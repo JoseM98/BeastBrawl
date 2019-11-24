@@ -8,6 +8,7 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <math.h>
 
 
 
@@ -24,7 +25,7 @@
 
 using namespace irr;
 
-
+const  float PI = 3.14159;
 
 void pruebaEvent1(Data d){
     
@@ -68,33 +69,33 @@ private:
 
 int main()
 {
-    Game *game = Game::GetInstance();
-    
-    game->SetState(State::States::INGAME);
-    game->InitGame();
-
-
-    EventManager eventManager = EventManager::GetInstance();
-    eventManager.Suscribe(Listener {EventType::PRIORIDAD1,pruebaEvent1, "suscriptor1"});
-    eventManager.Suscribe(Listener {EventType::PRIORIDAD1,pruebaEvent1, "suscriptor2"});
-    eventManager.Suscribe(Listener {EventType::PRIORIDAD2,pruebaEvent2, "suscriptor3"});
-
-    Data d;
-
-    eventManager.AddEvent(Event {EventType::PRIORIDAD1,d});
-    eventManager.AddEvent(Event {EventType::PRIORIDAD2,d});
-    eventManager.AddEvent(Event {EventType::PRIORIDAD1,d});
-    
-    eventManager.Update();  
-    cout << "------------------------------\n";
-    eventManager.UnSuscribe(EventType::PRIORIDAD1,"suscriptor2");
-
-    eventManager.AddEvent(Event {EventType::PRIORIDAD1,d});
-    eventManager.AddEvent(Event {EventType::PRIORIDAD2,d});
-    eventManager.AddEvent(Event {EventType::PRIORIDAD1,d});
-
-    
-    eventManager.Update();  
+//    Game *game = Game::GetInstance();
+//    
+//    game->SetState(State::States::INGAME);
+//    game->InitGame();
+//
+//
+//    EventManager eventManager = EventManager::GetInstance();
+//    eventManager.Suscribe(Listener {EventType::PRIORIDAD1,pruebaEvent1, "suscriptor1"});
+//    eventManager.Suscribe(Listener {EventType::PRIORIDAD1,pruebaEvent1, "suscriptor2"});
+//    eventManager.Suscribe(Listener {EventType::PRIORIDAD2,pruebaEvent2, "suscriptor3"});
+//
+//    Data d;
+//
+//    eventManager.AddEvent(Event {EventType::PRIORIDAD1,d});
+//    eventManager.AddEvent(Event {EventType::PRIORIDAD2,d});
+//    eventManager.AddEvent(Event {EventType::PRIORIDAD1,d});
+//    
+//    eventManager.Update();  
+//    cout << "------------------------------\n";
+//    eventManager.UnSuscribe(EventType::PRIORIDAD1,"suscriptor2");
+//
+//    eventManager.AddEvent(Event {EventType::PRIORIDAD1,d});
+//    eventManager.AddEvent(Event {EventType::PRIORIDAD2,d});
+//    eventManager.AddEvent(Event {EventType::PRIORIDAD1,d});
+//
+//    
+//    eventManager.Update();  
 
 
 
@@ -131,11 +132,29 @@ int main()
     node->setMaterialFlag(video::EMF_LIGHTING, false);
   }
 
+  scene::ISceneNode * node2 = smgr->addCubeSceneNode();
+  if (node2)
+  {
+    node2->setPosition(core::vector3df(0,-10,30));
+    node2->setMaterialTexture(0, driver->getTexture("media/wall.jpg"));
+    node2->setMaterialFlag(video::EMF_LIGHTING, false);
+
+    node2->setScale(core::vector3df(100,1,100));
+  }
   /*
   To be able to look at and move around in this scene, we create a first
   person shooter style camera and make the mouse cursor invisible.
   */
-  smgr->addCameraSceneNodeFPS();
+    scene::ICameraSceneNode* camera = smgr->addCameraSceneNode();
+    if (camera)
+    {
+        camera->setPosition(core::vector3df(0, 20, 0));
+        camera->setTarget(core::vector3df(0,0,30));
+        camera->setRotation(core::vector3df(0, 40, 0));
+        //camera->bindTargetAndRotation(true);
+        //camera->setFarValue(20.0f);
+    }
+  
   device->getCursorControl()->setVisible(false);
 
   /*
@@ -146,8 +165,7 @@ int main()
     driver->getTexture("media/irrlichtlogoalpha2.tga"),
     core::position2d<s32>(10,20));
 
-  gui::IGUIStaticText* diagnostics = device->getGUIEnvironment()->addStaticText(
-    L"", core::rect<s32>(10, 10, 400, 20));
+  gui::IGUIStaticText* diagnostics = device->getGUIEnvironment()->addStaticText(L"", core::rect<s32>(10, 10, 400, 20));
   diagnostics->setOverrideColor(video::SColor(255, 255, 255, 0));
 
   /*
@@ -162,13 +180,25 @@ int main()
   u32 then = device->getTimer()->getTime();
 
   // This is the movemen speed in units per second.
-  const f32 MOVEMENT_SPEED = 5.f;
+    //const f32 MOVEMENT_SPEED = 20.f;
 
 
+    float actualRotation = 0.f;  // rotacion ruedas del coche -> no se ve visiblemente en la escena
+    float angleRotation = 0.f;
+    const float maxSpeed = 20.f;
+    const float carFriction = 0.1;
+    const float carAcceleration = 0.15;
+    const float carSlowDown = 0.25;
+    float carSpeed = 0;
+    // To-Do: Poner un tiempo para que al pulsar rapido gire poco y al mantener gire mas
+    // To-Do: Que al girar se vea un lateral un poco del coche
+    // To-Do: Ponerle marchas automaticas de forma que al principio acelere muy rapido y luego le cueste mas
 
 
 while(device->run())
   {
+    angleRotation = 0.f;
+
     // Work out a frame delta time.
     const u32 now = device->getTimer()->getTime();
     const f32 frameDeltaTime = (f32)(now - then) / 100.f; // Time in seconds
@@ -177,18 +207,76 @@ while(device->run())
     /* Check if keys W, S, A or D are being held down, and move the
     sphere node around respectively. */
     core::vector3df nodePosition = node->getPosition();
+    core::vector3df nodeRotation = node->getRotation();
+    core::vector3df cameraPosition = camera->getPosition();
 
-    if(receiver.IsKeyDown(irr::KEY_KEY_W))
-      nodePosition.Z += MOVEMENT_SPEED * frameDeltaTime;
-    else if(receiver.IsKeyDown(irr::KEY_KEY_S))
-      nodePosition.Z -= MOVEMENT_SPEED * frameDeltaTime;
+    if(receiver.IsKeyDown(irr::KEY_KEY_W)){
+      carSpeed += carAcceleration;
+      if(carSpeed>maxSpeed)
+        carSpeed = maxSpeed;
+    }else if(receiver.IsKeyDown(irr::KEY_KEY_S)){
+      carSpeed -= carSlowDown;
+      if(carSpeed < 0)
+        carSpeed = 0;
+      //nodePosition.Z -= MOVEMENT_SPEED * frameDeltaTime;
+      //cameraPosition.Z -= MOVEMENT_SPEED * frameDeltaTime;
+    }else{
+      if(carSpeed > 0) {
+        carSpeed -= carFriction;
+        if(carSpeed < 0)
+          carSpeed = 0;
+      }
+    }
 
-    if(receiver.IsKeyDown(irr::KEY_KEY_A))
-      nodePosition.X -= MOVEMENT_SPEED * frameDeltaTime;
-    else if(receiver.IsKeyDown(irr::KEY_KEY_D))
-      nodePosition.X += MOVEMENT_SPEED * frameDeltaTime;
+    std::cout << "Car Speed: " << carSpeed << std::endl;
+    if(receiver.IsKeyDown(irr::KEY_KEY_A)){
+        if(carSpeed>5 && actualRotation>-10){
+            actualRotation -= 0.5;
+        }
+      //nodePosition.X -= MOVEMENT_SPEED * frameDeltaTime;
+      //cameraPosition.X -= MOVEMENT_SPEED * frameDeltaTime;
+    }else if(receiver.IsKeyDown(irr::KEY_KEY_D)){
+        if(carSpeed>5 && actualRotation<10){
+            actualRotation += 0.5;
+        }
+      //nodePosition.X += MOVEMENT_SPEED * frameDeltaTime;
+      //cameraPosition.X += MOVEMENT_SPEED * frameDeltaTime;
+    }else{
+        if(actualRotation>=1)
+            actualRotation -= 1.0;
+        else if(actualRotation<=-1)
+            actualRotation += 1.0;
+        else
+            actualRotation = 0;
+    }
 
+    // Calcular la posicion
+    if(actualRotation!=0){
+        angleRotation=(nodeRotation.Y*PI)/180.0;
+        nodePosition.X += sin(angleRotation)*carSpeed * frameDeltaTime;
+        nodePosition.Z += cos(angleRotation)*carSpeed * frameDeltaTime;
+        nodeRotation.Y += actualRotation * 0.20;
+      }else{
+        angleRotation=(nodeRotation.Y*PI)/180.0;
+        nodePosition.Z += cos(angleRotation)*carSpeed * frameDeltaTime;
+        nodePosition.X += sin(angleRotation)*carSpeed * frameDeltaTime;
+      }
+
+    if(receiver.IsKeyDown(irr::KEY_ESCAPE))
+      break;
+    
+
+    node->setRotation(nodeRotation);
     node->setPosition(nodePosition);
+    //camera->setTarget(nodePosition);
+    
+    cameraPosition.X = nodePosition.X-50.0*sin((nodeRotation.Y*PI)/180.0);
+    cameraPosition.Z = nodePosition.Z-50.0*cos((nodeRotation.Y*PI)/180.0);
+    camera->setTarget(nodePosition);
+    camera->setPosition(cameraPosition);
+    //std::cout << camera->getTargetAndRotationBinding() << " -> valor camara target" << std::endl;
+    // camera->bindTargetAndRotation(false);
+    //camera->updateAbsolutePosition();
 
     driver->beginScene(true, true, video::SColor(255,113,113,133));
 
