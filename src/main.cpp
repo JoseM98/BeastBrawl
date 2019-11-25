@@ -150,7 +150,7 @@ int main()
     {
         camera->setPosition(core::vector3df(0, 20, 0));
         camera->setTarget(core::vector3df(0,0,30));
-        camera->setRotation(core::vector3df(0, 40, 0));
+        //camera->setRotation(core::vector3df(0, 90, 0));  // La rotación se define mediante el target
         //camera->bindTargetAndRotation(true);
         //camera->setFarValue(20.0f);
     }
@@ -190,9 +190,11 @@ int main()
     const float carAcceleration = 0.15;
     const float carSlowDown = 0.25;
     float carSpeed = 0;
+    float lateralCarCamera = 0.f;
     // To-Do: Poner un tiempo para que al pulsar rapido gire poco y al mantener gire mas
     // To-Do: Que al girar se vea un lateral un poco del coche
     // To-Do: Ponerle marchas automaticas de forma que al principio acelere muy rapido y luego le cueste mas
+    // To-Do: El target se queda por delante del jugador
 
 
 while(device->run())
@@ -230,24 +232,41 @@ while(device->run())
 
     std::cout << "Car Speed: " << carSpeed << std::endl;
     if(receiver.IsKeyDown(irr::KEY_KEY_A)){
-        if(carSpeed>5 && actualRotation>-10){
-            actualRotation -= 0.5;
+        if(carSpeed>3){
+            if(actualRotation>-10){
+              actualRotation -= 0.5;
+            }
+            if(lateralCarCamera>-15){
+              lateralCarCamera -= 0.5;
+            }
         }
       //nodePosition.X -= MOVEMENT_SPEED * frameDeltaTime;
       //cameraPosition.X -= MOVEMENT_SPEED * frameDeltaTime;
     }else if(receiver.IsKeyDown(irr::KEY_KEY_D)){
-        if(carSpeed>5 && actualRotation<10){
-            actualRotation += 0.5;
+        if(carSpeed>3){
+            if(actualRotation<10){
+              actualRotation += 0.5;
+            }
+            if(lateralCarCamera<15){
+              lateralCarCamera += 0.5;
+            }
         }
       //nodePosition.X += MOVEMENT_SPEED * frameDeltaTime;
       //cameraPosition.X += MOVEMENT_SPEED * frameDeltaTime;
     }else{
-        if(actualRotation>=1)
-            actualRotation -= 1.0;
-        else if(actualRotation<=-1)
-            actualRotation += 1.0;
+        if(actualRotation>=0.7)
+            actualRotation -= 0.7;
+        else if(actualRotation<=-0.7)
+            actualRotation += 0.7;
         else
             actualRotation = 0;
+        
+        if(lateralCarCamera>=0.7)
+            lateralCarCamera -= 0.7;
+        else if(lateralCarCamera<=-0.7)
+            lateralCarCamera += 0.7;
+        else
+            lateralCarCamera = 0;
     }
 
     // Calcular la posicion
@@ -269,10 +288,16 @@ while(device->run())
     node->setRotation(nodeRotation);
     node->setPosition(nodePosition);
     //camera->setTarget(nodePosition);
-    
-    cameraPosition.X = nodePosition.X-50.0*sin((nodeRotation.Y*PI)/180.0);
-    cameraPosition.Z = nodePosition.Z-50.0*cos((nodeRotation.Y*PI)/180.0);
-    camera->setTarget(nodePosition);
+
+    // Camara Target
+    core::vector3df targetPosition  = nodePosition;
+    targetPosition.Y += 17;
+    camera->setTarget(targetPosition);
+
+    // Camara Position
+    cameraPosition.Y = nodePosition.Y + 20;
+    cameraPosition.X = nodePosition.X-40.0*sin(((nodeRotation.Y-lateralCarCamera)*PI)/180.0);
+    cameraPosition.Z = nodePosition.Z-40.0*cos(((nodeRotation.Y-lateralCarCamera)*PI)/180.0);
     camera->setPosition(cameraPosition);
     //std::cout << camera->getTargetAndRotationBinding() << " -> valor camara target" << std::endl;
     // camera->bindTargetAndRotation(false);
