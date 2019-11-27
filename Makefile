@@ -7,28 +7,30 @@ ALL_CLEANED_TEXT   := @echo -e "\033[0m \033[0;32m [Cleaned succesfully]\033[0m"
 #EXECUTING_TEXT     := @echo -e "\033[0m \033[5;32m Executing...\033[0m"
 JUMP_LINE		   := @echo
 
+ifdef DEBUG
+	CXXFLAGS += -g
+	SUFFIX	  = L
+else
+	CXXFLAGS += -O3
+	SUFFIX 	  = 
+endif
 
-SOURCES  	:= $(wildcard *.cpp)
-OBJ_PATH    := obj
-SRC_PATH	:= src
-LIBS 	    := lib/irrlicht/libIrrlicht.so
-INCLUDE     := -I.
-INCLUDE_IRR := -I /lib/irrlicht/irrlicht.h
-CC			:= g++
-NAME_EXE	:= Beast_Brawl
-CXXFLAGS 	+= -Wall -std=c++17
+
+SOURCES  		:= $(wildcard *.cpp)
+OBJ_PATH    	:= obj
+SRC_PATH		:= src
+LIBS 	    	:= lib/irrlicht/libIrrlicht.so lib/fmod/core/libfmod${SUFFIX}.so lib/fmod/studio/libfmodstudio${SUFFIX}.so
+INCLUDE     	:= -I.
+INCLUDE_IRR 	:= -I /lib/irrlicht/irrlicht.h
+INCLUDE_FMOD	:= -I /include/fmod/core -I /include/fmod/studio
+CC				:= g++
+NAME_EXE		:= Beast_Brawl
+CXXFLAGS 		+= -Wall -std=c++17 -m64
 
 ALLCPPS		:= $(shell find src/ -type f -iname *.cpp)
 ALLCPPSOBJ	:= $(patsubst $(SRC_PATH)/%.cpp,$(OBJ_PATH)/%.o,$(ALLCPPS))
 SUBDIRS		:= $(shell find src/ -type d)
 OBJSUBDIRS  := $(patsubst $(SRC_PATH)%,$(OBJ_PATH)%,$(SUBDIRS))
-
-ifdef DEBUG
-	CXXFLAGS += -g
-else
-	CXXFLAGS += -O3
-endif
-
 
 #Esto crea el ejecutable
 $(NAME_EXE): $(OBJSUBDIRS) $(ALLCPPSOBJ)
@@ -44,7 +46,7 @@ $(NAME_EXE): $(OBJSUBDIRS) $(ALLCPPSOBJ)
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
 	$(PRUEBA_TEXT)
 	$(COMPILING_TEXT) $<
-	@$(CC) $(CXXFLAGS) -o $@ -c $^ $(INCLUDE) $(INCLUDE_IRR) 
+	@$(CC) -pthread $(CXXFLAGS) -o $@ -c $^ $(INCLUDE) $(INCLUDE_IRR) $(INCLUDE_FMOD)
 	
 
 $(OBJSUBDIRS):
@@ -55,6 +57,7 @@ info:
 	$(info $(SUBDIRS))
 	$(info $(ALLCPPS))
 	$(info $(ALLCPPSOBJ))
+	$(info $(LIBS))
 
 .PHONY: exe
 exe:
