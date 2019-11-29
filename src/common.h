@@ -60,19 +60,19 @@ void ERRCHECK_fn(FMOD_RESULT result, const char *file, int line);
 #define Common_Clamp(_min, _val, _max) ((_val) < (_min) ? (_min) : ((_val) > (_max) ? (_max) : (_val)))
 
 /* Functions with platform specific implementation (common_platform) */
-//void Common_Init(void **extraDriverData);
-//void Common_Close();
+void Common_Init(void **extraDriverData);
+void Common_Close();
 void Common_Update();
 void Common_Sleep(unsigned int ms);
 void Common_Exit(int returnCode);
 void Common_DrawText(const char *text);
-//void Common_LoadFileMemory(const char *name, void **buff, int *length);
-//void Common_UnloadFileMemory(void *buff);
+void Common_LoadFileMemory(const char *name, void **buff, int *length);
+void Common_UnloadFileMemory(void *buff);
 bool Common_BtnPress(Common_Button btn);
-//bool Common_BtnDown(Common_Button btn);
+bool Common_BtnDown(Common_Button btn);
 const char *Common_BtnStr(Common_Button btn);
-//const char *Common_MediaPath(const char *fileName);
-//const char *Common_WritePath(const char *fileName);
+const char *Common_MediaPath(const char *fileName);
+const char *Common_WritePath(const char *fileName);
 //void Common_Mutex_Create(Common_Mutex *mutex);
 //void Common_Mutex_Destroy(Common_Mutex *mutex);
 //void Common_Mutex_Enter(Common_Mutex *mutex);

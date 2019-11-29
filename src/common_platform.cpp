@@ -11,46 +11,46 @@
 static unsigned int gPressedButtons = 0;
 static unsigned int gDownButtons = 0;
 static std::string gConsoleText;
-//static std::vector<char *> gPathList;
-//static termios originalTerm = {0};
-//
-//static void RevertTerminal()
-//{
-//    tcsetattr(STDIN_FILENO, TCSANOW, &originalTerm);
-//    
-//    printf("%c[?25h", 0x1B); // Show the cursor
-//}
-//
-//void Common_Init(void **extraDriverData)
-//{
-//    int err = tcgetattr(STDIN_FILENO, &originalTerm);
-//    assert(err == 0);
-//
-//    err = atexit(RevertTerminal);    // Register for atexit in case we bail and don't call Common_Close
-//    assert(err == 0);
-//    
-//    termios term = {0};
-//    err = tcgetattr(STDIN_FILENO, &term);
-//    assert(err == 0);
-//    
-//    term.c_lflag &= ~(ICANON); // Disable special characters, i.e. EOF, EOL, etc
-//    term.c_lflag &= ~(ECHO);   // Prevent echo of characters
-//    term.c_cc[VMIN] = 1;       // Specify min number of bytes before a read() can return
-//    
-//    err = tcsetattr(STDIN_FILENO, TCSANOW, &term); 
-//    assert(err == 0);
-//    
-//    printf("%c[?25l", 0x1B); // Hide the cursor
-//}
-//
-//void Common_Close()
-//{
-//    for (std::vector<char *>::iterator item = gPathList.begin(); item != gPathList.end(); ++item)
-//    {
-//        free(*item);
-//    }
-//}
-//
+static std::vector<char *> gPathList;
+static termios originalTerm = {0};
+
+static void RevertTerminal()
+{
+    tcsetattr(STDIN_FILENO, TCSANOW, &originalTerm);
+    
+    printf("%c[?25h", 0x1B); // Show the cursor
+}
+
+void Common_Init(void **extraDriverData)
+{
+    int err = tcgetattr(STDIN_FILENO, &originalTerm);
+    assert(err == 0);
+
+    err = atexit(RevertTerminal);    // Register for atexit in case we bail and don't call Common_Close
+    assert(err == 0);
+    
+    termios term = {0};
+    err = tcgetattr(STDIN_FILENO, &term);
+    assert(err == 0);
+    
+    term.c_lflag &= ~(ICANON); // Disable special characters, i.e. EOF, EOL, etc
+    term.c_lflag &= ~(ECHO);   // Prevent echo of characters
+    term.c_cc[VMIN] = 1;       // Specify min number of bytes before a read() can return
+    
+    err = tcsetattr(STDIN_FILENO, TCSANOW, &term); 
+    assert(err == 0);
+    
+    printf("%c[?25l", 0x1B); // Hide the cursor
+}
+
+void Common_Close()
+{
+    for (std::vector<char *>::iterator item = gPathList.begin(); item != gPathList.end(); ++item)
+    {
+        free(*item);
+    }
+}
+
 static bool IsKeyPressed()
 {
     fd_set fileDescMask;  
@@ -97,13 +97,12 @@ void Common_Update()
     /*
         Update the screen
     */
-    //printf("%c[H", 0x1B);               // Move cursor to home position
-    //printf("%s", gConsoleText.c_str()); // Terminal console is already double buffered, so just print
-    //printf("%c[J", 0x1B);               // Clear the rest of the screen
-    
-    //gConsoleText.clear();
+    printf("%c[H", 0x1B);               // Move cursor to home position
+    printf("%s", gConsoleText.c_str()); // Terminal console is already double buffered, so just print
+    printf("%c[J", 0x1B);               // Clear the rest of the screen
+    gConsoleText.clear();
 }
-//
+
 void Common_Sleep(unsigned int ms)
 {
     timespec sleepTime = { 0, ms * 1000 * 1000 };
@@ -123,47 +122,47 @@ void Common_DrawText(const char *text)
     gConsoleText.append(s);
 }
 
-//void Common_LoadFileMemory(const char *name, void **buff, int *length)
-//{
-//    FILE *file = fopen(name, "rb");
-//    assert(file);
-//    
-//    int err = fseek(file, 0, SEEK_END);
-//    assert(err == 0);
-//    
-//    int len = ftell(file);
-//    assert(len >= 0);
-//    
-//    rewind(file);
-//    
-//    void *mem = malloc(len);
-//    assert(len);
-//    
-//    int read = fread(mem, 1, len, file);
-//    assert(read == len);
-//    
-//    err = fclose(file);
-//    assert(err == 0);
-//
-//    *buff = mem;
-//    *length = len;
-//}
-//
-//void Common_UnloadFileMemory(void *buff)
-//{
-//    free(buff);
-//}
-//
+void Common_LoadFileMemory(const char *name, void **buff, int *length)
+{
+    FILE *file = fopen(name, "rb");
+    assert(file);
+    
+    int err = fseek(file, 0, SEEK_END);
+    assert(err == 0);
+    
+    int len = ftell(file);
+    assert(len >= 0);
+    
+    rewind(file);
+    
+    void *mem = malloc(len);
+    assert(len);
+    
+    int read = fread(mem, 1, len, file);
+    assert(read == len);
+    
+    err = fclose(file);
+    assert(err == 0);
+
+    *buff = mem;
+    *length = len;
+}
+
+void Common_UnloadFileMemory(void *buff)
+{
+    free(buff);
+}
+
 bool Common_BtnPress(Common_Button btn)
 {
     return ((gPressedButtons & (1 << btn)) != 0);
 }
 
-//bool Common_BtnDown(Common_Button btn)
-//{
-//    return ((gDownButtons & (1 << btn)) != 0);
-//}
-//
+bool Common_BtnDown(Common_Button btn)
+{
+    return ((gDownButtons & (1 << btn)) != 0);
+}
+
 const char *Common_BtnStr(Common_Button btn)
 {
     switch (btn)
@@ -185,26 +184,26 @@ const char *Common_BtnStr(Common_Button btn)
     }
 }
 
-//const char *Common_MediaPath(const char *fileName)
-//{
-//    char *filePath = (char *)calloc(256, sizeof(char));
-//  
-//    ssize_t len = readlink("/proc/self/exe", filePath, 256);
-//    assert(len != -1);
-//    
-//    char *filePathEnd = strrchr(filePath, '/');
-//    assert (filePathEnd != NULL);
-//
-//    filePathEnd++; // Move past the last slash
-//    filePathEnd[0] = '\0';
-//
-//    strcat(filePath, "../media/");
-//    strcat(filePath, fileName);
-//    gPathList.push_back(filePath);
-//
-//    return filePath;
-//}
-//
+const char *Common_MediaPath(const char *fileName)
+{
+    char *filePath = (char *)calloc(256, sizeof(char));
+  
+    ssize_t len = readlink("/proc/self/exe", filePath, 256);
+    assert(len != -1);
+    
+    char *filePathEnd = strrchr(filePath, '/');
+    assert (filePathEnd != NULL);
+
+    filePathEnd++; // Move past the last slash
+    filePathEnd[0] = '\0';
+
+    strcat(filePath, "./media/fmod/");
+    strcat(filePath, fileName);
+    gPathList.push_back(filePath);
+
+    return filePath;
+}
+
 //void Common_Mutex_Create(Common_Mutex *mutex)
 //{
 //    pthread_mutexattr_t attr;

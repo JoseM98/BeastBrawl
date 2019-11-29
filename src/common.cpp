@@ -19,15 +19,15 @@ void ERRCHECK_fn(FMOD_RESULT result, const char *file, int line)
     }
 }
 
-//void Common_Format(char *buffer, int bufferSize, const char *formatString...)
-//{
-//    va_list args;
-//    va_start(args, formatString);
-//    Common_vsnprintf(buffer, bufferSize, formatString, args);
-//    va_end(args);
-//    buffer[bufferSize-1] = '\0';
-//}
-//
+void Common_Format(char *buffer, int bufferSize, const char *formatString...)
+{
+    va_list args;
+    va_start(args, formatString);
+    Common_vsnprintf(buffer, bufferSize, formatString, args);
+    va_end(args);
+    buffer[bufferSize-1] = '\0';
+}
+
 void Common_Fatal(const char *format, ...)
 {
     char error[1024];
@@ -106,4 +106,3 @@ void Common_Draw(const char *format, ...)
         stringPtr += copyLength;
     } while (length > 0);
 }
-
