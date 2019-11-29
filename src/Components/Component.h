@@ -2,13 +2,15 @@
 #define __COMPONENT_H__
 
 enum CompType { 
-    Position, 
-    Speed, 
-    Id, 
-    Type, 
-    Texture, 
-    Mesh,
-    Transformable 
+    PositionComp, 
+    SpeedComp, 
+    IdComp, 
+    TypeComp, 
+    TextureComp, 
+    MeshComp,
+    TransformableComp,
+    CameraComp,
+    CarComp
 };
 
 class Component
