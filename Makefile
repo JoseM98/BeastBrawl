@@ -60,8 +60,8 @@ info:
 	$(info $(LIBS))
 
 .PHONY: exe
-exe:
-	@./$(NAME_EXE)
+exe: $(NAME_EXE)
+	@sh ./$(NAME_EXE).sh
 
 .PHONY: clean
 clean:
