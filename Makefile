@@ -22,7 +22,7 @@ SRC_PATH		:= src
 LIBS 	    	:= lib/irrlicht/libIrrlicht.so lib/fmod/libfmod${SUFFIX}.so lib/fmod/libfmodstudio${SUFFIX}.so
 INCLUDE     	:= -I.
 INCLUDE_IRR 	:= -I /lib/irrlicht/irrlicht.h
-INCLUDE_FMOD	:= -I /include/fmod/core -I /include/fmod/studio
+INCLUDE_FMOD	:= -I ./include/fmod/core -I ./include/fmod/studio
 CC				:= g++
 NAME_EXE		:= Beast_Brawl
 CXXFLAGS 		+= -Wall -std=c++17 -m64
