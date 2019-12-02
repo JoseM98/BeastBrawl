@@ -54,6 +54,16 @@ void SoundFacadeFMOD::unloadMasterBank() {
     ERRCHECK( masterBank->unload() );
 }
 
+void SoundFacadeFMOD::addInstanceSound(const char* nameEvent) {
+    FMOD::Studio::EventDescription* musicDescription = NULL;
+    ERRCHECK( system->getEvent(nameEvent, &musicDescription) );
+  
+    FMOD::Studio::EventInstance* musicInstance = NULL;
+    ERRCHECK( musicDescription->createInstance(&musicInstance) );
+
+    instances[nameEvent] = musicInstance;
+}
+
 void SoundFacadeFMOD::loadBanks() {
     
 }
@@ -63,5 +73,19 @@ void SoundFacadeFMOD::unloadBanks() {
 }
 
 void SoundFacadeFMOD::update() {
+    do
+    {
+        Common_Update();
 
+        if (Common_BtnPress(BTN_ACTION1))
+        {
+            //ERRCHECK( instances.find["event:/Ej2"]->start() );
+            std::cout << typeid(instances.find("event:Ej2")).name() << std::endl;
+        }
+
+        ERRCHECK( system->update() );
+
+        Common_Sleep(50);
+
+    } while (!Common_BtnPress(BTN_QUIT));
 }

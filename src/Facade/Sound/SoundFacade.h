@@ -12,6 +12,8 @@ class SoundFacade {
         virtual void loadMasterBank() = 0;
         virtual void unloadMasterBank() = 0;
 
+        virtual void addInstanceSound(const char*) = 0;
+
         virtual void loadBanks() = 0;
         virtual void unloadBanks() = 0;
 
