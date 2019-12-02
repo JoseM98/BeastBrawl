@@ -86,7 +86,6 @@ void Game::MainLoop(){
     }
 
     soundFacadeManager->GetSoundFacade()->TerminateSoundEngine();
-    delete soundFacadeManager;
 
     renderFacadeManager->GetRenderFacade()->FacadeDeviceDrop();
     //for(;;);  // To-Do: crear bucle del juego

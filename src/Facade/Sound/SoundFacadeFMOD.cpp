@@ -91,6 +91,4 @@ void SoundFacadeFMOD::Update() {
     }
 
     ERRCHECK( system->update() );
-
-    Common_Sleep(50);
 }
