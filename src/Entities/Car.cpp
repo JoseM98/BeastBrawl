@@ -1,4 +1,4 @@
-#include "PowerUp.h"
+#include "Car.h"
 #include "../Components/CPosition.h"
 #include "../Components/CSpeed.h"
 #include "../Components/CId.h"
@@ -12,13 +12,13 @@
 class Position;
 using namespace std;
 
-PowerUp::PowerUp()
+Car::Car()
 {
     // default values
-    float posX = 0.0,  posY = 0.0,  posZ = 0.0;
-    float rotX = 0.0,  rotY = 0.0,  rotZ = 0.0;
+    float posX = 10.0, posY = 20.0, posZ = 30.0;
+    float rotX = 0.0,  rotY = 0.0 , rotZ = 0.0;
     float scaX = 1.0,  scaY = 1.0,  scaZ = 1.0;
-    string texture = "earth.jpg";
+    string texture = "particle.bmp";
     string mesh    = "media/ninja.b3d";
     float maxSpeed = 20.0, acceleration = .15, friction = 0.1, slowDown = 0.25;
     
@@ -34,21 +34,31 @@ PowerUp::PowerUp()
     AddComponent(cTexture);
     AddComponent(cMesh);
     AddComponent(cCar);
-    cout << "Acabamos de llamar al constructor default de powerup, su transformable es " << cTransformable << endl;
+    cout << "Acabamos de llamar al constructor default de car, su transformable es " << cTransformable << endl;
 }
 
-PowerUp::PowerUp(float posX, float posY, float posZ) 
-    : PowerUp()
+Car::Car(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaX, float scaY, float scaZ, 
+    string texture, string mesh, 
+    float maxSpeed, float acceleration , float carFriction, float carSlowDown) 
+    : Car()
 {
     CTransformable *cTransformable = (CTransformable *)m_components[CompType::TransformableComp];
     cTransformable->posX = posX;
     cTransformable->posY = posY;
     cTransformable->posZ = posZ;
+
+    cTransformable->rotX = rotX;
+    cTransformable->rotY = rotY;
+    cTransformable->rotZ = rotZ;
+
+    cTransformable->scaleX = scaX;
+    cTransformable->scaleY = scaY;
+    cTransformable->scaleZ = scaZ;
+
+
 }
 
-
-
-PowerUp::~PowerUp()
+Car::~Car()
 {
-
+    
 }

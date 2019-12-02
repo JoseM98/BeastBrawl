@@ -8,16 +8,16 @@ using namespace std;
 
 //El orden de los enums define la prioridad del evento
 enum EventType{
-    PRESS_W,
-    PRESS_S,
+    PRESS_I,
+    PRESS_O,
     PRESS_A,
     PRESS_D,
-    NO_W_S_PRESS,
+    NO_I_O_PRESS,
     NO_A_D_PRESS,
     PRIORIDAD1,
     PRIORIDAD2,
-    PRIORIDAD3
-
+    PRIORIDAD3,
+    POWER_UP_COGIDO
 };
 
 struct Data{
