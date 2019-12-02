@@ -12,7 +12,7 @@
 class SoundFacadeFMOD : public SoundFacade {
     public:
         explicit SoundFacadeFMOD() : SoundFacade() {};
-        virtual ~SoundFacadeFMOD() {};
+        virtual ~SoundFacadeFMOD();
 
         virtual void InitSoundEngine();
         virtual void TerminateSoundEngine();

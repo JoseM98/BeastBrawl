@@ -20,6 +20,13 @@
  * SOUND FACADE FMOD
  */
 
+SoundFacadeFMOD::~SoundFacadeFMOD() {
+    delete coreSystem;
+    delete system;
+    delete masterBank;
+    delete stringsBank;
+}
+
 void SoundFacadeFMOD::InitSoundEngine() {
 
     void *extraDriverData = NULL;
