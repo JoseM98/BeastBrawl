@@ -20,7 +20,7 @@
  * SOUND FACADE FMOD
  */
 
-void SoundFacadeFMOD::initSoundEngine() {
+void SoundFacadeFMOD::InitSoundEngine() {
 
     void *extraDriverData = NULL;
     Common_Init(&extraDriverData);
@@ -33,28 +33,29 @@ void SoundFacadeFMOD::initSoundEngine() {
     //Inicializa FMOD Studio, inicializando tambien FMOD Core.
     ERRCHECK( system->initialize(512, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, 0) );
 
-    loadMasterBank();
+    LoadMasterBank();
 }
 
-void SoundFacadeFMOD::terminateSoundEngine() {
+void SoundFacadeFMOD::TerminateSoundEngine() {
 
-    unloadMasterBank();
+    UnloadMasterBank();
 
     ERRCHECK( system->release() );
     Common_Close();
 }
 
-void SoundFacadeFMOD::loadMasterBank() {
-    ERRCHECK( system->loadBankFile("../../../media/fmod/Master.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &masterBank) );
-    ERRCHECK( system->loadBankFile(Common_MediaPath("../../../media/fmod/Master.strings.bank"), FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank) );
+//TO-DO: Quitar el dichoso Common_MediaPath.
+void SoundFacadeFMOD::LoadMasterBank() {
+    ERRCHECK( system->loadBankFile(Common_MediaPath("Master.bank"), FMOD_STUDIO_LOAD_BANK_NORMAL, &masterBank) );
+    ERRCHECK( system->loadBankFile(Common_MediaPath("Master.strings.bank"), FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank) );
 }
 
-void SoundFacadeFMOD::unloadMasterBank() {
+void SoundFacadeFMOD::UnloadMasterBank() {
     ERRCHECK( stringsBank->unload() );
     ERRCHECK( masterBank->unload() );
 }
 
-void SoundFacadeFMOD::addInstanceSound(const char* nameEvent) {
+void SoundFacadeFMOD::AddInstanceSound(const char* nameEvent) {
     FMOD::Studio::EventDescription* musicDescription = NULL;
     ERRCHECK( system->getEvent(nameEvent, &musicDescription) );
   
@@ -64,28 +65,25 @@ void SoundFacadeFMOD::addInstanceSound(const char* nameEvent) {
     instances[nameEvent] = musicInstance;
 }
 
-void SoundFacadeFMOD::loadBanks() {
+void SoundFacadeFMOD::LoadBanks() {
     
 }
 
-void SoundFacadeFMOD::unloadBanks() {
+void SoundFacadeFMOD::UnloadBanks() {
     
 }
 
-void SoundFacadeFMOD::update() {
-    do
-    {
-        Common_Update();
+void SoundFacadeFMOD::Update() {
+    Common_Update();
 
-        if (Common_BtnPress(BTN_ACTION1))
-        {
-            //ERRCHECK( instances.find["event:/Ej2"]->start() );
-            std::cout << typeid(instances.find("event:Ej2")).name() << std::endl;
-        }
+    if (Common_BtnPress(BTN_ACTION1)) {
+        ERRCHECK( instances["event:/Ej2"]->start() );
+    }
+    if (Common_BtnPress(BTN_ACTION2)) {
+        ERRCHECK( instances["event:/Ej2"]->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+    }
 
-        ERRCHECK( system->update() );
+    ERRCHECK( system->update() );
 
-        Common_Sleep(50);
-
-    } while (!Common_BtnPress(BTN_QUIT));
+    Common_Sleep(50);
 }

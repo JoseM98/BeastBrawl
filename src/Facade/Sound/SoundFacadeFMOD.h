@@ -14,16 +14,16 @@ class SoundFacadeFMOD : public SoundFacade {
         explicit SoundFacadeFMOD() : SoundFacade() {};
         virtual ~SoundFacadeFMOD() {};
 
-        virtual void initSoundEngine();
-        virtual void terminateSoundEngine();
-        virtual void loadMasterBank();
-        virtual void unloadMasterBank();
-        virtual void addInstanceSound(const char*);
+        virtual void InitSoundEngine();
+        virtual void TerminateSoundEngine();
+        virtual void LoadMasterBank();
+        virtual void UnloadMasterBank();
+        virtual void AddInstanceSound(const char*);
 
-        virtual void loadBanks();
-        virtual void unloadBanks();
+        virtual void LoadBanks();
+        virtual void UnloadBanks();
 
-        virtual void update();
+        virtual void Update();
 
     private:
         FMOD::System* coreSystem = NULL;

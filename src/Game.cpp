@@ -68,12 +68,22 @@ void Game::InitGame(){
 
 
 void Game::MainLoop(){
-        renderFacadeManager->GetRenderFacade()->FacadeSetWindowCaption("Beast Brawl");
+    
+    renderFacadeManager->GetRenderFacade()->FacadeSetWindowCaption("Beast Brawl");
+
+    SoundFacadeManager* soundFacadeManager = SoundFacadeManager::GetInstance();
+    soundFacadeManager->InitializeFacadeFmod();
+    soundFacadeManager->GetSoundFacade()->InitSoundEngine();
+    soundFacadeManager->GetSoundFacade()->AddInstanceSound("event:/Ej2");
+
 
     while(renderFacadeManager->GetRenderFacade()->FacadeRun()){
         currentState->Update();
-
+        soundFacadeManager->GetSoundFacade()->Update();
     }
+
+    soundFacadeManager->GetSoundFacade()->TerminateSoundEngine();
+    delete soundFacadeManager;
 
     renderFacadeManager->GetRenderFacade()->FacadeDeviceDrop();
     //for(;;);  // To-Do: crear bucle del juego

@@ -6,18 +6,18 @@ class SoundFacade {
         
         virtual ~SoundFacade() = default;
 
-        virtual void initSoundEngine() = 0;
-        virtual void terminateSoundEngine() = 0;
+        virtual void InitSoundEngine() = 0;
+        virtual void TerminateSoundEngine() = 0;
 
-        virtual void loadMasterBank() = 0;
-        virtual void unloadMasterBank() = 0;
+        virtual void LoadMasterBank() = 0;
+        virtual void UnloadMasterBank() = 0;
 
-        virtual void addInstanceSound(const char*) = 0;
+        virtual void AddInstanceSound(const char*) = 0;
 
-        virtual void loadBanks() = 0;
-        virtual void unloadBanks() = 0;
+        virtual void LoadBanks() = 0;
+        virtual void UnloadBanks() = 0;
 
-        virtual void update() = 0;
+        virtual void Update() = 0;
 
     private:
     

@@ -40,9 +40,13 @@ class StateInGame : public State{
         RenderFacadeManager* renderFacadeManager;
         InputFacadeManager* inputFacadeManager;
         PhysicsFacadeManager* physicsFacadeManager;
+        //Sound facade manager
+        SoundFacadeManager* soundFacadeManager;
         RenderFacade* renderEngine;
         InputFacade* inputEngine;
         PhysicsFacade* physicsEngine;
+        //Sound facade
+        SoundFacade* soundEngine;
         ManPowerUp *manPowerUps;
 
         int lastFPS = -1;
