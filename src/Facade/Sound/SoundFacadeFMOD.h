@@ -27,7 +27,7 @@ class SoundFacadeFMOD : public SoundFacade {
 
         virtual void Update();
 
-        std::map<std::string, FMOD::Studio::EventInstance*> GetInstances() { return instances;};
+        //std::map<std::string, FMOD::Studio::EventInstance*> GetInstances() { return instances;};
 
 
     private:
@@ -37,5 +37,5 @@ class SoundFacadeFMOD : public SoundFacade {
         FMOD::Studio::Bank* stringsBank = NULL;
 
         std::unordered_map<std::string, FMOD::Studio::EventInstance*> instances;
-        EventManager* eventManager;
+        //EventManager* eventManager;
 };
