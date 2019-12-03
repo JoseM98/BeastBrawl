@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 
 #include "fmod_studio.hpp"
 #include "fmod.hpp"
@@ -31,5 +31,5 @@ class SoundFacadeFMOD : public SoundFacade {
         FMOD::Studio::Bank* masterBank = NULL;
         FMOD::Studio::Bank* stringsBank = NULL;
 
-        std::map<std::string, FMOD::Studio::EventInstance*> instances;
+        std::unordered_map<std::string, FMOD::Studio::EventInstance*> instances;
 };
