@@ -3,6 +3,10 @@
 #include "SoundFacadeFMOD.h"
 #include "fmod_errors.h"
 
+#include "SoundFacadeManager.h"
+
+
+//void PruebaSonido(Data d);
 /*
  * FMOD ERRORS
  */
@@ -27,7 +31,20 @@ SoundFacadeFMOD::~SoundFacadeFMOD() {
     delete stringsBank;
 }
 
+
+//Puntero a funcion
+//void PruebaSonido(Data d){
+//    SoundFacadeManager* soundFacadeManager = SoundFacadeManager::GetInstance();
+//    SoundFacadeFMOD* soundEngine = static_cast<SoundFacadeFMOD*>(soundFacadeManager->GetSoundFacade());
+//    auto instances = soundEngine->GetInstances();
+//    cout << "HA ENTRADO MUSICA\n";
+//    ERRCHECK( instances["event:/Ej2"]->start() );
+//
+//}
 void SoundFacadeFMOD::InitSoundEngine() {
+
+    //eventManager = EventManager::GetInstance();
+    //eventManager->Suscribe(Listener {EventType::PRESS_I,PruebaSonido,"pruebaSonido"});
 
     void *extraDriverData = NULL;
     Common_Init(&extraDriverData);

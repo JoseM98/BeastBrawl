@@ -3,6 +3,8 @@
 #include <iostream>
 #include <map>
 
+#include "../../EventManager/EventManager.h"
+#include "../../EventManager/Event.h"
 #include "fmod_studio.hpp"
 #include "fmod.hpp"
 #include "../../common.h"
@@ -25,6 +27,9 @@ class SoundFacadeFMOD : public SoundFacade {
 
         virtual void Update();
 
+        std::map<std::string, FMOD::Studio::EventInstance*> GetInstances() { return instances;};
+
+
     private:
         FMOD::System* coreSystem = NULL;
         FMOD::Studio::System* system = NULL;
@@ -32,4 +37,6 @@ class SoundFacadeFMOD : public SoundFacade {
         FMOD::Studio::Bank* stringsBank = NULL;
 
         std::map<std::string, FMOD::Studio::EventInstance*> instances;
+
+        EventManager* eventManager;
 };
