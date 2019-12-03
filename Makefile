@@ -9,16 +9,17 @@ JUMP_LINE		   := @echo
 
 ifdef DEBUG
 	CXXFLAGS += -g
-	#SUFFIX	  = L
+	SUFFIX	  = L
 else
 	CXXFLAGS += -O3
-	#SUFFIX 	  = 
+	SUFFIX 	  = 
 endif
+
 
 SOURCES  		:= $(wildcard *.cpp)
 OBJ_PATH    	:= obj
 SRC_PATH		:= src
-LIBS 	    	:= -L./lib/irrlicht -lIrrlicht -L./lib/fmod -lfmod -lfmodstudio #lib/irrlicht/libIrrlicht.so lib/fmod/libfmod${SUFFIX}.so lib/fmod/libfmodstudio${SUFFIX}.so
+LIBS 	    	:= lib/irrlicht/libIrrlicht.so lib/fmod/libfmod${SUFFIX}.so lib/fmod/libfmodstudio${SUFFIX}.so
 INCLUDE     	:= -I.
 INCLUDE_IRR 	:= -I /lib/irrlicht/irrlicht.h
 INCLUDE_FMOD	:= -I ./include/fmod/core -I ./include/fmod/studio

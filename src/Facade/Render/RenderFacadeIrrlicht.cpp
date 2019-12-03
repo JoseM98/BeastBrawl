@@ -171,10 +171,6 @@ void RenderFacadeIrrlicht::FacadeCheckInput(float frameDeltaTime, Entity* car, E
 	d.gameObject = car;
 	d.camera	 = cam;
 
-	if(receiver.IsKeyDown(KEY_KEY_1)){
-        eventManager->AddEvent(Event {EventType::PRESS_1,d});
-	}
-
 	if(receiver.IsKeyDown(KEY_KEY_I)){
         eventManager->AddEvent(Event {EventType::PRESS_I,d});
 	}else if(receiver.IsKeyDown(KEY_KEY_O)){

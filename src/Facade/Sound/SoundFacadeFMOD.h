@@ -13,21 +13,21 @@
 
 class SoundFacadeFMOD : public SoundFacade {
     public:
-        explicit SoundFacadeFMOD() = default;
-        ~SoundFacadeFMOD() override;
+        explicit SoundFacadeFMOD() : SoundFacade() {};
+        virtual ~SoundFacadeFMOD();
 
-        void InitSoundEngine() override;
-        void TerminateSoundEngine() override;
-        void LoadMasterBank() override;
-        void UnloadMasterBank() override;
-        void AddInstanceSound(const char*) override;
+        virtual void InitSoundEngine();
+        virtual void TerminateSoundEngine();
+        virtual void LoadMasterBank();
+        virtual void UnloadMasterBank();
+        virtual void AddInstanceSound(const char*);
 
-        void LoadBanks() override;
-        void UnloadBanks() override;
+        virtual void LoadBanks();
+        virtual void UnloadBanks();
 
-        void Update() override;
+        virtual void Update();
 
-        std::unordered_map<std::string, FMOD::Studio::EventInstance*> GetInstances() { return instances;};
+        //std::map<std::string, FMOD::Studio::EventInstance*> GetInstances() { return instances;};
 
 
     private:
@@ -37,5 +37,5 @@ class SoundFacadeFMOD : public SoundFacade {
         FMOD::Studio::Bank* stringsBank = NULL;
 
         std::unordered_map<std::string, FMOD::Studio::EventInstance*> instances;
-        EventManager* eventManager;
+        //EventManager* eventManager;
 };

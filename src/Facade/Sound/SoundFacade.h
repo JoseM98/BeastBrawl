@@ -2,7 +2,8 @@
 
 class SoundFacade {
     public:
-
+        explicit SoundFacade() = default;
+        
         virtual ~SoundFacade() = default;
 
         virtual void InitSoundEngine() = 0;
@@ -18,4 +19,6 @@ class SoundFacade {
 
         virtual void Update() = 0;
 
+    private:
+    
 };

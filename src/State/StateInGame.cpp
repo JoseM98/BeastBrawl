@@ -103,7 +103,7 @@ StateInGame::StateInGame(){
     physicsFacadeManager = PhysicsFacadeManager::GetInstance();
     physicsFacadeManager->InitializeIrrlicht();
     
-    //Physics* physics = new Physics();
+    Physics* physics = new Physics();
     //Almacenamos los motores
 	renderEngine   = renderFacadeManager->GetRenderFacade();
     inputEngine    = inputFacadeManager->GetInputFacade();
