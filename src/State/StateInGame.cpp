@@ -221,6 +221,7 @@ void StateInGame::Update()
 {    
     eventManager->Update();  
     const uint32_t now = renderEngine->FacadeGetTime();
+    //cout << renderEngine->FacadeGetTime()/1000.0 << endl;
     
     const float frameDeltaTime = (float)(now - then) / 100.0;
     then = now;
