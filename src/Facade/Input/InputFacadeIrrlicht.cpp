@@ -5,7 +5,7 @@ InputFacadeIrrlicht::InputFacadeIrrlicht(){
 	//RenderFacadeManager::GetInstance().GetRenderFacade()->AddReceiver(receiver);
 }
 
-void InputFacadeIrrlicht::CheckInputs(Entity& go){
+void InputFacadeIrrlicht::CheckInputs(float deltaTime, Entity* car, Entity* cam){
     //Data d;
 	//d.gameObject = &go;
 

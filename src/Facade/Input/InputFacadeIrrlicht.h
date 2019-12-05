@@ -6,6 +6,7 @@
 #include "../../../lib/irrlicht/irrlicht.h"
 
 
+
 using namespace irr;
 
 
@@ -43,8 +44,8 @@ class InputFacadeIrrlicht : public InputFacade{
     public:
         InputFacadeIrrlicht();
         ~InputFacadeIrrlicht();
-        void CheckInputs(Entity&) override;
-		void SetDevice(uintptr_t) override;
+        void CheckInputs(float, Entity*, Entity*) override;
+		void SetDevice(uintptr_t);
 		MyEventReceiver* GetReceiver();
 
     private:

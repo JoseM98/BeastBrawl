@@ -3,6 +3,7 @@
 #include <iostream>
 #include "InputFacade.h"
 #include "InputFacadeIrrlicht.h"
+#include "InputFacadeClover.h"
 
 class InputFacadeManager{
 
@@ -15,6 +16,7 @@ public:
 
     void InitializeClover() {
         // TODO: crear motor de clover
+        facade = new InputFacadeClover();
     }
 
     InputFacade *GetInputFacade() { return facade; };

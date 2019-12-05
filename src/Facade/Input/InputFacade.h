@@ -11,8 +11,7 @@
 class InputFacade {
     public:
         virtual ~InputFacade() = default;
-        virtual void CheckInputs(Entity&) = 0;
-        virtual void SetDevice(uintptr_t) = 0;
+        virtual void CheckInputs(float, Entity*, Entity*) = 0;
 
     protected:
         EventManager* eventManager;

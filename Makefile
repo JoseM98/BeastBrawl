@@ -11,9 +11,10 @@ JUMP_LINE		   := @echo
 SOURCES  	:= $(wildcard *.cpp)
 OBJ_PATH    := obj
 SRC_PATH	:= src
-LIBS 	    := -L./lib/irrlicht -lIrrlicht
-INCLUDE     := -I.
-INCLUDE_IRR := -I /lib/irrlicht/irrlicht.h
+LIBS 	     = -L./lib/irrlicht -lIrrlicht
+LIBS		+= -L./lib/sdl -lSDL2
+INCLUDE      = -I.
+INCLUDE     += -I./lib/irrlicht/
 CC			:= g++
 NAME_EXE	:= Beast_Brawl
 CXXFLAGS 	+= -Wall -std=c++17
@@ -44,7 +45,7 @@ $(NAME_EXE): $(OBJSUBDIRS) $(ALLCPPSOBJ)
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
 	$(PRUEBA_TEXT)
 	$(COMPILING_TEXT) $<
-	@$(CC) $(CXXFLAGS) -o $@ -c $^ $(INCLUDE) $(INCLUDE_IRR) 
+	@$(CC) $(CXXFLAGS) -o $@ -c $^ $(INCLUDE) 
 	
 
 $(OBJSUBDIRS):

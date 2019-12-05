@@ -98,7 +98,7 @@ StateInGame::StateInGame(){
 	renderFacadeManager->InitializeIrrlicht();
 
     inputFacadeManager = InputFacadeManager::GetInstance();
-    inputFacadeManager->InitializeIrrlicht();
+    inputFacadeManager->InitializeClover();
 
     physicsFacadeManager = PhysicsFacadeManager::GetInstance();
     physicsFacadeManager->InitializeIrrlicht();
@@ -226,8 +226,8 @@ void StateInGame::Update()
     then = now;
 
     
-    //inputEngine->CheckInputs(*car);
-    renderEngine->FacadeCheckInput(frameDeltaTime,car,cam);
+    inputEngine->CheckInputs(frameDeltaTime, car, cam);
+    //renderEngine->FacadeCheckInput(frameDeltaTime,car,cam);
     physicsEngine->Update(car, cam);
 
     renderEngine->FacadeDraw();
