@@ -19,7 +19,7 @@ endif
 SOURCES  		:= $(wildcard *.cpp)
 OBJ_PATH    	:= obj
 SRC_PATH		:= src
-LIBS 	    	:= lib/irrlicht/libIrrlicht.so lib/fmod/libfmod${SUFFIX}.so lib/fmod/libfmodstudio${SUFFIX}.so
+LIBS 	    	:= -L./lib/linux/irrlicht -lIrrlicht -L./lib/linux/fmod -lfmod -lfmodstudio
 INCLUDE     	:= -I.
 INCLUDE_IRR 	:= -I /lib/irrlicht/irrlicht.h
 INCLUDE_FMOD	:= -I ./include/fmod/core -I ./include/fmod/studio
