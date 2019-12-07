@@ -3,12 +3,12 @@
 #include <iostream>
 #include <unordered_map>
 
+#include <fmod_studio.hpp>
+#include <fmod.hpp>
+#include <fmod_errors.h>
+
 #include "../../EventManager/EventManager.h"
 #include "../../EventManager/Event.h"
-#include "fmod_studio.hpp"
-#include "fmod.hpp"
-//#include "../../common.h"
-
 #include "SoundFacade.h"
 
 class SoundFacadeFMOD : public SoundFacade {
@@ -18,8 +18,8 @@ class SoundFacadeFMOD : public SoundFacade {
 
         void InitSoundEngine() override;
         void TerminateSoundEngine() override;
-        void LoadMasterBank() override;
-        void UnloadMasterBank() override;
+        void LoadMasterBank();
+        void UnloadMasterBank();
         void AddInstanceSound(const char*) override;
 
         void LoadBanks() override;

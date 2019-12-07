@@ -4,11 +4,6 @@
 
 using namespace std;
 
-
-#include "fmod_studio.hpp"
-#include "fmod.hpp"
-#include "common.h"
-
 int main()
 {
 

@@ -1,24 +1,22 @@
 #include <iostream>
 
 #include "SoundFacadeFMOD.h"
-#include "fmod_errors.h"
-
 #include "SoundFacadeManager.h"
 
 
-//void PruebaSonido(Data d);
+void PruebaSonido(Data d);
 /*
  * FMOD ERRORS
  */
 
-//#define ERRCHECK(_result) ERRCHECK_fn(_result,__FILE__,__LINE__)
-//
-//void ERRCHECK_fn(FMOD_RESULT result, const char *file, int line) {
-//    if (result != FMOD_OK) {
-//        std::cerr << file << "(" << line << "): FMOD error " << result << " - " << FMOD_ErrorString(result) << std::endl;
-//        exit(-1);
-//    }
-//}
+#define ERRCHECK(_result) ERRCHECK_fn(_result,__FILE__,__LINE__)
+
+void ERRCHECK_fn(FMOD_RESULT result, const char *file, int line) {
+    if (result != FMOD_OK) {
+        std::cerr << file << "(Linea: " << line << "): Se ha producido un error de FMOD " << result << " - " << FMOD_ErrorString(result) << std::endl;
+        exit(-1);
+    }
+}
 
 /*
  * SOUND FACADE FMOD
@@ -46,9 +44,6 @@ void SoundFacadeFMOD::InitSoundEngine() {
 
     eventManager = EventManager::GetInstance();
     eventManager->Suscribe(Listener {EventType::PRESS_1,PruebaSonido,"pruebaSonido"});
-
-//    void *extraDriverData = NULL;
-//    Common_Init(&extraDriverData);
     
     ERRCHECK( FMOD::Studio::System::create(&system) );
 
@@ -66,13 +61,12 @@ void SoundFacadeFMOD::TerminateSoundEngine() {
     UnloadMasterBank();
 
     ERRCHECK( system->release() );
-    //Common_Close();
 }
 
 //TO-DO: Quitar el dichoso Common_MediaPath.
 void SoundFacadeFMOD::LoadMasterBank() {
-    ERRCHECK( system->loadBankFile(/*Common_MediaPath("Master.bank")*/"./media/fmod/Master.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &masterBank) );
-    ERRCHECK( system->loadBankFile(/*Common_MediaPath("Master.strings.bank")*/"./media/fmod/Master.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank) );
+    ERRCHECK( system->loadBankFile("./media/fmod/Master.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &masterBank) );
+    ERRCHECK( system->loadBankFile("./media/fmod/Master.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank) );
 }
 
 void SoundFacadeFMOD::UnloadMasterBank() {
@@ -99,14 +93,6 @@ void SoundFacadeFMOD::UnloadBanks() {
 }
 
 void SoundFacadeFMOD::Update() {
-//    Common_Update();
-//
-//    if (Common_BtnPress(BTN_ACTION1)) {
-//        ERRCHECK( instances["event:/Ej2"]->start() );
-//    }
-//    if (Common_BtnPress(BTN_ACTION2)) {
-//        ERRCHECK( instances["event:/Ej2"]->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
-//    }
 
     ERRCHECK( system->update() );
 }
