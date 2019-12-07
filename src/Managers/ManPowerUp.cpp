@@ -30,21 +30,21 @@ ManPowerUp::~ManPowerUp()
 
 void ManPowerUp::CreatePowerUp(float x, float y, float z) 
 {
-	shared_ptr<PowerUp> p = make_shared<PowerUp>(x, y, z);
+	PowerUp *p = new PowerUp(x, y, z);
     powerUps.push_back(p);
 }
 
 
 void ManPowerUp::CreatePowerUp() 
 {
-	shared_ptr<PowerUp> p = make_shared<PowerUp>();
+	PowerUp *p = new PowerUp();
     powerUps.push_back(p);
 }
 
 
 void ManPowerUp::SubscribeToEvents() 
 {
-    shared_ptr<EventManager> em = EventManager::GetInstance();
+    EventManager *em = EventManager::GetInstance();
     em->Suscribe(Listener {EventType::POWER_UP_COGIDO, EjecutarMeHanCogido, "EjecutarMeHanCogido"});
 }
 

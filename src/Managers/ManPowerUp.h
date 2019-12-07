@@ -4,8 +4,6 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include <memory>
-
 
 using namespace std;
 
@@ -20,12 +18,12 @@ public:
 
     void CreatePowerUp(float x, float y, float z);
     void CreatePowerUp();
-    vector<shared_ptr<PowerUp>> GetEntities() const {
+    vector<PowerUp *> GetEntities() const {
         return powerUps;
     };
 
 private:
-	vector<shared_ptr<PowerUp>> powerUps;
+	vector<PowerUp *> powerUps;
     void SubscribeToEvents();
 };
 

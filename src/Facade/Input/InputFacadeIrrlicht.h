@@ -1,12 +1,11 @@
 #pragma once
 
 #include <iostream>
-#include <memory>
 #include "InputFacade.h"
 //#include "../Render/RenderFacadeManager.h"
 #include "../../../lib/irrlicht/irrlicht.h"
 
-using namespace std;
+
 using namespace irr;
 
 
@@ -45,9 +44,11 @@ class InputFacadeIrrlicht : public InputFacade{
         InputFacadeIrrlicht();
         ~InputFacadeIrrlicht();
         void CheckInputs(Entity&) override;
+		void SetDevice(uintptr_t) override;
+		MyEventReceiver* GetReceiver();
 
     private:
-        MyEventReceiver receiver;
+        MyEventReceiver* receiver = new MyEventReceiver();
 		IrrlichtDevice *device;
 
 };

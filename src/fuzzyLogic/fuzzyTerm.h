@@ -1,13 +1,11 @@
 #pragma once
 
-#include <memory>
 
-using namespace std;
 class FuzzyTerm{
 public:
     virtual ~FuzzyTerm()=default;
     //all terms must implement a virtual constructor
-    virtual shared_ptr<FuzzyTerm> Clone()const = 0;
+    virtual FuzzyTerm* Clone()const = 0;
     //retrieves the degree of membership of the term
     virtual double GetDOM()const=0;
     //clears the degree of membership of the term

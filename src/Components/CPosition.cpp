@@ -14,3 +14,7 @@ CPosition::CPosition(float _x, float _y, float _z)
     m_compType = CompType::PositionComp;
 }
 
+CPosition::~CPosition()
+{
+    
+}

@@ -1,12 +1,12 @@
 #include "EventManager.h"
 #include <iostream>
+EventManager* EventManager::instance = 0;
 
-const shared_ptr<EventManager> EventManager::instance = make_shared<EventManager>();
-shared_ptr<EventManager> EventManager::GetInstance() {
+EventManager* EventManager::GetInstance() {
     //static EventManager instance;
-    // if(instance==nullptr){
-    //     instance = make_shared<EventManager>();
-    // }
+    if(instance==0){
+        instance = new EventManager();
+    }
     return instance;
 }
 

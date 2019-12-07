@@ -10,8 +10,7 @@ enum CompType {
     MeshComp,
     TransformableComp,
     CameraComp,
-    CarComp,
-    WheelComp
+    CarComp
 };
 
 class Component

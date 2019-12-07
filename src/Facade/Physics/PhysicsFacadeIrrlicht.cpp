@@ -16,7 +16,7 @@ PhysicsFacadeIrrlicht::PhysicsFacadeIrrlicht(){
 
     auto renderFacadeManager = RenderFacadeManager::GetInstance();
     auto renderEngine = renderFacadeManager->GetRenderFacade();
-    renderEngineIrrlicht = static_pointer_cast<RenderFacadeIrrlicht>(renderEngine);
+    renderEngineIrrlicht = static_cast<RenderFacadeIrrlicht*>(renderEngine);
     smgr = renderEngineIrrlicht->GetSceneManager();
 
 }
@@ -26,13 +26,14 @@ PhysicsFacadeIrrlicht::PhysicsFacadeIrrlicht(){
 void PhysicsFacadeIrrlicht::Update(Entity* car, Entity* cam){
     
 
+    auto smgr = renderEngineIrrlicht->GetSceneManager();
 
     //Guardamos en variables los componentes
     auto components = car->GetComponents();
     auto mapTransform = components.find(CompType::TransformableComp);
-	auto cTransformable = static_cast<CTransformable*>(mapTransform->second.get());
+	auto cTransformable = static_cast<CTransformable*>(mapTransform->second);
     auto mapId = components.find(CompType::IdComp);
-	auto cId = static_cast<CId*>(mapId->second.get());
+	auto cId = static_cast<CId*>(mapId->second);
 
     //Actualizamos el valor en la estructura de irrlicht
     // Cogemos el nodo de irrlicht con el ID igual al que le hemos pasado
@@ -58,7 +59,7 @@ void PhysicsFacadeIrrlicht::UpdateCam(Entity* cam){
     //Cogemos los componentes de la camara
 	auto components = cam->GetComponents();
 	auto mapTransformable = components.find(CompType::TransformableComp);
-	auto cTransformable = static_cast<CTransformable*>(mapTransformable->second.get());
+	auto cTransformable = static_cast<CTransformable*>(mapTransformable->second);
 
 	//Cogemos la posicion de nuestro coche
     //TODO: cambiar ese 0 por el id de CarManager

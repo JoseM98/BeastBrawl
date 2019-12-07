@@ -8,20 +8,18 @@ FuzzyLogic::~FuzzyLogic(){
 
 }
 
-void FuzzyLogic::AddRule(shared_ptr<FuzzyTerm> antecedent, shared_ptr<FuzzyTerm> consequence){
-    m_Rules.push_back(make_shared<FuzzyRule>(antecedent, consequence));
+void FuzzyLogic::AddRule(FuzzyTerm& antecedent, FuzzyTerm& consequence){
+    m_Rules.push_back(new FuzzyRule(antecedent, consequence));
 }
 
-shared_ptr<FuzzyVariable> FuzzyLogic::CreateFLV(const string& VarName){
-	m_Variables.insert(std::pair<string,shared_ptr<FuzzyVariable>>(VarName,make_shared<FuzzyVariable>()));
-	//m_Variables[VarName] = fv;
-	cout << "Sale fuzzy variable\n";
-	return	m_Variables[VarName];
+FuzzyVariable& FuzzyLogic::CreateFLV(const std::string& VarName){
+	m_Variables[VarName] = new FuzzyVariable();
+	return	*m_Variables[VarName];
 }
 
 void FuzzyLogic::SetConfidencesOfConsequentsToZero(){
 
-	auto curRule = m_Rules.begin();
+	std::vector<FuzzyRule*>::iterator curRule = m_Rules.begin();
 	for (curRule = m_Rules.begin(); curRule != m_Rules.end(); ++curRule){
 		(*curRule)->SetConfidenceOfConsequentToZero();
 	}
@@ -46,7 +44,7 @@ double FuzzyLogic::DeFuzzify(const std::string& NameOfFLV){
 	//std::cout << "pasamos por el SetConfidencesOfConsequentsToZero()" << std::endl;
 	
 	//process the rules 
-    std::vector<shared_ptr<FuzzyRule>>::iterator actualRule;
+    std::vector<FuzzyRule*>::iterator actualRule;
 	for (actualRule = m_Rules.begin(); actualRule != m_Rules.end(); ++actualRule){
 	//std::cout << "entramos al for, NO al calculate" << std::endl;
 		(*actualRule)->Calculate();
