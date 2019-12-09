@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __POWERUP_H__
+#define __POWERUP_H__
 
 #include "Entity.h"
 #include "../../lib/glm/vec3.hpp"
@@ -12,9 +13,11 @@ class PowerUp : public Entity
 
 public:
     PowerUp();
-    PowerUp(glm::vec3 _position);
+    PowerUp(float x, float y, float z);
     ~PowerUp();
 
 
 private:
 };
+
+#endif

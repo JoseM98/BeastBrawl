@@ -10,15 +10,8 @@ int main()
     Game *game = Game::GetInstance();
 
     
-        game->SetState(State::States::INGAME);
-        game->InitGame();
-    }
-    catch(...)
-    {
-        std::cout << "Algo ha fallado" << std::endl;
-    }
-    
-    
-	std::cout <<"SALDLASDASD\n";
+    game->SetState(State::States::INGAME);
+    game->InitGame();
+	
 	return 0;
 }

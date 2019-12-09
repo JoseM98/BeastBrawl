@@ -9,8 +9,7 @@
 class PhysicsFacadeIrrlicht : public PhysicsFacade{
     public:
         PhysicsFacadeIrrlicht();
-        void UpdateCar(Entity*, Entity*) override;
-        void UpdateCarAI(Entity*) override;
+        void Update(Entity*, Entity*) override;
         ~PhysicsFacadeIrrlicht();
 
 
