@@ -11,6 +11,8 @@
 #include "../../EventManager/Event.h"
 #include "SoundFacade.h"
 
+using namespace std;
+
 class SoundFacadeFMOD : public SoundFacade {
     public:
         explicit SoundFacadeFMOD() : SoundFacade() {};
@@ -20,14 +22,16 @@ class SoundFacadeFMOD : public SoundFacade {
         void TerminateSoundEngine() override;
         void LoadMasterBank();
         void UnloadMasterBank();
-        void AddInstanceSound(const char*) override;
 
-        void LoadBanks() override;
-        void UnloadBanks() override;
+        void LoadBank(const uint16_t) override;
+        void LoadBankInGame() override;
+        void LoadEvent(const char*) override;
+        //void InsertInstance(const char*, FMOD::Studio::EventInstance*);
+        void UnloadBank(const char*) override;
 
         void Update() override;
 
-        std::unordered_map<std::string, FMOD::Studio::EventInstance*> GetInstances() { return instances;};
+        std::unordered_map<std::string, FMOD::Studio::EventDescription*> GetDescription() { return soundDescriptions;};
 
 
     private:
@@ -36,6 +40,8 @@ class SoundFacadeFMOD : public SoundFacade {
         FMOD::Studio::Bank* masterBank = NULL;
         FMOD::Studio::Bank* stringsBank = NULL;
 
-        std::unordered_map<std::string, FMOD::Studio::EventInstance*> instances;
+        unordered_map<string, FMOD::Studio::Bank*> banks;
+        unordered_map<string, FMOD::Studio::EventDescription*> soundDescriptions;
+        //unordered_map<string, FMOD::Studio::EventInstance*> eventInstances;
         EventManager* eventManager;
 };

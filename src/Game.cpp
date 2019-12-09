@@ -76,12 +76,12 @@ void Game::MainLoop(){
     //Si se incluye esta funcion en el constructor de SoundFacadeFMOD da violacion de segmento.
     soundFacadeManager->InitializeFacadeFmod();
     soundFacadeManager->GetSoundFacade()->InitSoundEngine();
-    soundFacadeManager->GetSoundFacade()->AddInstanceSound("event:/Ej2");
+    //soundFacadeManager->GetSoundFacade()->AddInstanceSound("event:/Ej2");
 
+    currentState->InitState();
 
     while(renderFacadeManager->GetRenderFacade()->FacadeRun()){
         currentState->Update();
-        //Como es un ejemplo a piñon de FMOD esto lo que hace es validar el input, aunque esto se deberia poder hacer usando el nuestro y con un evento.
         soundFacadeManager->GetSoundFacade()->Update();
     }
 

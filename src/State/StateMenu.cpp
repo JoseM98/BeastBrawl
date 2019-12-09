@@ -14,6 +14,10 @@ StateMenu::~StateMenu(){
 }
 
 
+void StateMenu::InitState() {
+    
+}
+
 
 void StateMenu::Render(){
 

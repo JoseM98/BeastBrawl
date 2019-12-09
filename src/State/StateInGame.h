@@ -13,6 +13,7 @@
 #include "../Facade/Render/RenderFacadeManager.h"
 #include "../Facade/Input/InputFacadeManager.h"
 #include "../Facade/Physics/PhysicsFacadeManager.h"
+#include "../Facade/Sound/SoundFacadeManager.h"
 #include "../Systems/Physics.h"
 #include "../fuzzyLogic/fuzzyLogic.h"
 #include "../behaviourTree/behaviourTree.h"
@@ -28,8 +29,9 @@ class StateInGame : public State{
     public:
         StateInGame();
         virtual ~StateInGame();
-        void Update();
-        void Render();
+        void InitState() override;
+        void Update() override;
+        void Render() override;
         virtual States GetState() { return State::States::INGAME; };
 
 
@@ -41,9 +43,11 @@ class StateInGame : public State{
         RenderFacadeManager* renderFacadeManager;
         InputFacadeManager* inputFacadeManager;
         PhysicsFacadeManager* physicsFacadeManager;
+        SoundFacadeManager* soundFacadeManager;
         RenderFacade* renderEngine;
         InputFacade* inputEngine;
         PhysicsFacade* physicsEngine;
+        SoundFacade* soundEngine;
         ManPowerUp *manPowerUps;
 
         int lastFPS = -1;

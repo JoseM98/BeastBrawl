@@ -1,8 +1,10 @@
 #include <iostream>
+#include <string.h>
 
 #include "SoundFacadeFMOD.h"
 #include "SoundFacadeManager.h"
 
+using namespace std;
 
 void PruebaSonido(Data d);
 /*
@@ -34,10 +36,14 @@ SoundFacadeFMOD::~SoundFacadeFMOD() {
 void PruebaSonido(Data d){
     SoundFacadeManager* soundFacadeManager = SoundFacadeManager::GetInstance();
     SoundFacadeFMOD* soundEngine = static_cast<SoundFacadeFMOD*>(soundFacadeManager->GetSoundFacade());
-    auto instances = soundEngine->GetInstances();
-    cout << "HA ENTRADO MUSICA\n";
-    ERRCHECK( instances["event:/Ej2"]->start() );
-
+    auto instances = soundEngine->GetDescription();
+//
+    if (instances.find("choque_enemigo") != instances.end()) {
+        FMOD::Studio::EventInstance* instance = nullptr;
+        ERRCHECK( instances["choque_enemigo"]->createInstance(&instance) );
+        ERRCHECK( instance->start() );
+        ERRCHECK( instance->release() );
+    }
 }
 
 void SoundFacadeFMOD::InitSoundEngine() {
@@ -58,6 +64,15 @@ void SoundFacadeFMOD::InitSoundEngine() {
 
 void SoundFacadeFMOD::TerminateSoundEngine() {
 
+    soundDescriptions.clear();
+    
+    unordered_map<string, FMOD::Studio::Bank*>::iterator it = banks.begin();
+    while(it != banks.end()) {
+        it->second->unload();
+        it++;
+    }
+    banks.clear();
+
     UnloadMasterBank();
 
     ERRCHECK( system->release() );
@@ -74,25 +89,53 @@ void SoundFacadeFMOD::UnloadMasterBank() {
     ERRCHECK( masterBank->unload() );
 }
 
-void SoundFacadeFMOD::AddInstanceSound(const char* nameEvent) {
-    FMOD::Studio::EventDescription* musicDescription = NULL;
-    ERRCHECK( system->getEvent(nameEvent, &musicDescription) );
-  
-    FMOD::Studio::EventInstance* musicInstance = NULL;
-    ERRCHECK( musicDescription->createInstance(&musicInstance) );
 
-    instances[nameEvent] = musicInstance;
+//TO-DO: Cambio de tipo de parametro
+void SoundFacadeFMOD::LoadBank(const uint16_t numBank) {
+    //TO-DO: Esto se puede optimizar
+    switch (numBank) {
+        case 0:
+            //LoadBankMenu();
+            break;
+        case 1:
+            //Load...
+            break;
+        case 2:
+            LoadBankInGame();
+            break;
+        default:
+            cout << "It does not exist bank: " << numBank << endl;
+    }
 }
 
-void SoundFacadeFMOD::LoadBanks() {
-    
+void SoundFacadeFMOD::LoadBankInGame() {
+    if (banks.find("InGame") == banks.end()) {
+        banks["InGame"] = nullptr;
+        ERRCHECK(system->loadBankFile("./media/fmod/InGame.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &banks["InGame"]));
+    }
+    cout << "***** Voy a intentar cargar los eventos" << endl;
+    LoadEvent("choque_enemigo");
+    LoadEvent("lanzo_powerup");
 }
 
-void SoundFacadeFMOD::UnloadBanks() {
+void SoundFacadeFMOD::LoadEvent(const char* nameEvent) {
+    FMOD::Studio::EventDescription* description = NULL;
+    if (soundDescriptions.find(nameEvent) == soundDescriptions.end()) {
+        soundDescriptions[nameEvent] = nullptr;
+    }
+    //TO-DO: Mejorar
+    char* charEvent = "event:/";
+    char* event = (char *) malloc(1 + strlen(charEvent) + strlen(nameEvent) );
+    strcpy(event, charEvent);
+    strcat(event, nameEvent);
+    ERRCHECK( system->getEvent(event, &soundDescriptions[nameEvent]) );
+    cout << "Cargado el evento: " << event << endl;
+}
+
+void SoundFacadeFMOD::UnloadBank(const char*) {
     
 }
 
 void SoundFacadeFMOD::Update() {
-
     ERRCHECK( system->update() );
 }

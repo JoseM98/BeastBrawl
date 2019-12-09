@@ -9,6 +9,7 @@ class StateMenu : public State{
     public:
         StateMenu();
         virtual ~StateMenu();
+        void InitState();
         void Update();
         void Render();
         virtual States GetState() { return State::States::MENU; };

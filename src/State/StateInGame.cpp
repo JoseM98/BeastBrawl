@@ -108,7 +108,6 @@ StateInGame::StateInGame(){
 	renderEngine   = renderFacadeManager->GetRenderFacade();
     inputEngine    = inputFacadeManager->GetInputFacade();
     physicsEngine  = physicsFacadeManager->GetPhysicsFacade();
-
     
 
 // --------------------------- FUZZY LOGIC  "COUT TEMPORALES" ----------------------------------
@@ -210,6 +209,12 @@ StateInGame::~StateInGame(){
     delete cam;
 }
 
+
+void StateInGame::InitState() {
+    soundFacadeManager = SoundFacadeManager::GetInstance();
+    soundEngine    = soundFacadeManager->GetSoundFacade();
+    soundEngine->LoadBank(2);
+}
 
 
 void StateInGame::Render(){
