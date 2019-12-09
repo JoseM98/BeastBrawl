@@ -23,16 +23,19 @@ class SoundFacadeFMOD : public SoundFacade {
         void LoadMasterBank();
         void UnloadMasterBank();
 
-        void LoadBank(const uint16_t) override;
-        void LoadBankInGame() override;
+        void LoadBanks(const uint16_t) override;
+        
+        void LoadBanksInGame() override;
         void LoadEvent(const char*) override;
-        //void InsertInstance(const char*, FMOD::Studio::EventInstance*);
+        void InsertInstance(const char*, FMOD::Studio::EventInstance*);
+        bool EventIsPlaying(const char*);
+        
         void UnloadBank(const char*) override;
 
         void Update() override;
 
-        std::unordered_map<std::string, FMOD::Studio::EventDescription*> GetDescription() { return soundDescriptions;};
-
+        unordered_map<string, FMOD::Studio::EventDescription*> GetDescriptions() { return soundDescriptions;};
+        unordered_map<string, FMOD::Studio::EventInstance*> GetInstances() { return eventInstances; }
 
     private:
         FMOD::System* coreSystem = NULL;
@@ -42,6 +45,6 @@ class SoundFacadeFMOD : public SoundFacade {
 
         unordered_map<string, FMOD::Studio::Bank*> banks;
         unordered_map<string, FMOD::Studio::EventDescription*> soundDescriptions;
-        //unordered_map<string, FMOD::Studio::EventInstance*> eventInstances;
+        unordered_map<string, FMOD::Studio::EventInstance*> eventInstances;
         EventManager* eventManager;
 };

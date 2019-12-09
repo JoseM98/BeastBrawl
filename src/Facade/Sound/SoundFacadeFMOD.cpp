@@ -36,14 +36,19 @@ SoundFacadeFMOD::~SoundFacadeFMOD() {
 void PruebaSonido(Data d){
     SoundFacadeManager* soundFacadeManager = SoundFacadeManager::GetInstance();
     SoundFacadeFMOD* soundEngine = static_cast<SoundFacadeFMOD*>(soundFacadeManager->GetSoundFacade());
-    auto instances = soundEngine->GetDescription();
-//
-    if (instances.find("choque_enemigo") != instances.end()) {
+    auto description = soundEngine->GetDescriptions();
+    auto instances = soundEngine->GetInstances();
+
+    if (description.find("choque_enemigo") != description.end() && instances.find("choque_enemigo") == instances.end()) {
         FMOD::Studio::EventInstance* instance = nullptr;
-        ERRCHECK( instances["choque_enemigo"]->createInstance(&instance) );
+        ERRCHECK( description["choque_enemigo"]->createInstance(&instance) );
         ERRCHECK( instance->start() );
         ERRCHECK( instance->release() );
+        soundEngine->InsertInstance("choque_enemigo", instance);
     }
+    //else if (instances.find("choque_enemigo") != instances.end()) {
+    //    
+    //}
 }
 
 void SoundFacadeFMOD::InitSoundEngine() {
@@ -66,6 +71,7 @@ void SoundFacadeFMOD::TerminateSoundEngine() {
 
     soundDescriptions.clear();
     
+    //Recorre el mapa de bancos liberandolos.
     unordered_map<string, FMOD::Studio::Bank*>::iterator it = banks.begin();
     while(it != banks.end()) {
         it->second->unload();
@@ -90,8 +96,7 @@ void SoundFacadeFMOD::UnloadMasterBank() {
 }
 
 
-//TO-DO: Cambio de tipo de parametro
-void SoundFacadeFMOD::LoadBank(const uint16_t numBank) {
+void SoundFacadeFMOD::LoadBanks(const uint16_t numBank) {
     //TO-DO: Esto se puede optimizar
     switch (numBank) {
         case 0:
@@ -101,14 +106,14 @@ void SoundFacadeFMOD::LoadBank(const uint16_t numBank) {
             //Load...
             break;
         case 2:
-            LoadBankInGame();
+            LoadBanksInGame();
             break;
         default:
-            cout << "It does not exist bank: " << numBank << endl;
+            cout << "Este banco no existe: " << numBank << endl;
     }
 }
 
-void SoundFacadeFMOD::LoadBankInGame() {
+void SoundFacadeFMOD::LoadBanksInGame() {
     if (banks.find("InGame") == banks.end()) {
         banks["InGame"] = nullptr;
         ERRCHECK(system->loadBankFile("./media/fmod/InGame.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &banks["InGame"]));
@@ -118,18 +123,31 @@ void SoundFacadeFMOD::LoadBankInGame() {
     LoadEvent("lanzo_powerup");
 }
 
+//Carga eventos de sonido que pueden sonar muchas veces durante la partida
 void SoundFacadeFMOD::LoadEvent(const char* nameEvent) {
+
+    //Si no esta el evento de sonido cargado, lo cargo.
     FMOD::Studio::EventDescription* description = NULL;
     if (soundDescriptions.find(nameEvent) == soundDescriptions.end()) {
+        
         soundDescriptions[nameEvent] = nullptr;
+        
+        //TO-DO: Mejorar esta concatenacion
+        char* charEvent = "event:/";
+        char* event = (char *) malloc(1 + strlen(charEvent) + strlen(nameEvent) );
+        strcpy(event, charEvent);
+        strcat(event, nameEvent);
+
+        //Cargo el evento
+        ERRCHECK( system->getEvent(event, &soundDescriptions[nameEvent]) );
+
+        //Se guarda los datos en memoria para que no se vuelvan a cargar cada vez.
+        ERRCHECK( soundDescriptions[nameEvent]->loadSampleData() );
     }
-    //TO-DO: Mejorar
-    char* charEvent = "event:/";
-    char* event = (char *) malloc(1 + strlen(charEvent) + strlen(nameEvent) );
-    strcpy(event, charEvent);
-    strcat(event, nameEvent);
-    ERRCHECK( system->getEvent(event, &soundDescriptions[nameEvent]) );
-    cout << "Cargado el evento: " << event << endl;
+}
+
+void SoundFacadeFMOD::InsertInstance(const char* nameEvent, FMOD::Studio::EventInstance* instance) {
+    eventInstances[nameEvent] = instance;
 }
 
 void SoundFacadeFMOD::UnloadBank(const char*) {
@@ -137,5 +155,15 @@ void SoundFacadeFMOD::UnloadBank(const char*) {
 }
 
 void SoundFacadeFMOD::Update() {
+
+    /*FMOD_STUDIO_PLAYBACK_STATE eventState;
+    for(auto event : eventInstances) {
+
+        ERRCHECK(event.second->getPlaybackState(&eventState));
+        if (eventState == FMOD_STUDIO_PLAYBACK_PLAYING || eventState == FMOD_STUDIO_PLAYBACK_STARTING) {
+            cout << "Esta sonando" << endl;
+        }
+    }*/
+
     ERRCHECK( system->update() );
 }
