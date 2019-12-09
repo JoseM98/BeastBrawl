@@ -1,5 +1,4 @@
 #include "Car.h"
-#include "../Components/CPosition.h"
 #include "../Components/CSpeed.h"
 #include "../Components/CId.h"
 #include "../Components/CType.h"
@@ -12,12 +11,11 @@
 class Position;
 using namespace std;
 
-Car::Car()
-{
+Car::Car(){
     // default values
-    glm::vec3 pos   = glm::vec3(10.0f, 20.0f, 30.0f);
-    glm::vec3 rot   = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    glm::vec3 pos   = glm::vec3(-20.0f, 20.0f, -300.0f);
+    glm::vec3 rot   = glm::vec3(0.0f, 90.0f, 0.0f);
+    glm::vec3 scale = glm::vec3(1.0f, 0.7f, 0.5f);
     string texture = "particle.bmp";
     string mesh    = "media/ninja.b3d";
     float maxSpeed = 20.0, acceleration = .15, friction = 0.1, slowDown = 0.25;
@@ -59,6 +57,19 @@ Car::Car(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale,
 
 
 }
+
+
+
+Car::Car(glm::vec3 _position) 
+    : Car()
+{
+    CTransformable *cTransformable = (CTransformable *)m_components[CompType::TransformableComp].get();
+    cTransformable->position.x = _position.x;
+    cTransformable->position.y = _position.y;
+    cTransformable->position.z = _position.z;
+}
+
+
 
 Car::~Car()
 {
