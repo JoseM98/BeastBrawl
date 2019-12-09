@@ -16,12 +16,12 @@ Car::Car(){
     glm::vec3 pos   = glm::vec3(-20.0f, 20.0f, -300.0f);
     glm::vec3 rot   = glm::vec3(0.0f, 90.0f, 0.0f);
     glm::vec3 scale = glm::vec3(1.0f, 0.7f, 0.5f);
-    string texture = "particle.bmp";
-    string mesh    = "media/ninja.b3d";
+    string texture = "";
+    string mesh    = "car.obj";
     float maxSpeed = 20.0, acceleration = .15, friction = 0.1, slowDown = 0.25;
     
     shared_ptr<CId> cId   = make_shared<CId>();
-    shared_ptr<CType> cType = make_shared<CType>(ModelType::Cube);
+    shared_ptr<CType> cType = make_shared<CType>(ModelType::AnimatedMesh);
     shared_ptr<CTransformable> cTransformable = make_shared<CTransformable>(pos, rot, scale); 
     shared_ptr<CTexture> cTexture = make_shared<CTexture>(texture);
     shared_ptr<CMesh> cMesh   = make_shared<CMesh>(mesh);
