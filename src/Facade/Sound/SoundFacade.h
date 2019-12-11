@@ -18,5 +18,6 @@ class SoundFacade {
         virtual void Update() = 0;
 
     private:
+    //void SubscribeToGameEvents(int state);  
     
 };

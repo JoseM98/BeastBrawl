@@ -28,11 +28,12 @@ class SoundFacadeFMOD : public SoundFacade {
         void LoadBanksInGame() override;
         void LoadEvent(const char*) override;
         void InsertInstance(const char*, FMOD::Studio::EventInstance*);
-        bool EventIsPlaying(const char*);
+        //bool EventIsPlaying(const char*);
         
         void UnloadBank(const char*) override;
 
         void Update() override;
+        //void InitializeState(int state);
 
         unordered_map<string, FMOD::Studio::EventDescription*> GetDescriptions() { return soundDescriptions;};
         unordered_map<string, FMOD::Studio::EventInstance*> GetInstances() { return eventInstances; }
@@ -47,4 +48,6 @@ class SoundFacadeFMOD : public SoundFacade {
         unordered_map<string, FMOD::Studio::EventDescription*> soundDescriptions;
         unordered_map<string, FMOD::Studio::EventInstance*> eventInstances;
         EventManager* eventManager;
+
+        void SubscribeToGameEvents(int state);
 };

@@ -76,7 +76,6 @@ void Game::MainLoop(){
     //Si se incluye esta funcion en el constructor de SoundFacadeFMOD da violacion de segmento.
     soundFacadeManager->InitializeFacadeFmod();
     soundFacadeManager->GetSoundFacade()->InitSoundEngine();
-    //soundFacadeManager->GetSoundFacade()->AddInstanceSound("event:/Ej2");
 
     currentState->InitState();
 

@@ -39,11 +39,11 @@ void PruebaSonido(Data d){
     auto description = soundEngine->GetDescriptions();
     auto instances = soundEngine->GetInstances();
 
-    if (description.find("choque_enemigo") != description.end() && instances.find("choque_enemigo") == instances.end()) {
+    if (description.find("choque_enemigo") != description.end() /*&& instances.find("choque_enemigo") == instances.end()*/) {
         FMOD::Studio::EventInstance* instance = nullptr;
         ERRCHECK( description["choque_enemigo"]->createInstance(&instance) );
         ERRCHECK( instance->start() );
-        ERRCHECK( instance->release() );
+        //ERRCHECK( instance->release() );
         soundEngine->InsertInstance("choque_enemigo", instance);
     }
     //else if (instances.find("choque_enemigo") != instances.end()) {
@@ -65,6 +65,22 @@ void SoundFacadeFMOD::InitSoundEngine() {
     ERRCHECK( system->initialize(512, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, 0) );
 
     LoadMasterBank();
+}
+
+/*void SoundFacadeFMOD::InitializeState(int state) {
+    LoadBanks(state);
+    switch (state)
+    {
+    case 0:
+        break;
+    
+    default:
+        break;
+    }
+}*/
+
+void SoundFacadeFMOD::SubscribeToGameEvents(int state) {
+    
 }
 
 void SoundFacadeFMOD::TerminateSoundEngine() {
@@ -156,14 +172,17 @@ void SoundFacadeFMOD::UnloadBank(const char*) {
 
 void SoundFacadeFMOD::Update() {
 
-    /*FMOD_STUDIO_PLAYBACK_STATE eventState;
+    FMOD_STUDIO_PLAYBACK_STATE eventState;
     for(auto event : eventInstances) {
 
         ERRCHECK(event.second->getPlaybackState(&eventState));
-        if (eventState == FMOD_STUDIO_PLAYBACK_PLAYING || eventState == FMOD_STUDIO_PLAYBACK_STARTING) {
-            cout << "Esta sonando" << endl;
+        if (eventState != FMOD_STUDIO_PLAYBACK_PLAYING || eventState != FMOD_STUDIO_PLAYBACK_STARTING) {
+            //event.second->release();
+            //delete event.second;
+            //eventInstances.erase(event.first);
+
         }
-    }*/
+    }
 
     ERRCHECK( system->update() );
 }
