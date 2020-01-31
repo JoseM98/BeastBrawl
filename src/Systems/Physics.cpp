@@ -20,6 +20,23 @@
 Physics::Physics(float _deltaTime) : deltaTime(_deltaTime) {
 }
 
+
+void Physics::UpdateEveryFrame(Car* car, Camera* cam, double percentTick){
+    // actualizar posiciones
+    auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
+    auto cTransformableCam = static_cast<CTransformable *>(cam->GetComponent(CompType::TransformableComp).get());
+
+    //std::cout << "( " << cTransformableCam->positionPrev.z << " , " << cTransformableCam->positionNext.z << " , " << cTransformableCam->position.z << " ) --> " << percentTick << std::endl;
+    cTransformable->position.x = (cTransformable->positionNext.x - cTransformable->positionPrev.x) * percentTick + cTransformable->positionPrev.x;
+    cTransformable->position.z = (cTransformable->positionNext.z - cTransformable->positionPrev.z) * percentTick + cTransformable->positionPrev.z;
+
+    cTransformableCam->position.x = (cTransformableCam->positionNext.x - cTransformableCam->positionPrev.x) * percentTick + cTransformableCam->positionPrev.x;
+    cTransformableCam->position.z = (cTransformableCam->positionNext.z - cTransformableCam->positionPrev.z) * percentTick + cTransformableCam->positionPrev.z;
+    //std::cout << "( " << cTransformableCam->positionPrev.z << " , " << cTransformableCam->positionNext.z << " , " << cTransformableCam->position.z << " )" << std::endl;
+}
+
+
+
 void Physics::update(Car *car, Camera *cam) {
     // actualizar posiciones
     auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
@@ -27,11 +44,15 @@ void Physics::update(Car *car, Camera *cam) {
     auto cCamera = static_cast<CCamera *>(cam->GetComponent(CompType::CameraComp).get());
     auto cTransformableCam = static_cast<CTransformable *>(cam->GetComponent(CompType::TransformableComp).get());
     auto cSpeed = static_cast<CSpeed *>(car->GetComponent(CompType::SpeedComp).get());
+    //std::cout << "( " << cTransformableCam->position.z << " )" << std::endl;
+    cTransformable->positionPrev = cTransformable->position;
+    cTransformableCam->positionPrev = cTransformableCam->position;
     if (cCar->speed >= 0)
         CalculatePosition(cCar, cTransformable, cSpeed, deltaTime);
     else
         CalculatePositionReverse(cCar, cTransformable, deltaTime);
     CalculatePositionCamera(cTransformable, cTransformableCam, cCamera);
+    //std::cout << "( " << cTransformableCam->position.z << " )" << std::endl;
 }
 
 //Calcula la posicion del coche (duda con las formulas preguntar a Jose)
@@ -44,8 +65,8 @@ void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpe
     cSpeed->speed.z = sin(angleRotation);  // * cCar->speed;
     cSpeed->speed.y = 0.f;                 // TODO, esto lo cacharreará el CLPhysics
 
-    cTransformable->position.x -= cSpeed->speed.x * cCar->speed * deltaTime;
-    cTransformable->position.z += cSpeed->speed.z * cCar->speed * deltaTime;
+    cTransformable->positionNext.x = cTransformable->positionPrev.x - cSpeed->speed.x * cCar->speed * deltaTime;
+    cTransformable->positionNext.z = cTransformable->positionPrev.z + cSpeed->speed.z * cCar->speed * deltaTime;
 
     //Si tiene rotacion, rotamos el coche
     // if (cCar->wheelRotation != 0) {
@@ -64,8 +85,8 @@ void Physics::CalculatePositionReverse(CCar *cCar, CTransformable *cTransformabl
     float delta = deltaTime;
 
     //Modificamos la posicion en X y Z en funcion del angulo
-    cTransformable->position.z += sin(angleRotation) * cCar->speed * delta;
-    cTransformable->position.x -= cos(angleRotation) * cCar->speed * delta;
+    cTransformable->positionNext.z = cTransformable->positionPrev.z + sin(angleRotation) * cCar->speed * delta;
+    cTransformable->positionNext.x = cTransformable->positionPrev.x - cos(angleRotation) * cCar->speed * delta;
 
     //Si tiene rotacion, rotamos el coche
     if (cCar->wheelRotation != 0) {
@@ -82,8 +103,8 @@ void Physics::CalculatePositionReverse(CCar *cCar, CTransformable *cTransformabl
 void Physics::CalculatePositionCamera(CTransformable *cTransformableCar, CTransformable *cTransformableCamera, CCamera *cCamera) {
     // comento la primera linea porque la pos de la cámara en altura (por ahora) es siempre la misma
     cTransformableCamera->position.y = cTransformableCar->position.y + 20;
-    cTransformableCamera->position.x = (cTransformableCar->position.x + 40 * cos(((cTransformableCar->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
-    cTransformableCamera->position.z = (cTransformableCar->position.z - 40 * sin(((cTransformableCar->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
+    cTransformableCamera->positionNext.x = (cTransformableCar->positionNext.x + 40 * cos(((cTransformableCar->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
+    cTransformableCamera->positionNext.z = (cTransformableCar->positionNext.z - 40 * sin(((cTransformableCar->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
 }
 
 

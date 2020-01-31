@@ -39,6 +39,9 @@ class Physics {
     void DecelerateHuman(CCar &cCar, CNitro &cNitro) const;
     void NotTurningHuman(CCar &cCar) const;
 
+    void UpdateEveryFrame(Car* car, Camera* cam, const double percentTick);
+    void setDeltaTime(float _deltaTime){deltaTime = _deltaTime;};
+
    protected:
    private:
     void CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpeed *cSpeed, float deltaTime);

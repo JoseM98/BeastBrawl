@@ -183,17 +183,17 @@ void StateInGame::Update() {
     // COLISIONES entre el Player y el Totem
     collisions->IntersectPlayerTotem(manCars.get()->GetCar().get(), manTotems.get());
 
-    // Actualizaciones en Irrlich
-    renderEngine->UpdateCamera(cam.get(), manCars.get());
-    physicsEngine->UpdateCar(manCars.get()->GetCar().get(), cam.get());
-
-    for (shared_ptr<Entity> actualPowerUp : manPowerUps->GetEntities())  // actualizamos los powerUp en irrlich
-        physicsEngine->UpdatePowerUps(actualPowerUp.get());
-
-    renderEngine->FacadeUpdatePlates(manNamePlates.get());
+    
 }
 
 void StateInGame::Render() {
+    // Actualizaciones en Irrlich
+    renderEngine->UpdateCamera(cam.get(), manCars.get());
+    physicsEngine->UpdateCar(manCars.get()->GetCar().get(), cam.get());
+    for (shared_ptr<Entity> actualPowerUp : manPowerUps->GetEntities())  // actualizamos los powerUp en irrlich
+        physicsEngine->UpdatePowerUps(actualPowerUp.get());
+    renderEngine->FacadeUpdatePlates(manNamePlates.get());
+
     renderEngine->FacadeBeginScene();
     // renderEngine->FacadeDraw();  //Para dibujar primitivas debe ir entre el drawAll y el endScene
     renderEngine->FacadeDrawAll();

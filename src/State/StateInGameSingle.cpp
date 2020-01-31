@@ -45,21 +45,58 @@ void StateInGameSingle::Input() {
 }
 
 void StateInGameSingle::Update() {
-    StateInGame::Update();
-    for (auto actualAI : manCars->GetEntities()) { // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
-        if (static_cast<Car*>(actualAI.get())->GetTypeCar() == TypeCar::CarAI){
-            manCars->UpdateCarAI(static_cast<CarAI*>(actualAI.get()), manPowerUps.get(), manBoxPowerUps.get(), manTotems.get(), manWayPoint.get(), manNavMesh.get(), manBoundingWall.get());
-            physicsEngine->UpdateCarAI(actualAI.get());
-        }
-    }
-    CAMBIARCosasDeTotemUpdate();
+    timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();
+    
+    
+    if(timeElapsed > updateTickTime){
+        start = system_clock::now();
 
-    // COLISIONES entre powerUp y IA
-    collisions->IntersectsCarsPowerUps(manCars.get(), manPowerUps.get(), manNavMesh.get());
-    // COLISIONES entre BoxPowerUp y IA
-    collisions->IntersectCarsBoxPowerUp(manCars.get(), manBoxPowerUps.get());
-    // COLISIONES  entre la IA y el Totem
-    collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
+        //auto now_ms = std::chrono::time_point_cast<std::chrono::microseconds>(start);
+        //auto value = now_ms.time_since_epoch();
+        //long duration = value.count() - (timeElapsed - updateTickTime);
+        //std::cout << "valor: " << duration << std::endl;
+        //std::chrono::microseconds dur(duration);
+        //std::chrono::time_point<std::chrono::system_clock> dt(dur);
+        //start = dt;
+        //float prueba = duration_cast<std::chrono::microseconds>(system_clock::now()-startTime).count();
+        //std::cout << "valor: " << value.count() << "     -- otos valores: " << timeElapsed - updateTickTime << std::endl;
+
+        //std::cout << system_clock::now() <<
+        //setDeltaTime(timeElapsed/1000000.0);
+        //physics->setDeltaTime(timeElapsed/1000000.0);
+        //std::cout << "Tiempo: " << timeElapsed/1000000.0 << std::endl;  // esto es mi deltaTime
+        timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();
+        
+        // actualizar cosas normales
+    
+
+        StateInGame::Update();
+        for (auto actualAI : manCars->GetEntities()) { // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
+            if (static_cast<Car*>(actualAI.get())->GetTypeCar() == TypeCar::CarAI){
+                manCars->UpdateCarAI(static_cast<CarAI*>(actualAI.get()), manPowerUps.get(), manBoxPowerUps.get(), manTotems.get(), manWayPoint.get(), manNavMesh.get(), manBoundingWall.get());
+                physicsEngine->UpdateCarAI(actualAI.get());
+            }
+        }
+        CAMBIARCosasDeTotemUpdate();
+
+        // COLISIONES entre powerUp y IA
+        collisions->IntersectsCarsPowerUps(manCars.get(), manPowerUps.get(), manNavMesh.get());
+        // COLISIONES entre BoxPowerUp y IA
+        collisions->IntersectCarsBoxPowerUp(manCars.get(), manBoxPowerUps.get());
+        // COLISIONES  entre la IA y el Totem
+        collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
+
+
+    }else{
+        //std::cout << "No entra: " << timeElapsed/1000000.0 << std::endl;
+    }
+    
+    
+    percentTick = min(1.0, (timeElapsed / updateTickTime)); 
+    //std::cout << "Transcurrido: " << percentTick << std::endl;
+    physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
+    // actualizar posicion
+
 }
 
 void StateInGameSingle::Render() {

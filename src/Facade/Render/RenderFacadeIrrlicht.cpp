@@ -344,17 +344,18 @@ void RenderFacadeIrrlicht::UpdateCamera(Entity* cam, ManCar* manCars) {
 
         }
         float angleRotation = (60 * PI) / 180.0;
-
         camera1->setTarget(targetPosition);
         camera1->setFOV(angleRotation);
         camera1->setPosition(core::vector3df(cTransformable->position.x, cTransformable->position.y-5, cTransformable->position.z));
 
     }else if(cCamera->camType == CamType::NORMAL){
         float angleRotation = (70 * PI) / 180.0;
-
+        targetPosition.X = 0.0;
+        targetPosition.Y = 0.0;
+        targetPosition.Z = -50.0;
         camera1->setTarget(targetPosition);
         camera1->setFOV(angleRotation);
-        camera1->setPosition(core::vector3df(cTransformable->position.x, cTransformable->position.y, cTransformable->position.z));
+        camera1->setPosition(core::vector3df(200, 100, 0));
     }else if (cCamera->camType == CamType::TOTEM){
 
         auto car = manCars->GetCar();

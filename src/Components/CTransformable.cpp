@@ -7,4 +7,7 @@ CTransformable::CTransformable(glm::vec3 _pos, glm::vec3 _rot, glm::vec3 _scale)
     position = _pos;
     rotation = _rot;
     scale    = _scale;
+
+    positionPrev = _pos;
+    positionNext = _pos;
 }

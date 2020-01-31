@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StateInGame.h"
+#define FRAME_RATE 1.0
 
 class StateInGameSingle : public StateInGame {
    public:
@@ -23,4 +24,8 @@ class StateInGameSingle : public StateInGame {
     void CAMBIARCosasNavMesh(ManCar &, ManNavMesh &);
     void CAMBIARCosasDeTotemUpdate() override;
 
+    time_point<system_clock> start;
+    double updateTickTime = 1000000.0/FRAME_RATE;  // mircroseconds 16000  -> 16,000 milliseconds
+    double percentTick = 0.0;
+    double timeElapsed = 0.0;
 };
