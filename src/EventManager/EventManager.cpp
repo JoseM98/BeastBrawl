@@ -24,7 +24,7 @@ void EventManager::Update() {
     std::thread::id idEsteHilo = std::this_thread::get_id();
     while (idOcupado != idHiloCero && idOcupado != idEsteHilo);
     idOcupado = std::this_thread::get_id();
-    
+    while (idOcupado != idHiloCero && idOcupado != idEsteHilo);
     while (!events.empty()) {
         Event e = events.front();  //Cojemos el primero en la lista
         events.pop_front();        // Lo sacamos de la lista
@@ -51,7 +51,7 @@ void EventManager::AddEventMulti(Event e) {
     std::thread::id idEsteHilo = std::this_thread::get_id();
     while (idOcupado != idHiloCero && idOcupado != idEsteHilo);
     idOcupado = std::this_thread::get_id();
-
+    while (idOcupado != idHiloCero && idOcupado != idEsteHilo);
     //FIXME: Descomentar esto para que funcione con cola
     //eventQueue.push(e);
 
