@@ -4,6 +4,7 @@
 #include <memory>
 #include <queue>
 #include <thread>
+#include <atomic>
 #include <mutex>
 #include "Event.h"
 
@@ -29,7 +30,7 @@ class EventManager {
     EventManager() : id_single(0) {  };
 
     std::thread::id idHiloCero{0};
-    std::thread::id idOcupado {idHiloCero};
+    std::atomic<std::thread::id> idOcupado {idHiloCero};
 
     uint32_t id_single;
     // static const EventManager instance;

@@ -21,11 +21,10 @@ EventManager& EventManager::GetInstance() {
 //O(n)
 //Acceso: O(1)
 void EventManager::Update() {
-    std::lock_guard<std::mutex> lock(mutex);
-
-    // std::thread::id idEsteHilo = std::this_thread::get_id();
-    // while (idOcupado != idHiloCero && idOcupado != idEsteHilo);
-    // idOcupado = std::this_thread::get_id();
+    std::thread::id idEsteHilo = std::this_thread::get_id();
+    while (idOcupado != idHiloCero && idOcupado != idEsteHilo);
+    idOcupado = std::this_thread::get_id();
+    
     while (!events.empty()) {
         Event e = events.front();  //Cojemos el primero en la lista
         events.pop_front();        // Lo sacamos de la lista
@@ -43,16 +42,15 @@ void EventManager::Update() {
             }
         }
     }
-    // idOcupado = idHiloCero;
+    idOcupado = idHiloCero;
 }
 
 //Añade un evento a la cola de eventos
 // O(n) -> Recorremos la lista iterativamente hasta encontrar el valor directamente superior
 void EventManager::AddEventMulti(Event e) {
-    std::lock_guard<std::mutex> lock(mutex);
-    // std::thread::id idEsteHilo = std::this_thread::get_id();
-    // while (idOcupado != idHiloCero && idOcupado != idEsteHilo);
-    // idOcupado = std::this_thread::get_id();
+    std::thread::id idEsteHilo = std::this_thread::get_id();
+    while (idOcupado != idHiloCero && idOcupado != idEsteHilo);
+    idOcupado = std::this_thread::get_id();
 
     //FIXME: Descomentar esto para que funcione con cola
     //eventQueue.push(e);
@@ -73,13 +71,11 @@ void EventManager::AddEventMulti(Event e) {
 
         events.insert(it, e);
     }
-    // idOcupado = idHiloCero;
+    idOcupado = idHiloCero;
 }
 
 // Añade un listener al mapa
 void EventManager::SubscribeMulti(const Listener listener) {
-    std::lock_guard<std::mutex> lock(mutex);
-
     //Vamos a ver si tiene ya alguno de este tipo
     auto iterator = listeners.find(listener.type);
 
@@ -122,22 +118,16 @@ void EventManager::UnSubscribeMulti(EventType eType, string listenerName) {
 }
 
 void EventManager::ClearEvents() {
-    std::lock_guard<std::mutex> lock(mutex);
-
     events.clear();
 }
 
 void EventManager::ClearListeners() {
-    std::lock_guard<std::mutex> lock(mutex);
-
     listeners.clear();
 }
 
 //DEBUG: Recorre y muestra todos los suscriptores
 //Fuente: https://stackoverflow.com/questions/26281979/c-loop-through-map
 void EventManager::ShowSuscribers() {
-    std::lock_guard<std::mutex> lock(mutex);
-
     for (auto const& mapByType : listeners) {
         std::cout << "Tipo de evento: " << mapByType.first << "\n";
 
