@@ -36,8 +36,10 @@ void SystemOnline::SendSync(ManCar* manCars, ManTotem* manTotem){
 
     for(const auto& car : manCar.GetEntities()){
         auto cTotemCar = static_cast<CTotem *>(car->GetComponent(CompType::TotemComp).get());
-        if(cTotemCar->active == true)
+        if(cTotemCar->active == true) {
             totemInGround = false;
+            break;
+        }
     }
 
     if(manTotem->GetEntities().size() != 0){
@@ -53,5 +55,5 @@ void SystemOnline::SendSync(ManCar* manCars, ManTotem* manTotem){
     //std::cout << "Totem en suelo: " << totemInGround << std::endl; 
     //std::cout << "Pos totem: " << posTotem.x << " , " << posTotem.z << std::endl;
     //std::cout << "---------------------------------------" << std::endl; 
-    udpClient->SendSync(idOnlineMainCar ,cTransCar->position, cTransCar->rotation, cPowerUp->typePowerUp, cTotem->active, cTotem->accumulatedTime, totemInGround, posTotem);
+    udpClient->SendSync(idOnlineMainCar ,cTransCar->position, cTransCar->rotation, cPowerUp->typePowerUp, cTotem->active, cTotem->confirmed, cTotem->accumulatedTime, totemInGround, posTotem);
 }

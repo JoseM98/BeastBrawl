@@ -24,13 +24,14 @@ class UDPServer : public boost::enable_shared_from_this<UDPServer> {
     void HandleReceive(std::shared_ptr<unsigned char[]> recevBuff, std::shared_ptr<udp::endpoint> remoteEndpoint, const boost::system::error_code& error, size_t bytesTransferred);
     // void HandleReceive(const boost::system::error_code& error, size_t bytesTransferred);
     void HandleReceivedInputs(const unsigned char resendInputs[], const size_t currentBufferSize, const udp::endpoint& remoteClient);
-    void HandleReceivedSync(const unsigned char resendSync[], const size_t currentBufferSize, const udp::endpoint& remoteClient);
+    void HandleReceivedSync(Player& p, size_t currentIndex, unsigned char resendSync[], const size_t currentBufferSize, const udp::endpoint& remoteClient);
     void ResendBytesToOthers(const unsigned char resendBytes[], const size_t currentBufferSize, const udp::endpoint& remoteClient);
     void SendBytes(const unsigned char resendBytes[], const size_t currentBufferSize, const Player& player);
     //void SendInputs(const vector<Constants::InputTypes> inputs, const Player& player);
     void HandleSentBytes(const boost::system::error_code& errorCode, std::size_t bytesTransferred) const;
 
     void ReceiveNewCar();
+    void AssignTotemIfNeeded(Player &p);
 
     void RequestId();
     Player* GetPlayerById(uint16_t id);

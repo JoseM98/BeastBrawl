@@ -254,26 +254,21 @@ void StateInGame::CAMBIARCosasNavMesh(ManCar &manCars, ManNavMesh &manNavMesh){
 }
 
 
-void StateInGame::CAMBIARCosasDeTotemUpdate() {
-    bool todosFalse = true;
+void StateInGame::CAMBIARPositionTotemAboveCar() {
     auto cTransformTotem = static_cast<CTransformable *>(totemOnCar->GetComponent(CompType::TransformableComp).get());
     cTransformTotem->rotation.y += 0.1;
-    for (const auto& carAI : manCars->GetEntities()) {  // actualizamos los coche IA
+
+    // recorremos los coches
+    for (const auto& currentCar : manCars->GetEntities()) { 
         // comprobamos el componente totem y si lo tienen se lo ponemos justo encima para que se sepa quien lo lleva
-        auto cTotem = static_cast<CTotem *>(carAI.get()->GetComponent(CompType::TotemComp).get());
-        if (cTotem->active) {
-            todosFalse = false;
-            auto cTransformCar = static_cast<CTransformable *>(carAI.get()->GetComponent(CompType::TransformableComp).get());
+        auto cTotem = static_cast<CTotem *>(currentCar.get()->GetComponent(CompType::TotemComp).get());
+        if (cTotem->active && cTotem->confirmed) {
+            auto cTransformCar = static_cast<CTransformable *>(currentCar.get()->GetComponent(CompType::TransformableComp).get());
             cTransformTotem->position.x = cTransformCar->position.x;
             cTransformTotem->position.z = cTransformCar->position.z;
             cTransformTotem->position.y = 22.0f;
-            // supuestamente esta el drawAll que te lo hace no?????????????????
-            // si esta cambiando pero no se esta redibujando
             break; // cuando encontramos a alguien que ya lleva el totem, nos salimos del for, no seguimos comprobando a los demás
         }
-    }
-    if(todosFalse){
-        cTransformTotem->position.y = -100.0f;
     }
 
     renderEngine->UpdateTransformable(totemOnCar.get());

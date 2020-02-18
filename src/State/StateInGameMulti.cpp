@@ -3,26 +3,6 @@
 #include "../Components/COnline.h"
 #include "../Systems/SystemOnline.h"
 
-StateInGameMulti::StateInGameMulti() : StateInGame() {
-    InitVirtualMethods();
-    vec3 pos = vec3(120.0f, 20.0f, -300.0f);
-    manCars->CreateHumanCar(pos);
-
-    shared_ptr<Entity> car1 = manCars->GetEntities()[0];
-    COnline *cOnline1 = static_cast<COnline *>(car1->GetComponent(CompType::OnlineComp).get());
-    cOnline1->idClient = 1;
-
-    shared_ptr<Entity> car2 = manCars->GetEntities()[1];
-    COnline *cOnline2 = static_cast<COnline *>(car2->GetComponent(CompType::OnlineComp).get());
-    cOnline2->idClient = 2;
-
-    renderEngine->FacadeAddObject(car2.get());
-
-    vector<Constants::InputTypes> inputs;
-    sysOnline->SendInputs(inputs);  // enviamos un vector vacío la primera vez para que el servidor sepa que estamos vivos
-
-    CAMBIARCosasNavMesh(*manCars.get(), *manNavMesh.get());
-}
 
 StateInGameMulti::StateInGameMulti(uint16_t IdOnline, const vector<uint16_t> IdPlayersOnline) : StateInGame() {
     InitVirtualMethods();
@@ -55,6 +35,7 @@ StateInGameMulti::StateInGameMulti(uint16_t IdOnline, const vector<uint16_t> IdP
     sysOnline->SendInputs(inputs);  // enviamos un vector vacío la primera vez para que el servidor sepa que estamos vivos
 
     CAMBIARCosasNavMesh(*manCars.get(), *manNavMesh.get());
+    DeactivateTotems();
 }
 
 StateInGameMulti::~StateInGameMulti() {
@@ -62,6 +43,20 @@ StateInGameMulti::~StateInGameMulti() {
 
 void StateInGameMulti::InitState() {
     StateInGame::InitState();
+}
+
+/**
+ * Este método sirve para que se desactiven y desconfirmen todos los totems 
+ * al iniciar partida (están activos por defecto para no influir en el
+ * modo single). Esto es porque en el modo single no vale con coger el totem,
+ * el servidor nos tiene que confirmar que, efectivamente, tenemos totem.
+ */
+void StateInGameMulti::DeactivateTotems() {
+    for(auto& currentCar : manCars->GetEntities()) {
+        auto cTotem = static_cast<CTotem *>(currentCar.get()->GetComponent(CompType::TotemComp).get());
+        cTotem->active = false;
+        cTotem->confirmed = false;
+    }
 }
 
 void StateInGameMulti::Input() {
@@ -80,7 +75,7 @@ void StateInGameMulti::Input() {
     }
 
     auto millisSinceLastSyncSent = duration_cast<milliseconds>(now - lastTimeSentSync).count();
-    if (millisSinceLastSyncSent > 250) {  // 1000ms = 1s = 60fps; 2s = 120frames
+    if (millisSinceLastSyncSent > 500) {  // 1000ms = 1s = 60fps; 2s = 120frames
         lastTimeSentSync = now;
         sysOnline->SendSync(manCars.get(), manTotems.get());
     }
@@ -99,19 +94,11 @@ void StateInGameMulti::Update() {
         }
     }
 
-    CAMBIARCosasDeTotemUpdate();
+    CAMBIARPositionTotemAboveCar();
     // COLISIONES entre powerUp y cocheHuman
     collisions->IntersectsCarsPowerUps(manCars.get(), manPowerUps.get(), manNavMesh.get());
     // COLISIONES entre BoxPowerUp y cocheHuman
     collisions->IntersectCarsBoxPowerUp(manCars.get(), manBoxPowerUps.get());
-    // COLISIONES  entre la cocheHuman y el Totem
-    // collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
-    //if(manTotems->GetEntities().size() != 0){
-    //    auto cTransformable = static_cast<CTransformable *>(manTotems->GetEntities()[0]->GetComponent(CompType::TransformableComp).get());
-    //    std::cout << "X: " << cTransformable->position.x << "  -  Y: " << cTransformable->position.z << "\n";
-    //}else{
-    //    std::cout << "No existe totem\n";
-    //}
 }
 
 void StateInGameMulti::Render() {

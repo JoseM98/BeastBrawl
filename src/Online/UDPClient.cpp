@@ -1,7 +1,6 @@
 #include "UDPClient.h"
 #include "../src/EventManager/Event.h"
 #include "../src/EventManager/EventManager.h"
-// #include <src/EventManager/EventManager.h>
 #include <boost/asio/placeholders.hpp>
 #include <boost/bind.hpp>
 #include <deque>
@@ -115,6 +114,7 @@ void UDPClient::HandleReceivedSync(unsigned char* recevBuff, size_t bytesTransfe
     int64_t totemTime;
     glm::vec3 posTotem(0.0, 0.0, 0.0);
     bool haveTotem;
+    bool totemConfirmed;
     bool totemInGround;
 
     Utils::Deserialize(&petitionType, recevBuff, currentIndex);
@@ -123,10 +123,10 @@ void UDPClient::HandleReceivedSync(unsigned char* recevBuff, size_t bytesTransfe
         lastSyncIDReceived = idCall;
 
         Utils::Deserialize(&idCarOnline, recevBuff, currentIndex);
+        Utils::DeserializePowerUpTotem(recevBuff, typePU, haveTotem, totemConfirmed, totemInGround, currentIndex);
         glm::vec3 posCar = Utils::DeserializeVec3(recevBuff, currentIndex);
         glm::vec3 rotCar = Utils::DeserializeVec3(recevBuff, currentIndex);
 
-        Utils::DeserializePowerUpTotem(recevBuff, typePU, haveTotem, totemInGround, currentIndex);
 
         Utils::Deserialize(&totemTime, recevBuff, currentIndex);
         // realizar llamadas al event Manager de manCar
@@ -201,8 +201,15 @@ void UDPClient::HandleSentInputs(const boost::system::error_code& errorCode, std
     }
 }
 
-void UDPClient::SendSync(uint16_t idOnline, const glm::vec3& posCar, const glm::vec3& rotCar, typeCPowerUp tipoPU, bool haveTotem,
-                         int64_t totemTime, bool totemInGround, const glm::vec3& posTotem) {
+void UDPClient::SendSync(uint16_t idOnline, 
+                        const glm::vec3& posCar, 
+                        const glm::vec3& rotCar, 
+                        typeCPowerUp tipoPU, 
+                        bool haveTotem, 
+                        bool totemConfirmed,
+                        int64_t totemTime, 
+                        bool totemInGround, 
+                        const glm::vec3& posTotem) {
     unsigned char requestBuff[Constants::ONLINE_BUFFER_SIZE];
     size_t currentBuffSize = 0;
     uint8_t callType = Constants::PetitionTypes::SEND_SYNC;
@@ -211,10 +218,10 @@ void UDPClient::SendSync(uint16_t idOnline, const glm::vec3& posCar, const glm::
     Utils::Serialize(requestBuff, &callType, currentBuffSize);
     Utils::Serialize(requestBuff, &idCall, currentBuffSize);
     Utils::Serialize(requestBuff, &idOnline, currentBuffSize);
+    Utils::SerializePowerUpTotem(requestBuff, tipoPU, haveTotem, totemConfirmed, totemInGround, currentBuffSize);
     Utils::SerializeVec3(requestBuff, posCar, currentBuffSize);
     Utils::SerializeVec3(requestBuff, rotCar, currentBuffSize);
 
-    Utils::SerializePowerUpTotem(requestBuff, tipoPU, haveTotem, totemInGround, currentBuffSize);
     Utils::Serialize(requestBuff, &totemTime, currentBuffSize);
     if (totemInGround)
         Utils::SerializeVec3(requestBuff, posTotem, currentBuffSize);  // la pos del totem no se envia siempre

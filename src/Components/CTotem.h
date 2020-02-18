@@ -17,6 +17,7 @@ public:
     ~CTotem();
 
     bool active = false;
+    bool confirmed {true}; // lo ponemos a true para que no afecte en el stateInGameSingle
     time_point<system_clock> timeStart;        // reloj que contaviliza, cada vez que tenemos el totem, el tiempo
     const int64_t durationTime = 3000000;       // 30 seg, debes mantenerlo en tu poder
     int64_t accumulatedTime = 0;

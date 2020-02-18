@@ -41,8 +41,8 @@ void UDPServer::HandleReceive(std::shared_ptr<unsigned char[]> recevBuff, std::s
         Utils::Deserialize(&idPlayer, recevBuff.get(), currentIndex);
 
         // TODO: esto creo que podría evitarse
-        unsigned char buffRecieved[Constants::ONLINE_BUFFER_SIZE];
-        memcpy(&buffRecieved[0], &recevBuff.get()[0], bytesTransferred);
+        unsigned char buffReceived[Constants::ONLINE_BUFFER_SIZE];
+        memcpy(&buffReceived[0], &recevBuff.get()[0], bytesTransferred);
 
         SavePlayerIfNotExists(idPlayer, *remoteClient.get());
 
@@ -55,9 +55,9 @@ void UDPServer::HandleReceive(std::shared_ptr<unsigned char[]> recevBuff, std::s
                 case Constants::PetitionTypes::SEND_INPUTS: {
                     //std::cout << "Recibidos inputs: " << bytesTransferred << std::endl;
                     if (p.lastInputIDReceived < idCall) {
-                        cout << "Se ha recibido y reenviado un paquete de input del player " << idPlayer << endl;
+                        // cout << "Se ha recibido y reenviado un paquete de input del player " << idPlayer << endl;
                         p.lastInputIDReceived = idCall;
-                        HandleReceivedInputs(buffRecieved, bytesTransferred, *remoteClient.get());
+                        HandleReceivedInputs(buffReceived, bytesTransferred, *remoteClient.get());
                     } else {
                         cout << "Se ha ignorado un paquete de input porque era antiguo" << endl;
                     }
@@ -65,9 +65,9 @@ void UDPServer::HandleReceive(std::shared_ptr<unsigned char[]> recevBuff, std::s
                 case Constants::PetitionTypes::SEND_SYNC: {
                     //std::cout << "Recibida sincronizacion: " << bytesTransferred << std::endl;
                     if (p.lastSyncIDReceived < idCall) {
-                        cout << "Se ha recibido y reenviado un paquete de sync del player " << idPlayer << endl;
+                        // cout << "Se ha recibido y reenviado un paquete de sync del player " << idPlayer << endl;
                         p.lastSyncIDReceived = idCall;
-                        HandleReceivedSync(buffRecieved, bytesTransferred, *remoteClient.get());
+                        HandleReceivedSync(p, currentIndex, buffReceived, bytesTransferred, *remoteClient.get());
                     } else {
                         cout << "Se ha ignorado un paquete de sync porque era antiguo" << endl;
                     }
@@ -91,8 +91,43 @@ void UDPServer::HandleReceivedInputs(const unsigned char resendInputs[], const s
     ResendBytesToOthers(resendInputs, currentBufferSize, originalClient);
 }
 
-void UDPServer::HandleReceivedSync(const unsigned char resendSync[], const size_t currentBufferSize, const udp::endpoint& originalClient) {
+void UDPServer::HandleReceivedSync(Player& p, size_t currentIndex, unsigned char resendSync[], const size_t currentBufferSize, const udp::endpoint& originalClient) {
+    unsigned char byte;
+    Utils::Deserialize(&byte, resendSync, currentIndex);
+    bool haveTotem = false;
+    bool totemConfirmed = false;
+    bool totemLost = false;
+    if ((byte >> 3) & 1U)
+        haveTotem = true;
+
+    if ((byte >> 5) & 1U)
+        totemConfirmed = true;
+
+    if ((byte >> 6) & 1U)
+        totemLost = true;
+
+    // significa que ha cogido el totem por primera vez pero todavía 
+    // no tiene la confirmación del servidor
+    if(haveTotem && !totemConfirmed) {
+        AssignTotemIfNeeded(p);
+    } else if(totemLost) { // significa que ha perdido el totem, por ahora aquí no hacemos nada aún
+
+    } 
+
     ResendBytesToOthers(resendSync, currentBufferSize, originalClient);
+}
+
+void UDPServer::AssignTotemIfNeeded(Player &player) {
+    // primero recorremos a los jugadores para ver si alguno tiene ya el totem
+    // si alguno lo tiene, entonces ignoramos esta asignación de totem.
+    // esto puede pasar porque dos jugadores han cogido el totem a la vez
+    for(auto& currentPlayer : players) {
+        if(currentPlayer.hasTotem)
+            return;
+    }
+
+    // si nadie lo tenía, entonces le asignamos el totem. A ojos del servidor,
+    player.hasTotem = true;
 }
 
 void UDPServer::ResendBytesToOthers(const unsigned char resendBytes[], const size_t currentBufferSize, const udp::endpoint& originalClient) {
