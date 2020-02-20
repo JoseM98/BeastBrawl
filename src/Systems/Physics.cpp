@@ -174,6 +174,10 @@ void Physics::TurnLeft(Car *car, Camera *cam) {
     auto cCamera = static_cast<CCamera*>(cam->GetComponent(CompType::CameraComp).get());
     //Componentes del coche
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
+    auto cTrans = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
+
+    std::cout << "Gira derecha: " << cTrans->rotation.y << "\n";
+
 
     if (cCar->speed >= cCar->maxSpeed*0.15) {
         if (cCar->wheelRotation > -cCar->maxWheelRotation) {

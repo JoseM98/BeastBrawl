@@ -49,6 +49,8 @@
 #include "../fuzzyLogic/fuzzyLogic.h"
 #include "../Components/CNavMesh.h"
 #include "../Components/CCurrentNavMesh.h"
+#include "../Constants.h"
+
 //#include "btBulletDynamicsCommon.h"
 
 using namespace std;
@@ -64,7 +66,7 @@ class StateInGame : public State {
     void InitState() override;
     void Input() override;
     void Update() override;
-    void Render() override;
+    void Render(double timeElapsed, double updateTickTime) override;
     States GetState() { return State::States::INGAME_SINGLE; };
     void setDeltaTime(float _deltaTime){deltaTime = _deltaTime;};
 
@@ -87,7 +89,7 @@ class StateInGame : public State {
 
     shared_ptr<Physics> physics;
     //shared_ptr<float> deltaTime;
-    float deltaTime = 1.0/1.0;
+    float deltaTime = 1.0/FRAME_RATE;
     shared_ptr<PhysicsPowerUp> phisicsPowerUp;
     shared_ptr<SystemBoxPowerUp> sysBoxPowerUp;
     shared_ptr<Collisions> collisions;
@@ -114,4 +116,5 @@ class StateInGame : public State {
     void CAMBIARCosasDeTotem(ManTotem &);
     void CAMBIARCosasDeBoxPU(ManWayPoint &, ManBoxPowerUp &);
     void CAMBIARCosasNavMesh(ManNavMesh &);
+
 };

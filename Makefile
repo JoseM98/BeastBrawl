@@ -33,7 +33,7 @@ else
 	INCLUDE_GLEW := -I /include/glew/glew.h
 	#INCLUDE_BULLET := -I./include/bullet -I./include
 	CREATE_SYMLINKS := bash symlinks.sh
-	CC			:= g++
+	CC			:= ccache g++
 endif
 
 
@@ -42,7 +42,7 @@ OBJ_PATH    := obj/src
 SRC_PATH	:= src
 
 NAME_EXE	:= Beast_Brawl
-CXXFLAGS 	+= -Wall -Wno-unknown-pragmas -std=c++17 -pthread -ltbb # el no-unknown-pragmas es para que no salga el warning de los pragma region
+CXXFLAGS 	+= -Wall -Wno-unknown-pragmas -std=c++17 -fuse-ld=gold -pthread -ltbb # el no-unknown-pragmas es para que no salga el warning de los pragma region
 																	# -pthread es para la librería asio
 																	# -ltbb es para la librería tbb
 

@@ -137,12 +137,24 @@ void Game::MainLoop() {
     renderFacadeMan->GetRenderFacade()->FacadeSetWindowCaption("Beast Brawl");
 
     while (renderFacadeMan->GetRenderFacade()->FacadeRun()) {
-        currentState->Input();
-        currentState->Update();
+
+
+        timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();   
+        if(timeElapsed > updateTickTime){
+            start = system_clock::now();
+
+            currentState->Input();
+            currentState->Update();
+
+            timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count() + timeElapsed - updateTickTime;
+        }else{
+            //std::cout << "No entra: " << timeElapsed/1000000.0 << std::endl;
+        }
+
 
         //Actualiza el motor de audio.
         soundFacadeManager->GetSoundFacade()->Update();
-        currentState->Render();
+        currentState->Render(timeElapsed, updateTickTime);
     }
 
     renderFacadeMan->GetRenderFacade()->FacadeDeviceDrop();

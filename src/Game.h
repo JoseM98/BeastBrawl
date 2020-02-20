@@ -11,7 +11,9 @@
 
 #include <iostream>
 #include <memory>
+#include "Constants.h"
 using namespace std;
+
 
 class Game{
     public:
@@ -45,5 +47,10 @@ class Game{
         shared_ptr<State> lastState;
 
         bool gameStarted = false;
+
+
+        time_point<system_clock> start;
+        double updateTickTime = 1000000.0/FRAME_RATE;  // mircroseconds 16000  -> 16,000 milliseconds
+        double timeElapsed = 0.0;
 };
 

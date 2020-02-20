@@ -12,7 +12,7 @@ class StateInGameMulti : public StateInGame {
     void InitState() override;
     void Input() override;
     void Update() override;
-    void Render() override;
+    void Render(double timeElapsed, double updateTickTime) override;
     States GetState() { return State::States::INGAME_MULTI; };
 
    private:

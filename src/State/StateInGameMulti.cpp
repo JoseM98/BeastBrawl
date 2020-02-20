@@ -112,9 +112,9 @@ void StateInGameMulti::Update() {
     collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
 }
 
-void StateInGameMulti::Render() {
+void StateInGameMulti::Render(double timeElapsed, double updateTickTime) {
     renderEngine->FacadeDrawBoundingBox(manCars.get()->GetCar().get(), true);
-    StateInGame::Render();
+    StateInGame::Render(timeElapsed, updateTickTime);
 }
 
 void StateInGameMulti::InitializeCLPhysics(ManCar &manCars, ManBoundingWall &manBoundingWall) {

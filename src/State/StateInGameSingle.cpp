@@ -45,11 +45,7 @@ void StateInGameSingle::Input() {
 }
 
 void StateInGameSingle::Update() {
-    timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();
-    
-    
-    if(timeElapsed > updateTickTime){
-        start = system_clock::now();
+
 
         //auto now_ms = std::chrono::time_point_cast<std::chrono::microseconds>(start);
         //auto value = now_ms.time_since_epoch();
@@ -65,7 +61,7 @@ void StateInGameSingle::Update() {
         //setDeltaTime(timeElapsed/1000000.0);
         //physics->setDeltaTime(timeElapsed/1000000.0);
         //std::cout << "Tiempo: " << timeElapsed/1000000.0 << std::endl;  // esto es mi deltaTime
-        timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();
+        
         
         // actualizar cosas normales
     
@@ -86,20 +82,12 @@ void StateInGameSingle::Update() {
         // COLISIONES  entre la IA y el Totem
         collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
 
-
-    }else{
-        //std::cout << "No entra: " << timeElapsed/1000000.0 << std::endl;
-    }
-    
-    
-    percentTick = min(1.0, (timeElapsed / updateTickTime)); 
-    //std::cout << "Transcurrido: " << percentTick << std::endl;
-    physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
-    // actualizar posicion
-
 }
 
-void StateInGameSingle::Render() {
+void StateInGameSingle::Render(double timeElapsed, double updateTickTime) {
+    double percentTick = min(1.0, (timeElapsed / updateTickTime)); 
+    physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
+
     //auto carPrincial = manCars->GetCar().get();
     //bool isColliding = collisions->Intersects(manCars.get()->GetCar().get(), carPrincial);
     //renderEngine->FacadeDrawBoundingBox(manCars.get()->GetCar().get(), isColliding);
@@ -108,7 +96,7 @@ void StateInGameSingle::Render() {
         renderEngine->FacadeDrawBoundingBox(cars.get(), false);
     }
     //renderEngine->FacadeDrawBoundingBox(carPrincial, isColliding);
-    StateInGame::Render();
+    StateInGame::Render(timeElapsed, updateTickTime);
 }
 
 void StateInGameSingle::InitializeCLPhysics(ManCar &manCars, ManBoundingWall &manBoundingWall) {

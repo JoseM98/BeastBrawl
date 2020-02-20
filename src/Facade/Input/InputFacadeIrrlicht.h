@@ -20,6 +20,8 @@ class MyEventReceiver : public IEventReceiver{
 			if (event.EventType == EET_KEY_INPUT_EVENT)
 				KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
 
+			if(event.EventType == irr::EET_JOYSTICK_INPUT_EVENT && event.JoystickEvent.Joystick == 0)
+				JoystickState = event.JoystickEvent;
 			return false;
 		}
 
@@ -29,6 +31,10 @@ class MyEventReceiver : public IEventReceiver{
 			return KeyIsDown[keyCode];
 		}
 		
+		const SEvent::SJoystickEvent & GetJoysStickState(void) const{
+			return JoystickState;
+		}
+
 		MyEventReceiver()
 		{
 			for (u32 i=0; i<KEY_KEY_CODES_COUNT; ++i)
@@ -38,6 +44,7 @@ class MyEventReceiver : public IEventReceiver{
 	private:
 		// We use this array to store the current state of each key
 		bool KeyIsDown[KEY_KEY_CODES_COUNT];
+		SEvent::SJoystickEvent JoystickState;
 };
 
 class InputFacadeIrrlicht : public InputFacade{

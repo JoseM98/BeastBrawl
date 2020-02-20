@@ -1,7 +1,6 @@
 #pragma once
 
 #include "StateInGame.h"
-#define FRAME_RATE 1.0
 
 class StateInGameSingle : public StateInGame {
    public:
@@ -10,7 +9,7 @@ class StateInGameSingle : public StateInGame {
     void InitState() override;
     void Input() override;
     void Update() override;
-    void Render() override;
+    void Render(double timeElapsed, double updateTickTime) override;
     States GetState() { return State::States::INGAME_SINGLE; };
 
    private:
@@ -23,9 +22,4 @@ class StateInGameSingle : public StateInGame {
     void CAMBIARInicializarCarAIS(ManCar &, ManWayPoint &);
     void CAMBIARCosasNavMesh(ManCar &, ManNavMesh &);
     void CAMBIARCosasDeTotemUpdate() override;
-
-    time_point<system_clock> start;
-    double updateTickTime = 1000000.0/FRAME_RATE;  // mircroseconds 16000  -> 16,000 milliseconds
-    double percentTick = 0.0;
-    double timeElapsed = 0.0;
 };
