@@ -86,6 +86,7 @@ void StateInGameSingle::Update() {
 
 void StateInGameSingle::Render(double timeElapsed, double updateTickTime) {
     double percentTick = min(1.0, (timeElapsed / updateTickTime)); 
+    cout << "PercentTick[" << percentTick << "]" << endl;
     physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
 
     //auto carPrincial = manCars->GetCar().get();

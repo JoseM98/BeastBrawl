@@ -3,7 +3,8 @@
 #define SERVER_HOST "localhost"
 #define SERVER_PORT_UDP "1234"
 #define SERVER_PORT_TCP "1235"
-#define FRAME_RATE 1.0
+#define UPDATE_FRAME_RATE 15.0
+#define FRAME_RATE 60.0
 
 
 class Constants {

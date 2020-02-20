@@ -34,7 +34,7 @@ CarAI::CarAI(){
     glm::vec3 scale = glm::vec3(0.6f, 0.6f, 0.6f);
     string texture = "";
     string mesh    = "kart_ia.obj";
-    float maxSpeed = 200.0, acceleration = 1.5, friction = 1.0, slowDown = 2.5;
+    float maxSpeed = 800.0, acceleration = 50, friction = 10, slowDown = 200;
     
     shared_ptr<CId> cId   = make_shared<CId>();
     shared_ptr<CType> cType = make_shared<CType>(ModelType::AnimatedMesh);

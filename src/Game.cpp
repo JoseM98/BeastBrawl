@@ -138,22 +138,29 @@ void Game::MainLoop() {
 
     while (renderFacadeMan->GetRenderFacade()->FacadeRun()) {
 
-
+        
         timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();   
-        if(timeElapsed > updateTickTime){
+        // if(timeElapsed > updateTickTime){
+        if(timeElapsed >= updateTickTime - 1000){
+            cout << "////////////////// Entramos en el update /////////////////" << endl;
             start = system_clock::now();
 
             currentState->Input();
             currentState->Update();
-
-            timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count() + timeElapsed - updateTickTime;
-        }else{
-            //std::cout << "No entra: " << timeElapsed/1000000.0 << std::endl;
+            // int64_t tiempoQueSePasa = timeElapsed - updateTickTime;
+            timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();
+            cout << "El timeElapsed dentro del input es " << timeElapsed << endl;
+            // cout << "El tiempoQueSePasa dentro del input es " << tiempoQueSePasa << endl;
+            // timeElapsed += tiempoQueSePasa;
+            
         }
-
 
         //Actualiza el motor de audio.
         soundFacadeManager->GetSoundFacade()->Update();
+
+        cout << "TimeElapsed[" << timeElapsed << "]" << endl;
+        // cout << "UpdateTickTime[" << updateTickTime << "]" << endl;
+
         currentState->Render(timeElapsed, updateTickTime);
     }
 

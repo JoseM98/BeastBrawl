@@ -50,7 +50,7 @@ class Game{
 
 
         time_point<system_clock> start;
-        double updateTickTime = 1000000.0/FRAME_RATE;  // mircroseconds 16000  -> 16,000 milliseconds
-        double timeElapsed = 0.0;
+        const double updateTickTime = 1/UPDATE_FRAME_RATE * 1000000;
+        int64_t timeElapsed { 0 };
 };
 

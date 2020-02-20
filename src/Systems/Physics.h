@@ -3,6 +3,8 @@
 
 #include "../EventManager/Event.h"
 #include "../EventManager/EventManager.h"
+#include "../EventManager/EventManager.h"
+#include "../Constants.h"
 
 
 #include <math.h>
@@ -40,12 +42,12 @@ class Physics {
     void NotTurningHuman(CCar &cCar) const;
 
     void UpdateEveryFrame(Car* car, Camera* cam, const double percentTick);
-    void setDeltaTime(float _deltaTime){deltaTime = _deltaTime;};
+    // void setDeltaTime(float _deltaTime){deltaTime = _deltaTime;};
 
    protected:
    private:
     void CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpeed *cSpeed, float deltaTime);
     void CalculatePositionReverse(CCar *cCar, CTransformable *cTransformable, float deltaTime);
     void CalculatePositionCamera(CTransformable *cTransformableCar, CTransformable *cTransformableCamera, CCamera *cCamera);
-    float deltaTime;
+    float deltaTime {1/FRAME_RATE};
 };
