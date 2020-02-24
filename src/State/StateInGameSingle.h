@@ -9,7 +9,7 @@ class StateInGameSingle : public StateInGame {
     void InitState() override;
     void Input() override;
     void Update() override;
-    void Render(double timeElapsed, double updateTickTime) override;
+    void Render(double timeElapsed) override;
     States GetState() { return State::States::INGAME_SINGLE; };
 
    private:

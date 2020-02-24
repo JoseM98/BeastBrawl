@@ -27,7 +27,7 @@ void StateEndRace::InitState() {
 }
 
 
-void StateEndRace::Render(double timeElapsed, double updateTickTime){
+void StateEndRace::Render(double timeElapsed){
     renderEngine->FacadeDrawEndRace();
 }
 

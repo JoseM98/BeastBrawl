@@ -25,7 +25,7 @@ void StatePause::InitState() {
 }
 
 
-void StatePause::Render(double timeElapsed, double updateTickTime){
+void StatePause::Render(double timeElapsed){
     renderEngine->FacadeDrawPause();
 }
 

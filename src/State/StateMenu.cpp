@@ -27,7 +27,7 @@ void StateMenu::InitState() {
 }
 
 
-void StateMenu::Render(double timeElapsed, double updateTickTime){
+void StateMenu::Render(double timeElapsed){
     renderEngine->FacadeDrawMenu();
 }
 

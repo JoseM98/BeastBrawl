@@ -186,7 +186,7 @@ void StateInGame::Update() {
     
 }
 
-void StateInGame::Render(double timeElapsed, double updateTickTime) {
+void StateInGame::Render(double timeElapsed) {
     // Actualizaciones en Irrlich
     renderEngine->UpdateCamera(cam.get(), manCars.get());
     physicsEngine->UpdateCar(manCars.get()->GetCar().get(), cam.get());

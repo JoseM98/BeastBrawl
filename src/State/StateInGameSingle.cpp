@@ -84,20 +84,16 @@ void StateInGameSingle::Update() {
 
 }
 
-void StateInGameSingle::Render(double timeElapsed, double updateTickTime) {
-    double percentTick = min(1.0, (timeElapsed / updateTickTime)); 
+void StateInGameSingle::Render(double timeElapsed) {
+    double percentTick = min(1.0, (timeElapsed / Constants::TIME_BETWEEN_UPDATES_us)); 
     cout << "PercentTick[" << percentTick << "]" << endl;
     physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
-
-    //auto carPrincial = manCars->GetCar().get();
-    //bool isColliding = collisions->Intersects(manCars.get()->GetCar().get(), carPrincial);
-    //renderEngine->FacadeDrawBoundingBox(manCars.get()->GetCar().get(), isColliding);
 
     for (auto cars : manCars->GetEntities()) {
         renderEngine->FacadeDrawBoundingBox(cars.get(), false);
     }
     //renderEngine->FacadeDrawBoundingBox(carPrincial, isColliding);
-    StateInGame::Render(timeElapsed, updateTickTime);
+    StateInGame::Render(timeElapsed);
 }
 
 void StateInGameSingle::InitializeCLPhysics(ManCar &manCars, ManBoundingWall &manBoundingWall) {

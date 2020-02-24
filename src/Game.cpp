@@ -141,7 +141,7 @@ void Game::MainLoop() {
         
         timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();   
         // if(timeElapsed > updateTickTime){
-        if(timeElapsed >= updateTickTime - 1000){
+        if(timeElapsed >= Constants::TIME_BETWEEN_UPDATES_us - 1000){
             cout << "////////////////// Entramos en el update /////////////////" << endl;
             start = system_clock::now();
 
@@ -161,7 +161,7 @@ void Game::MainLoop() {
         cout << "TimeElapsed[" << timeElapsed << "]" << endl;
         // cout << "UpdateTickTime[" << updateTickTime << "]" << endl;
 
-        currentState->Render(timeElapsed, updateTickTime);
+        currentState->Render(timeElapsed);
     }
 
     renderFacadeMan->GetRenderFacade()->FacadeDeviceDrop();

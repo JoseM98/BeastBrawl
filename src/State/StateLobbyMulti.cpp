@@ -34,7 +34,7 @@ void StateLobbyMulti::InitState() {
     //cout << "> MENU iniciado" << endl;
 }
 
-void StateLobbyMulti::Render(double timeElapsed, double updateTickTime) {
+void StateLobbyMulti::Render(double timeElapsed) {
     renderEngine->FacadeDrawLobbyMulti();
 }
 

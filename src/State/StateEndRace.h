@@ -17,7 +17,7 @@ class StateEndRace : public State{
         void Input() override;
         void InitState() override;
         void Update() override;
-        void Render(double timeElapsed, double updateTickTime) override;
+        void Render(double timeElapsed) override;
         States GetState() { return State::States::MENU; };
 
 
