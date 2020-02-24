@@ -1,14 +1,18 @@
 #include "TCPServer.h"
+
 #include <boost/asio/placeholders.hpp>
 #include <boost/bind.hpp>
 #include "../../include/include_json/include_json.hpp"
-#include "../src/Constants.h"
+#include "../../src/Constants.h"
+#include "../src/Systems/Utils.h"
+//#include "../../src/Systems/Serialization.h"
+
 
 using json = nlohmann::json;
 using boost::asio::ip::tcp;
 using namespace std::chrono;
 
-#define MIN_NUM_PLAYERS 2
+#define MIN_NUM_PLAYERS 4
 
 TCPServer::TCPServer(boost::asio::io_context& context_, uint16_t port_)
     : context(context_), acceptor_(context_, tcp::endpoint(tcp::v4(), port_)) {
@@ -17,7 +21,6 @@ TCPServer::TCPServer(boost::asio::io_context& context_, uint16_t port_)
 
 void TCPServer::StartReceiving() {
     TCPConnection::pointer new_connection = TCPConnection::Create(context);
-
     acceptor_.async_accept(
         new_connection->socket(),
         boost::bind(&TCPServer::HandleAccept,
@@ -39,7 +42,7 @@ void TCPServer::HandleAccept(TCPConnection::pointer new_connection, const boost:
             players.push_back(p);
         }
         std::cout << "Num conexiones: " << connections.size() << std::endl;
-        if (connections.size() == MIN_NUM_PLAYERS) {
+        if (connections.size() >= MIN_NUM_PLAYERS) {
             cout << "Ya hemos llegado al núm de conexiones para enviar partida, vamos a visar a los clientes" << endl;
             SendStartGame();
             // justo despues vaciar el tcp para otra conexion
@@ -66,21 +69,30 @@ void TCPServer::SendStartGame() {
     for (auto currentPlayer : connections) {
         json j;
         uint8_t posVector = 0;
-        uint32_t numero = 0;
-        vector<uint32_t> dataEnemies;
+        uint16_t idPlayer = 0;
+        vector<uint16_t> idsEnemies;
         for (auto currentPlayerSub : connections) {
             if (currentPlayer == currentPlayerSub) {
-                numero = players[posVector].id + 1;  // cuidado al igualar uint16 con uint32
+                idPlayer = players[posVector].id + 1;
             } else {
-                dataEnemies.push_back(players[posVector].id + 1);
+                idsEnemies.push_back(players[posVector].id + 1);
             }
             posVector++;
         }
 
-        j["idPlayer"] = numero;
-        j["idEnemies"] = dataEnemies;
-        string datos = j.dump();
+        // std::shared_ptr<boost::array<unsigned char, Constants::ONLINE_BUFFER_SIZE>> buff = make_shared<boost::array<unsigned char, Constants::ONLINE_BUFFER_SIZE>>();
+        std::shared_ptr<unsigned char[]> buff(new unsigned char[Constants::ONLINE_BUFFER_SIZE]);
+        size_t currentBuffSize = 0;
+        uint8_t enemiesSize = idsEnemies.size();
+    
+        Utils::Serialize(buff.get(), &idPlayer, currentBuffSize);
+        Utils::Serialize(buff.get(), &enemiesSize, currentBuffSize);
+        Utils::SerializeVector(buff.get(), idsEnemies, currentBuffSize);
 
-        currentPlayer->SendStartMessage(datos);
+        // j["idPlayer"] = idPlayer;
+        // j["idEnemies"] = idsEnemies;
+        // string datos = j.dump();
+
+        currentPlayer->SendStartMessage(buff.get(), currentBuffSize);
     }
 }

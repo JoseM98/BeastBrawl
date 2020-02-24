@@ -1,8 +1,8 @@
 #pragma once
 
 #include "RenderFacade.h"
-#include "../../EventManager/Event.h"
-#include "../../EventManager/EventManager.h"
+#include <EventManager/Event.h>
+#include <EventManager/EventManager.h>
 
 #include <codecvt>
 #include <iostream>
@@ -28,9 +28,10 @@ class RenderFacadeClover : public RenderFacade {
       void UpdateCamera(Entity*, ManCar* manCars) override;
       bool FacadeRun() override;
       uint32_t FacadeGetTime() const override;
-      vector<Constants::InputTypes>  FacadeCheckInput() override;
+      vector<Constants::InputTypes> FacadeCheckInputMulti() override;
+      void FacadeCheckInputSingle() override;
       int FacadeGetFPS() const override;
-      void FacadeSetWindowCaption(std::string) const override;
+      void FacadeSetWindowCaption(std::string, int) const override;
       void FacadeBeginScene() const override;
       void FacadeDrawAll() const override;
       void FacadeEndScene() const override;
@@ -55,7 +56,7 @@ class RenderFacadeClover : public RenderFacade {
       void FacadeSuscribeEvents() override;
       void FacadeAddPlates(Manager* manNamePlates) override;
       void FacadeUpdatePlates(Manager* manNamePlates) override;
-      void ThrowEventChangeToMulti(string dataServer) override;
+      void ThrowEventChangeToMulti(uint16_t IdOnline, const vector<uint16_t> IdPlayersOnline) override;
 
       //DEBUG
       void Draw3DLine(vec3& pos1, vec3& pos2, uint16_t r, uint16_t g, uint16_t b) const override;
@@ -63,6 +64,7 @@ class RenderFacadeClover : public RenderFacade {
       void FacadeDrawGraphEdges(ManWayPoint* manWayPoints) const override;
       void FacadeDrawBoundingBox(Entity* entity, bool colliding) const override;
       void FacadeDrawBoundingPlane(Entity* entity) const override;
+      void FacadeDrawBoundingOBB(Entity* entity) const override;
       void FacadeDrawAIDebug(ManCar* manCars, ManNavMesh* manNavMesh, ManWayPoint* manWayPoint) const override;
       void FacadeDrawAIDebugPath(Entity* carAI, ManWayPoint* manWayPoint) const override;
 

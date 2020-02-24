@@ -6,6 +6,8 @@
 #include "../EventManager/Event.h"
 #include "../EventManager/EventManager.h"
 #include "../Systems/Utils.h"
+//#include "../Systems/Serialization.h"
+
 
 using json = nlohmann::json;
 
@@ -15,10 +17,10 @@ using namespace boost::asio;
 using namespace std::chrono;
 using namespace std;
 
-TCPClient::TCPClient(string host_, string port_)
+TCPClient::TCPClient(string host_, uint16_t port_)
     : context{},
       //   endpoints{tcp::resolver(context).resolve(host_, port_)},
-      serverEndpoint{*tcp::resolver(context).resolve(tcp::v4(), host_, port_).begin()},
+      serverEndpoint{*tcp::resolver(context).resolve(tcp::v4(), host_, to_string(port_)).begin()},
       stopped{false},
       socket(context),
       butler{[&]() {
@@ -96,18 +98,20 @@ void TCPClient::StartReceiving() {
     //std::shared_ptr<string> recevBuff = make_shared<string>();
     cout << "Estamos en StartReceiving" << endl;
 
-    std::shared_ptr<boost::array<char, 1024>> recevBuff = make_shared<boost::array<char, 1024>>();
+    // std::shared_ptr<boost::array<char, Constants::ONLINE_BUFFER_SIZE>> recevBuff = make_shared<boost::array<char, Constants::ONLINE_BUFFER_SIZE>>();
+    // unsigned char *buff[Constants::ONLINE_BUFFER_SIZE];
+    std::shared_ptr<unsigned char[]> buff ( new unsigned char[Constants::ONLINE_BUFFER_SIZE] );
     socket.async_receive(
-        asio::buffer(*recevBuff),
+        asio::buffer(buff.get(), Constants::ONLINE_BUFFER_SIZE),
         boost::bind(
             &TCPClient::HandleReceived,
             this,
-            recevBuff,
+            buff,
             boost::asio::placeholders::error,
             boost::asio::placeholders::bytes_transferred));
 }
 
-void TCPClient::HandleReceived(std::shared_ptr<boost::array<char, 1024>> recevBuff, const boost::system::error_code& errorCode, std::size_t bytesTransferred) {
+void TCPClient::HandleReceived(std::shared_ptr<unsigned char[]> recevBuff, const boost::system::error_code& errorCode, std::size_t bytesTransferred) {
     cout << "Estamos en HandleReceived" << endl;
     if (stopped) {
         cout << "Hemos intentado recibir pero el cliente tcp estaba parado" << endl;
@@ -115,17 +119,21 @@ void TCPClient::HandleReceived(std::shared_ptr<boost::array<char, 1024>> recevBu
     }
 
     if (!errorCode && bytesTransferred > 0) {
-        string receivedString;
-        std::copy(recevBuff->begin(), recevBuff->begin() + bytesTransferred, std::back_inserter(receivedString));
+        uint16_t idPlayer;
+        uint8_t enemiesSize;
+        vector<uint16_t> idEnemies;
+        size_t currentIndex = 0;
 
+        Utils::Deserialize(&idPlayer, recevBuff.get(), currentIndex);
+        Utils::Deserialize(&enemiesSize, recevBuff.get(), currentIndex);
+        Utils::DeserializeVector(idEnemies, enemiesSize, recevBuff.get(), currentIndex);
+        
         std::shared_ptr<DataMap> data = make_shared<DataMap>();
-        (*data)["dataServer"] = receivedString;
+        (*data)[DataType::ID_ONLINE] = idPlayer;
+        (*data)[DataType::VECTOR_ID_ONLINE] = idEnemies;
         EventManager::GetInstance().AddEventMulti(Event{EventType::NEW_TCP_START_MULTI, data});
 
-        json receivedJSON = json::parse(receivedString);
-        uint32_t idPlayer = receivedJSON["idPlayer"];
-        vector<uint32_t> arrayIdEnemies = receivedJSON["idEnemies"];
-        std::cout << "El cliente TCP recibe: " << receivedString << std::endl;
+        std::cout << "El cliente TCP recibe cosas" << std::endl;
     } else if (errorCode) {
         cout << "Hubo un error con código " << errorCode << endl;
     } else {
@@ -140,20 +148,13 @@ void TCPClient::SendConnectionRequest() {
         return;
     }
 
-    //json j;
-    //j["petitionType"] = Constants::PetitionTypes::SEND_INPUTS;
-    //j["id"] = id;
-    //j["inputs"] = inputs;
-    //string jsonToBeSent = j.dump();
-    // cout << "Vamos a enviar datos" << endl;
-    uint16_t numero = 1;
-    //sendBuff2[0] = boost::asio::buffer(&numero, sizeof(numero));
-    json j;
-    j["requestConnection"] = numero;
+    unsigned char request[Constants::ONLINE_BUFFER_SIZE];
+    uint8_t numero = Constants::CONNECTION_REQUEST;
+    size_t currentBuffSize = 0;
+    Utils::Serialize(request, &numero, currentBuffSize);
 
-    string s = j.dump();
     socket.async_send(
-        boost::asio::buffer(s, s.size()),
+        boost::asio::buffer(request, currentBuffSize),
         boost::bind(
             &TCPClient::HandleSentConnectionRequest,
             this,

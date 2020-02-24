@@ -1,25 +1,26 @@
 #include "CarAI.h"
 
-#include "../Components/CSpeed.h"
-#include "../Components/CId.h"
-#include "../Components/CType.h"
-#include "../Components/CTexture.h"
-#include "../Components/CMesh.h"
-#include "../Components/CPowerUp.h"
-#include "../Components/CTransformable.h"
-#include "../Components/CCar.h"
-#include "../Components/CPath.h"
-#include "../Components/CShield.h"
-#include "../Components/CTotem.h"
-#include "../Components/CRoboJorobo.h"
-#include "../Components/CNitro.h"
-#include "../Components/CBoundingSphere.h"
-#include "../Components/CColliding.h"
-#include "../Components/CCurrentNavMesh.h"
-#include "../Components/CTargetNavMesh.h"
-#include "../Components/CBoundingRay.h"
-#include "../Components/CMovementType.h"
-
+#include <Components/CSpeed.h>
+#include <Components/CId.h>
+#include <Components/CType.h>
+#include <Components/CTexture.h>
+#include <Components/CMesh.h>
+#include <Components/CPowerUp.h>
+#include <Components/CTransformable.h>
+#include <Components/CCar.h>
+#include <Components/CPath.h>
+#include <Components/CShield.h>
+#include <Components/CTotem.h>
+#include <Components/CRoboJorobo.h>
+#include <Components/CNitro.h>
+#include <Components/CBoundingSphere.h>
+#include <Components/CColliding.h>
+#include <Components/CCurrentNavMesh.h>
+#include <Components/CTargetNavMesh.h>
+#include <Components/CBoundingRay.h>
+#include <Components/CMovementType.h>
+#include "../Components/CExternalForce.h"
+#include "../Components/CBoundingChassis.h"
 
 
 class Position;
@@ -61,6 +62,13 @@ CarAI::CarAI(){
     shared_ptr<CBoundingSphere> cBoundSphere = make_shared<CBoundingSphere>(pos);
     shared_ptr<CBoundingRay> cBoundRay = make_shared<CBoundingRay>();
     shared_ptr<CMovementType> cMovementType = make_shared<CMovementType>("Empty");
+
+    shared_ptr<CExternalForce> cExternalForce = make_shared<CExternalForce>();
+
+    glm::vec3 pSphBehind = pos;
+    glm::vec3 pSphFront = pos;
+    shared_ptr<CBoundingChassis> cBoundingChassis = make_shared<CBoundingChassis>(pSphBehind, 8.0, pSphFront, 8.0);
+
     AddComponent(cId);
     AddComponent(cType);
     AddComponent(cTransformable);
@@ -86,6 +94,10 @@ CarAI::CarAI(){
 
     AddComponent(cCurrentNavMesh);
     AddComponent(cTargetNavMesh);
+
+    AddComponent(cExternalForce);
+
+    AddComponent(cBoundingChassis);
     cout << "Acabamos de llamar al constructor default de car, su transformable es " << cTransformable << endl;
 }
 

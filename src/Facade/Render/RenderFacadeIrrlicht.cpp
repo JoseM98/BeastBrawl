@@ -1,31 +1,33 @@
-#define _USE_MATH_DEFINES
-
 #include "RenderFacadeIrrlicht.h"
 
-#include <math.h>
-#include "../../Aliases.h"
-#include "../../Components/CBoundingPlane.h"
-#include "../../Components/CBoundingSphere.h"
+#include <cmath>
+#include "../../Components/CBoundingChassis.h"
+#include "../../Components/CBoundingOBB.h"
 #include "../../Components/CPowerUp.h"
-#include "../../Components/CCamera.h"
-#include "../../Components/CDimensions.h"
-#include "../../Components/CId.h"
-#include "../../Components/CMesh.h"
-#include "../../Components/CNamePlate.h"
-#include "../../Components/CPath.h"
-#include "../../Components/CTexture.h"
-#include "../../Components/CTargetNavMesh.h"
-#include "../../Components/CTotem.h"
-#include "../../Components/CTransformable.h"
-#include "../../Components/CType.h"
-#include "../../Components/CWayPoint.h"
-#include "../../Components/CWayPointEdges.h"
-#include "../../Components/CMovementType.h"
-#include "../../Components/Component.h"
-#include "../../Constants.h"
-#include "../../Entities/WayPoint.h"
-#include "../../Entities/CarAI.h"
-#include "../../Game.h"
+
+#include <Components/CBoundingPlane.h>
+#include <Components/CBoundingSphere.h>
+#include <Components/CCamera.h>
+#include <Components/CDimensions.h>
+#include <Components/CId.h>
+#include <Components/CMesh.h>
+#include <Components/CNamePlate.h>
+#include <Components/CPath.h>
+#include <Components/CTexture.h>
+#include <Components/CTargetNavMesh.h>
+#include <Components/CTotem.h>
+#include <Components/CType.h>
+#include <Components/CWayPointEdges.h>
+#include <Components/CMovementType.h>
+#include <Components/CNavMesh.h>
+#include <Components/CCurrentNavMesh.h>
+#include <Components/CCar.h>
+#include <Entities/CarAI.h>
+#include <Entities/CarHuman.h>
+#include <Systems/Physics.h>
+#include <Managers/ManNavMesh.h>
+#include <Constants.h>
+#include <Game.h>
 
 using namespace irr;
 using namespace video;
@@ -84,7 +86,7 @@ RenderFacadeIrrlicht::RenderFacadeIrrlicht() {
 }
 
 void RenderFacadeIrrlicht::FacadeSuscribeEvents() {
-    EventManager::GetInstance().Suscribe(Listener{
+    EventManager::GetInstance().Subscribe(Listener{
         EventType::UPDATE_POWERUP_HUD,
         bind(&RenderFacadeIrrlicht::FacadeUpdatePowerUpHUD, this, placeholders::_1),
         "facadeUpdatePowerUpHUD"});
@@ -135,7 +137,7 @@ void RenderFacadeIrrlicht::FacadeInitHUD() {
 }
 
 void RenderFacadeIrrlicht::FacadeUpdatePowerUpHUD(DataMap* d) {
-    typeCPowerUp type = any_cast<typeCPowerUp>((*d)["typePowerUp"]);
+    typeCPowerUp type = any_cast<typeCPowerUp>((*d)[TYPE_POWER_UP]);
     cout << "Facada recibe el power up: " << (int)type << endl;
     currentPowerUp = int(type);
 }
@@ -164,7 +166,7 @@ void RenderFacadeIrrlicht::FacadeDrawHUD(Entity* car, ManCar* carsAI) {
 
     int i = 0;
     core::stringw textIA = core::stringw("Car ");
-    for (auto cars : carsAI->GetEntities()) {
+    for (const auto& cars : carsAI->GetEntities()) {
         if(carsAI->GetCar().get() != cars.get()){
             cTotem = static_cast<CTotem*>(cars->GetComponent(CompType::TotemComp).get());
 
@@ -183,7 +185,7 @@ void RenderFacadeIrrlicht::FacadeDrawHUD(Entity* car, ManCar* carsAI) {
 
 //Crea las plates de los nombres de los coches
 void RenderFacadeIrrlicht::FacadeAddPlates(Manager* manNamePlates) {
-    for (auto plate : manNamePlates->GetEntities()) {
+    for (const auto& plate : manNamePlates->GetEntities()) {
         auto cId = static_cast<CId*>(plate->GetComponent(CompType::IdComp).get());
 
         core::stringw string = core::stringw("Car AI ") + core::stringw(numEnemyCars++);
@@ -194,7 +196,7 @@ void RenderFacadeIrrlicht::FacadeAddPlates(Manager* manNamePlates) {
 
 //Actualiza las posiciones de las plates
 void RenderFacadeIrrlicht::FacadeUpdatePlates(Manager* manNamePlates) {
-    for (auto plate : manNamePlates->GetEntities()) {
+    for (const auto& plate : manNamePlates->GetEntities()) {
         auto cNamePlate = static_cast<CNamePlate*>(plate->GetComponent(CompType::NamePlateComp).get());
         auto cId = static_cast<CId*>(plate->GetComponent(CompType::IdComp).get());
 
@@ -259,9 +261,11 @@ const uint16_t RenderFacadeIrrlicht::FacadeAddObject(Entity* entity) {
         node->setMaterialTexture(0, driver->getTexture(path.c_str()));  //Obligado incluir el c_str() si no irrlicht no carga solo con un string
         node->setMaterialFlag(video::EMF_LIGHTING, false);
 
+        /*
         bool hasSphere = entity->HasComponent(CompType::CompBoundingSphere);
         if (hasSphere && Constants::DEBUG_SHOW_SPHERES) {
-            scene::ISceneNode* nodeSphere = smgr->addSphereSceneNode(CBoundingSphere::DEFAULT_SPHERE_RADIUS);
+            cout << "POS X: " << cTransformable->position.x << " POS Y: " << cTransformable->position.y << "POS Z:" << cTransformable->position.z << endl;
+            scene::ISceneNode* nodeSphere = smgr->addSphereSceneNode(10.0);
             nodeSphere->setID(cId->id + Component::ID_DIFFERENCE);
             nodeSphere->setPosition(core::vector3df(cTransformable->position.x, cTransformable->position.y, cTransformable->position.z));
             nodeSphere->setScale(core::vector3df(1.f, 1.f, 1.f));
@@ -269,6 +273,39 @@ const uint16_t RenderFacadeIrrlicht::FacadeAddObject(Entity* entity) {
             nodeSphere->setMaterialFlag(video::EMF_LIGHTING, false);
             nodeSphere->setVisible(showDebug);
         }
+        */
+        
+
+       
+        bool hasChassis = entity->HasComponent(CompType::CompBoundingChassis);
+        if (hasChassis && Constants::DEBUG_SHOW_CHASSIS) {
+            cout << "entramos aqui???" << endl;
+            auto cChassis = static_cast<CBoundingChassis *>(entity->GetComponent(CompType::CompBoundingChassis).get());
+            // primera esfera
+            auto radiousSph1 = cChassis->sphereBehind->radius;
+            auto centerSph1 = cChassis->sphereBehind->center;
+            cout << "POS X: " << centerSph1.x << " POS Y: " << centerSph1.y << "POS Z:" << centerSph1.z << endl;
+            scene::ISceneNode* nodeSphere1 = smgr->addSphereSceneNode(radiousSph1);
+            nodeSphere1->setID(cId->id + Component::ID_DIFFERENCE);
+            nodeSphere1->setPosition(core::vector3df(centerSph1.x, centerSph1.y, centerSph1.z));
+            nodeSphere1->setScale(core::vector3df(1.f, 1.f, 1.f));
+            nodeSphere1->setMaterialTexture(0, driver->getTexture(path.c_str()));  //Obligado incluir el c_str() si no irrlicht no carga solo con un string
+            nodeSphere1->setMaterialFlag(video::EMF_LIGHTING, false);
+            nodeSphere1->setVisible(false);
+            // segunda esfera
+            auto radiousSph2 = cChassis->sphereFront->radius;
+            auto centerSph2 = cChassis->sphereFront->center;
+            cout << "POS X: " << centerSph2.x << " POS Y: " << centerSph2.y << "POS Z:" << centerSph2.z << endl;
+            scene::ISceneNode* nodeSphere2 = smgr->addSphereSceneNode(radiousSph2);
+            nodeSphere2->setID(cId->id + Component::ID_DIFFERENCE + Component::ID_DIFFERENCE);
+            nodeSphere2->setPosition(core::vector3df(centerSph2.x, centerSph2.y, centerSph2.z));
+            nodeSphere2->setScale(core::vector3df(1.f, 1.f, 1.f));
+            nodeSphere2->setMaterialTexture(0, driver->getTexture(path.c_str()));  //Obligado incluir el c_str() si no irrlicht no carga solo con un string
+            nodeSphere2->setMaterialFlag(video::EMF_LIGHTING, false);
+            nodeSphere2->setVisible(false);
+        }
+        
+
     }
 
     //Cogemos sus edges
@@ -333,6 +370,7 @@ void RenderFacadeIrrlicht::UpdateTransformable(Entity* entity) {
     //Actualiza el escalado del objeto de irrlicht
     node->setScale(core::vector3df(cTransformable->scale.x, cTransformable->scale.y, cTransformable->scale.z));
 
+    /*
     bool hasSphere = entity->HasComponent(CompType::CompBoundingSphere);
     if (hasSphere && Constants::DEBUG_SHOW_SPHERES) {
         scene::ISceneNode* nodeSphere = smgr->getSceneNodeFromId(cId->id + Component::ID_DIFFERENCE);
@@ -341,6 +379,25 @@ void RenderFacadeIrrlicht::UpdateTransformable(Entity* entity) {
         //nodeSphere->setRotation(core::vector3df(cTransformable->rotation.x, cTransformable->rotation.y, cTransformable->rotation.z));
         //nodeSphere->setScale(core::vector3df(cTransformable->scale.x, cTransformable->scale.y, cTransformable->scale.z));
     }
+    */
+    
+    
+   
+    bool hasChassis = entity->HasComponent(CompType::CompBoundingChassis);
+    if (hasChassis && Constants::DEBUG_SHOW_CHASSIS) {
+        auto cChassis = static_cast<CBoundingChassis *>(entity->GetComponent(CompType::CompBoundingChassis).get());
+        auto centerSph1 = cChassis->sphereBehind->center;
+        scene::ISceneNode* nodeSphere1 = smgr->getSceneNodeFromId(cId->id + Component::ID_DIFFERENCE);
+        nodeSphere1->setPosition(core::vector3df(centerSph1.x, centerSph1.y, centerSph1.z));
+        nodeSphere1->setVisible(showDebug);
+        auto centerSph2 = cChassis->sphereFront->center;
+        scene::ISceneNode* nodeSphere2 = smgr->getSceneNodeFromId(cId->id + Component::ID_DIFFERENCE + Component::ID_DIFFERENCE);
+        nodeSphere2->setPosition(core::vector3df(centerSph2.x, centerSph2.y, centerSph2.z));
+        nodeSphere2->setVisible(false);
+    }
+    
+    
+
 }
 
 //Reajusta la camara
@@ -358,7 +415,7 @@ void RenderFacadeIrrlicht::UpdateCamera(Entity* cam, ManCar* manCars) {
 
     targetPosition.Y += 17;
 
-    if(cCamera->camType == CamType::INVERTED){
+    if(cCamera->camType == CamType::INVERTED_CAM){
         targetPosition.Y += 0;
 
         float distX = abs(cTransformable->position.x - targetPosition.X);
@@ -384,15 +441,17 @@ void RenderFacadeIrrlicht::UpdateCamera(Entity* cam, ManCar* manCars) {
         camera1->setFOV(angleRotation);
         camera1->setPosition(core::vector3df(cTransformable->position.x, cTransformable->position.y-5, cTransformable->position.z));
 
-    }else if(cCamera->camType == CamType::NORMAL){
+    }else if(cCamera->camType == CamType::NORMAL_CAM){
         float angleRotation = (70 * PI) / 180.0;
-        targetPosition.X = 0.0;
-        targetPosition.Y = 0.0;
-        targetPosition.Z = -50.0;
+        // targetPosition.X = 0.0;
+        // targetPosition.Y = 0.0;
+        // targetPosition.Z = -50.0;
         camera1->setTarget(targetPosition);
         camera1->setFOV(angleRotation);
-        camera1->setPosition(core::vector3df(200, 100, 0));
-    }else if (cCamera->camType == CamType::TOTEM){
+        // camera1->setPosition(core::vector3df(200, 100, 0));
+        camera1->setPosition(core::vector3df(cTransformable->position.x, cTransformable->position.y, cTransformable->position.z));
+    }else if (cCamera->camType == CamType::TOTEM_CAM){
+        
 
         auto car = manCars->GetCar();
         auto cTotemCar = static_cast<CTotem*>(car->GetComponent(CompType::TotemComp).get());
@@ -400,14 +459,14 @@ void RenderFacadeIrrlicht::UpdateCamera(Entity* cam, ManCar* manCars) {
 
         //Si somos nosotros quien tenemos el totem ponemos camara normal
         if(cTotemCar->active){
-            cCamera->camType = CamType::NORMAL;
+            cCamera->camType = CamType::NORMAL_CAM;
             return;
 
         }
 
         auto idCarAIWithTotem = -1;
         //Buscamos el ID del coche que tiene el totem (en caso de tenerlo)
-        for(auto cars : manCars->GetEntities()){
+        for(const auto& cars : manCars->GetEntities()){
             if(manCars->GetCar().get() != cars.get()){
                 auto cTotem = static_cast<CTotem*>(cars->GetComponent(CompType::TotemComp).get());
                 if(cTotem->active){
@@ -473,9 +532,95 @@ uint32_t RenderFacadeIrrlicht::FacadeGetTime() const{
     return device->getTimer()->getTime();
 }
 
+
 // To-Do: introducir multi input
 // Comprobar inputs del teclado
- vector<Constants::InputTypes> RenderFacadeIrrlicht::FacadeCheckInput() {
+void RenderFacadeIrrlicht::FacadeCheckInputSingle() {
+    EventManager &eventManager = EventManager::GetInstance();
+
+    if (receiver.IsKeyDown(KEY_ESCAPE)) {
+        device->closeDevice();
+    }
+    if (receiver.IsKeyDown(KEY_KEY_P)) {
+        eventManager.AddEventMulti(Event{EventType::PRESS_P});
+    }
+    // if (receiver.IsKeyDown(KEY_KEY_0)) {
+    //     eventManager.AddEventMulti(Event{EventType::PRESS_0});
+    // }
+    
+    //  delante y detrás
+    if (receiver.IsKeyDown(KEY_KEY_I)) {
+        eventManager.AddEventMulti(Event{EventType::PRESS_I});
+    } else if (receiver.IsKeyDown(KEY_KEY_O)) {
+        eventManager.AddEventMulti(Event{EventType::PRESS_O});
+    } else {
+        eventManager.AddEventMulti(Event{EventType::NO_I_O_PRESS});
+    }
+
+    // izq y dch
+    if (receiver.IsKeyDown(KEY_KEY_D)) {
+        eventManager.AddEventMulti(Event{EventType::PRESS_D});
+    } else if (receiver.IsKeyDown(KEY_KEY_A)) {
+        eventManager.AddEventMulti(Event{EventType::PRESS_A});
+    } else {
+        eventManager.AddEventMulti(Event{EventType::NO_A_D_PRESS});
+    }
+
+    // MODO DEBUG
+    if (receiver.IsKeyDown(KEY_F3) && !receiver.IsKeyDown(KEY_LSHIFT) && duration_cast<milliseconds>(system_clock::now() - timeStart).count()>inputDelay) {
+        timeStart = system_clock::now();
+        showDebug = !showDebug; 
+
+    }else if(receiver.IsKeyDown(KEY_F3) && receiver.IsKeyDown(KEY_LSHIFT) && duration_cast<milliseconds>(system_clock::now() - timeStart).count()>inputDelay){
+        timeStart = system_clock::now();
+        showAIDebug = !showAIDebug;
+    }
+
+    //TODO: Alargar esto para cuando tengamos mas coches para debugear
+    // Seleccion de coche para debugear
+    if(receiver.IsKeyDown(KEY_KEY_1) && receiver.IsKeyDown(KEY_LSHIFT) && duration_cast<milliseconds>(system_clock::now() - timeStart).count()>inputDelay){
+        timeStart = system_clock::now();
+        idCarAIToDebug = 0;
+    }else if(receiver.IsKeyDown(KEY_KEY_2) && receiver.IsKeyDown(KEY_LSHIFT) && duration_cast<milliseconds>(system_clock::now() - timeStart).count()>inputDelay){
+        timeStart = system_clock::now();
+        idCarAIToDebug = 1;
+    }else if(receiver.IsKeyDown(KEY_KEY_3) && receiver.IsKeyDown(KEY_LSHIFT) && duration_cast<milliseconds>(system_clock::now() - timeStart).count()>inputDelay){
+        timeStart = system_clock::now();
+        idCarAIToDebug = 2;
+    }else if(receiver.IsKeyDown(KEY_KEY_0) && receiver.IsKeyDown(KEY_LSHIFT) && duration_cast<milliseconds>(system_clock::now() - timeStart).count()>inputDelay){
+        timeStart = system_clock::now();
+        idCarAIToDebug = -1;
+    }
+
+    // CAMARA
+    if (receiver.IsKeyDown(KEY_KEY_Q) && !invertedCam && !totemCamActive) {
+        timeStart = system_clock::now();
+        eventManager.AddEventMulti(Event{EventType::INVERT_CAMERA});
+        invertedCam = true;
+
+    } else if(receiver.IsKeyDown(KEY_KEY_E) && duration_cast<milliseconds>(system_clock::now() - timeStart).count()>inputDelayCamera) {
+        timeStart = system_clock::now();
+        eventManager.AddEventMulti(Event{EventType::TOTEM_CAMERA});
+        totemCamActive = !totemCamActive;
+    } else if (!receiver.IsKeyDown(KEY_KEY_Q) && !totemCamActive){
+        invertedCam = false;
+        eventManager.AddEventMulti(Event{EventType::NORMAL_CAMERA});
+    }
+
+    // POWERUPS
+    if (receiver.IsKeyDown(KEY_SPACE))
+        eventManager.AddEventMulti(Event{EventType::PRESS_SPACE});
+
+    //Cambiamos a menu
+    if (receiver.IsKeyDown(KEY_F2) && duration_cast<milliseconds>(system_clock::now() - timeStart).count()>inputDelay) {
+        timeStart = system_clock::now();
+        eventManager.AddEventMulti(Event{EventType::STATE_PAUSE});
+        //Game::GetInstance()->SetState(State::PAUSE);
+    }
+ }
+
+
+ vector<Constants::InputTypes> RenderFacadeIrrlicht::FacadeCheckInputMulti() {
     EventManager &eventManager = EventManager::GetInstance();
     vector<Constants::InputTypes> inputs;
     inputs.reserve(4); // para evitar el funcionamiento de cómo se redimensiona
@@ -565,12 +710,9 @@ uint32_t RenderFacadeIrrlicht::FacadeGetTime() const{
         inputs.push_back(Constants::InputTypes::LAUNCH_PU);
     }
 
-    //Cambiamos a menu
-    if (receiver.IsKeyDown(KEY_F2) && duration_cast<milliseconds>(system_clock::now() - timeStart).count()>inputDelay) {
-        timeStart = system_clock::now();
-        eventManager.AddEventMulti(Event{EventType::STATE_PAUSE});
-        //Game::GetInstance()->SetState(State::PAUSE);
-    }
+    //No debe tener menu pausa
+
+
     return inputs;
 }
 
@@ -639,15 +781,13 @@ void RenderFacadeIrrlicht::FacadeCheckInputEndRace() {
 
 void RenderFacadeIrrlicht::FacadeCheckInputLobbyMulti() {
     //Cambiamos a ingame
-    if (receiver.IsKeyDown(KEY_F1)) {
-        ThrowEventChangeToMulti("");      // Cambiamos de estado al STATE_INGAMEMULTI
-    } else if (receiver.IsKeyDown(KEY_ESCAPE)) {
+    if (receiver.IsKeyDown(KEY_ESCAPE)) {
         device->closeDevice();
     }
 }
 
 
-void RenderFacadeIrrlicht::ThrowEventChangeToMulti(string dataServer){
+void RenderFacadeIrrlicht::ThrowEventChangeToMulti(uint16_t IdOnline, const vector<uint16_t> IdPlayersOnline){
     numEnemyCars = 0;
     //Manera un poco cutre de resetear el CId al empezar el juego
     auto cId = make_shared<CId>();
@@ -656,7 +796,9 @@ void RenderFacadeIrrlicht::ThrowEventChangeToMulti(string dataServer){
     cNavMesh->ResetNumIds();
     //Game::GetInstance()->SetState(State::INGAME_MULTI);
     shared_ptr<DataMap> data = make_shared<DataMap>();
-    (*data)["dataServer"] = dataServer;
+    //(*data)[DataType::DATA_SERVER] = dataServer;
+    (*data)[DataType::ID_ONLINE] = IdOnline;
+    (*data)[DataType::VECTOR_ID_ONLINE] = IdPlayersOnline;
     EventManager::GetInstance().AddEventMulti(Event{EventType::STATE_INGAMEMULTI, data});
 }
 
@@ -665,11 +807,14 @@ int RenderFacadeIrrlicht::FacadeGetFPS() const{
     return driver->getFPS();
 }
 
-void RenderFacadeIrrlicht::FacadeSetWindowCaption(std::string title) const{
+void RenderFacadeIrrlicht::FacadeSetWindowCaption(std::string title, int fps) const{
+    
+    std::string name = title + " - FPS: " + std::to_string(fps);
+    
     //Como transformar de string a wstring (irrlicht)
     std::wstring text_aux;
-    for (unsigned int i = 0; i < title.length(); ++i)
-        text_aux += wchar_t(title[i]);
+    for (unsigned int i = 0; i < name.length(); ++i)
+        text_aux += wchar_t(name[i]);
 
     const wchar_t* txt = text_aux.c_str();
 
@@ -741,7 +886,7 @@ void RenderFacadeIrrlicht::FacadeDrawGraphEdges(ManWayPoint* manWayPoints) const
     if (!showDebug) return;  //Si no esta activado debug retornamos
 
     //Recorremos todos los WayPoints del manager
-    for (auto way : manWayPoints->GetEntities()) {
+    for (const auto& way : manWayPoints->GetEntities()) {
         auto cWayPoint = static_cast<CWayPoint*>(way->GetComponent(CompType::WayPointComp).get());
         auto cWayPointEdge = static_cast<CWayPointEdges*>(way->GetComponent(CompType::WayPointEdgesComp).get());
 
@@ -808,7 +953,7 @@ void RenderFacadeIrrlicht::FacadeDrawAIDebug(ManCar* manCars, ManNavMesh* manNav
     glm::vec3 point7;
     //Dibujamos el cuadrado que engloba a cada NavMesh
 
-    for(auto navMesh : manNavMesh->GetEntities()){
+    for(const auto& navMesh : manNavMesh->GetEntities()){
         auto cTransformable = static_cast<CTransformable*>(navMesh->GetComponent(CompType::TransformableComp).get());
         auto cDimensions    = static_cast<CDimensions*>(navMesh->GetComponent(CompType::DimensionsComp).get());
 
@@ -852,7 +997,7 @@ void RenderFacadeIrrlicht::FacadeDrawAIDebug(ManCar* manCars, ManNavMesh* manNav
     //Ahora vamos a hacer el debug desde nuestra posicion al CPosDestination
     if(idCarAIToDebug==-1){
         //Significa que lo hacemos para todos los coches
-        for(auto carAI : manCars->GetEntities()){
+        for(const auto& carAI : manCars->GetEntities()){
             if (static_cast<Car*>(carAI.get())->GetTypeCar() == TypeCar::CarAI){
                 auto cPosDestination = static_cast<CPosDestination*>(carAI->GetComponent(CompType::PosDestination).get());
                 auto cTransformableCar = static_cast<CTransformable*>(carAI->GetComponent(CompType::TransformableComp).get());
@@ -994,6 +1139,26 @@ void RenderFacadeIrrlicht::FacadeDrawBoundingPlane(Entity* entity) const {
     Draw3DLine(b, c);
     Draw3DLine(c, d);
     Draw3DLine(d, a);
+}
+
+
+void RenderFacadeIrrlicht::FacadeDrawBoundingOBB(Entity* entity) const {
+    if (!showDebug) return;  //Si no esta activado debug retornamos
+
+    CBoundingOBB *obb = static_cast<CBoundingOBB*>(entity->GetComponent(CompType::CompBoundingOBB).get());
+    
+    for(auto& obbActual : obb->planes){
+        vec3 &a = obbActual.get()->a;
+        vec3 &b = obbActual.get()->b;
+        vec3 &c = obbActual.get()->c;
+        vec3 &d = obbActual.get()->d;
+
+        Draw3DLine(a, b, 0, 0, 200);
+        Draw3DLine(b, c, 0, 0, 200);
+        Draw3DLine(c, d, 0, 0, 200);
+        Draw3DLine(d, a, 0, 0, 200);
+    }
+
 }
 
 void RenderFacadeIrrlicht::FacadeDrawBoundingBox(Entity* entity, bool colliding) const{

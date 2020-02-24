@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../include/glm/vec3.hpp"
-
 #include "Component.h"
+
+#include "../include/glm/vec3.hpp"
 #include <string>
 #include <iostream>
 #include <chrono>
@@ -40,4 +40,5 @@ public:
     time_point<system_clock> timeStart;
     const int64_t durationTime = 100;       // 0,2 segundos ---> Podra variar dependiendo de cada powerUp
     float speed = 510.0;
+    float deceleration = -25;
 };

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../../include/irrlicht/irrlicht.h"
-#include "../../EventManager/Event.h"
-#include "../../EventManager/EventManager.h"
-#include "../Input/InputFacadeIrrlicht.h"
-#include "../Input/InputFacadeManager.h"
+#include <irrlicht/irrlicht.h>
+#include <EventManager/Event.h>
+#include <EventManager/EventManager.h>
+#include <Facade/Input/InputFacadeIrrlicht.h>
+#include <Facade/Input/InputFacadeManager.h>
 #include "RenderFacade.h"
 
 //#include "../../State/State.h"
@@ -34,9 +34,10 @@ class RenderFacadeIrrlicht : public RenderFacade {
     void UpdateCamera(Entity*, ManCar* manCars) override;
     bool FacadeRun() override;
     uint32_t FacadeGetTime() const override;
-    vector<Constants::InputTypes> FacadeCheckInput() override;
+    vector<Constants::InputTypes> FacadeCheckInputMulti() override;
+    void FacadeCheckInputSingle() override;
     int FacadeGetFPS() const override;
-    void FacadeSetWindowCaption(std::string) const override;
+    void FacadeSetWindowCaption(std::string, int) const override;
     void FacadeBeginScene() const override;
     void FacadeDrawAll() const override;
     void FacadeEndScene() const override;
@@ -61,7 +62,7 @@ class RenderFacadeIrrlicht : public RenderFacade {
     void FacadeSuscribeEvents() override;
     void FacadeAddPlates(Manager* manNamePlates) override;
     void FacadeUpdatePlates(Manager* manNamePlates) override;
-    void ThrowEventChangeToMulti(string dataServer) override;
+    void ThrowEventChangeToMulti(uint16_t IdOnline, const vector<uint16_t> IdPlayersOnline) override;
 
     //DEBUG
     void Draw3DLine(vec3& pos1, vec3& pos2, uint16_t r, uint16_t g, uint16_t b) const override;
@@ -69,6 +70,7 @@ class RenderFacadeIrrlicht : public RenderFacade {
     void FacadeDrawGraphEdges(ManWayPoint* manWayPoints) const override;
     void FacadeDrawBoundingBox(Entity* entity, bool colliding) const override;
     void FacadeDrawBoundingPlane(Entity* entity) const override;
+    void FacadeDrawBoundingOBB(Entity* entity) const override;
     void FacadeDrawAIDebug(ManCar* manCars, ManNavMesh* manNavMesh, ManWayPoint* manWayPoint) const override;
     void FacadeDrawAIDebugPath(Entity* carAI, ManWayPoint* manWayPoint) const override;
 

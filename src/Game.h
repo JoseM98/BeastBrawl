@@ -1,19 +1,17 @@
 #pragma once
 
 #include "State/State.h"
-#include "State/StateMenu.h"
-#include "State/StateInGame.h"
-#include "State/StatePause.h"
-#include "State/StateEndRace.h"
-#include "Facade/Render/RenderFacadeManager.h"
-#include "Facade/Input/InputFacadeManager.h"
-#include "Facade/Physics/PhysicsFacadeManager.h"
+#include <Aliases.h>
 
 #include <iostream>
 #include <memory>
+#include <chrono>
 #include "Constants.h"
-using namespace std;
 
+using namespace std;
+using namespace std::chrono;
+
+class State;
 
 class Game{
     public:
@@ -37,11 +35,13 @@ class Game{
         
     
 
+
+
     private:
         Game(){};
         static Game* game;
         void SuscribeEvents();
-        
+
         shared_ptr<State> currentState;
         shared_ptr<State> gameState;
         shared_ptr<State> lastState;
@@ -51,5 +51,6 @@ class Game{
 
         time_point<system_clock> start;
         int64_t timeElapsed { 0 };
+        bool gameMarkedToDelete {false};
 };
 

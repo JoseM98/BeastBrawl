@@ -1,7 +1,5 @@
 #include "Game.h"
-#include "Facade/Input/InputFacadeManager.h"
 #include "Facade/Physics/PhysicsFacadeManager.h"
-#include "Facade/Render/RenderFacadeManager.h"
 #include "State/StateEndRace.h"
 #include "State/StateInGameMulti.h"
 #include "State/StateInGameSingle.h"
@@ -9,6 +7,7 @@
 #include "State/StateMenu.h"
 #include "State/StatePause.h"
 #include "Systems/Utils.h"
+
 
 using namespace std;
 
@@ -32,6 +31,7 @@ void Game::SetState(State::States stateType) {
             EventManager::GetInstance().ClearEvents();
             EventManager::GetInstance().ClearListeners();
             currentState = make_shared<StateMenu>();
+            gameState.reset();
             SuscribeEvents();
             gameStarted = false;
             break;
@@ -46,28 +46,46 @@ void Game::SetState(State::States stateType) {
             break;
         case State::INGAME_SINGLE:
             if (!gameStarted) {
-                currentState = make_shared<StateInGameSingle>();
+                shared_ptr<State> newState = make_shared<StateInGameSingle>();
+                cout << "Hemos creado el nuevo statInGameSingle" << endl;
+                currentState = newState;
+                cout << "Hemos chafado el currentState con statInGameSingle" << endl;
                 gameState = currentState;
+                cout << "Hemos chafado el gameState con statInGameSingle" << endl;
                 gameStarted = true;
             } else {
                 currentState = gameState;
             }
             break;
         case State::INGAME_MULTI:
-            if (!gameStarted) {
-                shared_ptr<State> newState = make_shared<StateInGameMulti>();
-                currentState = newState;
-                gameState = currentState;
-                gameStarted = true;
-            } else {
-                currentState = gameState;
-            }
+            // ATENCIÓN: este estado se inicializa en un método abajo aparte
+            // if (!gameStarted) {
+            //     shared_ptr<State> newState = make_shared<StateInGameMulti>();
+            //     cout << "Hemos creado el nuevo StateInGameMulti" << endl;
+            //     currentState = newState;
+            //     cout << "Hemos chafado el currentState con StateInGameMulti" << endl;
+            //     gameState = currentState;
+            //     cout << "Hemos chafado el gameState con StateInGameMulti" << endl;
+            //     gameStarted = true;
+            // } else {
+            //     currentState = gameState;
+            // }
             break;
         case State::PAUSE:
             currentState = make_shared<StatePause>();
             break;
         case State::ENDRACE:
+            EventManager::GetInstance().ClearEvents();
+            EventManager::GetInstance().ClearListeners();
             currentState = make_shared<StateEndRace>();
+            if (gameMarkedToDelete) {
+                gameState.reset();
+                gameMarkedToDelete = false;
+            } else
+                gameMarkedToDelete = true;
+
+            SuscribeEvents();
+            gameStarted = false;
             break;
         case State::LOBBY_MULTI:
             currentState = make_shared<StateLobbyMulti>();
@@ -97,32 +115,32 @@ void Game::InitGame() {
 
 void Game::SuscribeEvents() {
     cout << "Suscripciones\n";
-    EventManager::GetInstance().SuscribeMulti(Listener(
+    EventManager::GetInstance().SubscribeMulti(Listener(
         EventType::STATE_MENU,
         bind(&Game::SetStateMenu, this, placeholders::_1),
         "StateMenu"));
 
-    EventManager::GetInstance().SuscribeMulti(Listener(
+    EventManager::GetInstance().SubscribeMulti(Listener(
         EventType::STATE_PAUSE,
         bind(&Game::SetStatePause, this, placeholders::_1),
         "StatePause"));
 
-    EventManager::GetInstance().SuscribeMulti(Listener(
+    EventManager::GetInstance().SubscribeMulti(Listener(
         EventType::STATE_INGAMESINGLE,
         bind(&Game::SetStateInGameSingle, this, placeholders::_1),
         "StateInGameSingle"));
 
-    EventManager::GetInstance().SuscribeMulti(Listener(
+    EventManager::GetInstance().SubscribeMulti(Listener(
         EventType::STATE_INGAMEMULTI,
         bind(&Game::SetStateInGameMulti, this, placeholders::_1),
         "StateInGameMulti"));
 
-    EventManager::GetInstance().SuscribeMulti(Listener(
+    EventManager::GetInstance().SubscribeMulti(Listener(
         EventType::STATE_ENDRACE,
         bind(&Game::SetStateEndRace, this, placeholders::_1),
         "StateEndRace"));
 
-    EventManager::GetInstance().SuscribeMulti(Listener(
+    EventManager::GetInstance().SubscribeMulti(Listener(
         EventType::STATE_LOBBYMULTI,
         bind(&Game::SetStateLobbyMulti, this, placeholders::_1),
         "SetStateLobbyMulti"));
@@ -132,7 +150,8 @@ void Game::MainLoop() {
     SoundFacadeManager* soundFacadeManager = SoundFacadeManager::GetInstance();
 
     RenderFacadeManager* renderFacadeMan = RenderFacadeManager::GetInstance();
-    renderFacadeMan->GetRenderFacade()->FacadeSetWindowCaption("Beast Brawl");
+
+    int lastFPS = -1;
 
     while (renderFacadeMan->GetRenderFacade()->FacadeRun()) {
         timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now() - start).count();
@@ -162,6 +181,12 @@ void Game::MainLoop() {
         // cout << "UpdateTickTime[" << updateTickTime << "]" << endl;
 
         currentState->Render(timeElapsed);
+
+        int fps = renderFacadeMan->GetRenderFacade()->FacadeGetFPS();
+        if(lastFPS != fps) {
+            renderFacadeMan->GetRenderFacade()->FacadeSetWindowCaption("Beast Brawl", fps);
+            lastFPS = fps;
+        }
     }
 
     renderFacadeMan->GetRenderFacade()->FacadeDeviceDrop();
@@ -193,19 +218,19 @@ void Game::SetStateInGameSingle(DataMap* d) {
 
 void Game::SetStateInGameMulti(DataMap* d) {
     //SetState(State::INGAME_MULTI);
-    auto dataServer = any_cast<string>((*d)["dataServer"]);
+    uint16_t IdOnline = any_cast<uint16_t>((*d)[DataType::ID_ONLINE]);
+    vector<uint16_t> vectorIdOnline = any_cast<vector<uint16_t>>((*d)[DataType::VECTOR_ID_ONLINE]);
     if (!gameStarted) {
         shared_ptr<State> newState;
-        if (dataServer == "")
-            newState = make_shared<StateInGameMulti>();
-        else
-            newState = make_shared<StateInGameMulti>(dataServer);
+        newState = make_shared<StateInGameMulti>(IdOnline, vectorIdOnline);
         currentState = newState;
         gameState = currentState;
         gameStarted = true;
     } else {
         currentState = gameState;
     }
+
+    currentState->InitState();
 }
 
 void Game::SetStateEndRace(DataMap* d) {

@@ -1,15 +1,13 @@
 #include "SystemBtPowerUp.h"
 
 
-#include "../behaviourTree/behaviourTree.h"
-#include "../behaviourTree/composite.h"
-#include "../behaviourTree/selector.h"
-#include "../behaviourTree/sequence.h"
-#include "../behaviourTree/decorator.h"
+#include <behaviourTree/behaviourTree.h>
+#include <behaviourTree/selector.h>
+#include <behaviourTree/sequence.h>
+#include <behaviourTree/decorator.h>
 
-#include "../behaviourTree/Blackboard.h"
-#include "../Components/CPowerUp.h"
-#include "../Components/CTotem.h"
+#include <behaviourTree/Blackboard.h>
+#include <Components/CTotem.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //                           COMPROBAR BEHAVIOR TREE
@@ -117,7 +115,7 @@ struct ThrowPowerUp : public behaviourTree {
     virtual bool run(Blackboard* blackboard) override {
         //std::cout << "Lanzaaas el powerUp beibeee" << std::endl;
         shared_ptr<DataMap> data = make_shared<DataMap>();
-        (*data)["actualCar"] = static_cast<Car*>(blackboard->actualCar);
+        (*data)[ACTUAL_CAR] = blackboard->actualCar;
         EventManager::GetInstance().AddEventMulti(Event{EventType::THROW_POWERUP_AI, data});
 
         return true;
@@ -140,7 +138,7 @@ struct HaveRoboJorobo : public behaviourTree {
 // TO-DO --> actualmente si tienes tu el totem te lo quitas y te lo vuelve a asiganar
 struct HaveTotemOtherCar : public behaviourTree {
     virtual bool run(Blackboard* blackboard) override {
-        for(auto cars : blackboard->manCars->GetEntities()){
+        for(auto& cars : blackboard->manCars->GetEntities()){
             auto cTotem = static_cast<CTotem*>(cars.get()->GetComponent(CompType::TotemComp).get()); 
             // Si algun coche tenia el totem .... lo pierde
             if(cTotem->active == true){

@@ -1,10 +1,13 @@
 #pragma once
 
 #include "Component.h"
+
 #include <string>
 #include <iostream>
+#include "../../include/glm/vec3.hpp"
 
 using namespace std;
+using namespace glm;
 
 class CCar : public Component
 {

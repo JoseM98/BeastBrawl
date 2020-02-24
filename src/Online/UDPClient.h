@@ -6,13 +6,14 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
-#include "../../include/include_json/include_json.hpp"
 #include "../Constants.h"
+#include "../../include/glm/vec3.hpp"
+#include "../Components/CPowerUp.h"
 
 using boost::asio::ip::udp;
 using namespace std;
 using namespace std::chrono;
-using json = nlohmann::json;
+
 
 class UDPClient {
     // --- TCP --- (sala de espera)
@@ -31,22 +32,23 @@ class UDPClient {
     //      él se encargará de registrar nuestro endpoint udp
 
    public:
-    UDPClient(string host, string port_);
+    UDPClient(string host, uint16_t port_);
     ~UDPClient();
 
-    void SendInput(Constants::InputTypes input);
-    void SendInputs(vector<Constants::InputTypes>& inputs, uint32_t id);
+    void SendInputs(vector<Constants::InputTypes>& inputs, uint16_t id);
+    void SendSync(uint16_t idOnline, const glm::vec3 &posCar, const glm::vec3 &rotCar, typeCPowerUp tipoPU, bool haveTotem, int64_t totemTime,  
+                    bool totemInGround, const glm::vec3 &posTotem);
     void SendDateTime();
     uint32_t idMainCar;
 
    private:
     void StartReceiving();
-    void HandleReceived(std::shared_ptr<boost::array<char, 1024>> recvBuff, const boost::system::error_code& error, size_t bytesTransferred);
-    void HandleReceivedInput(const json, const uint32_t id) const;
-    void HandleSentInput(std::shared_ptr<Constants::InputTypes> input, const boost::system::error_code& errorCode,
-                         std::size_t bytes_transferred);
-    void HandleSentInputs(const boost::system::error_code& errorCode,
-                          std::size_t bytes_transferred);
+    void HandleReceived(std::shared_ptr<unsigned char[]> recevBuff, const boost::system::error_code& error, size_t bytesTransferred);
+    void HandleReceivedInputs(const vector<Constants::InputTypes> inputs, const uint16_t idRival) const;
+    void HandleReceivedSync(unsigned char* recevBuff, size_t bytesTransferred) const;
+    void HandleSentInputs(const boost::system::error_code& errorCode, std::size_t bytes_transferred);
+    void HandleSentSync(const boost::system::error_code& errorCode, std::size_t bytes_transferred);
+
     void HandleSentDateTime(const boost::shared_ptr<std::string> message,
                             const boost::system::error_code& errorCode,
                             std::size_t bytes_transferred);
@@ -55,4 +57,5 @@ class UDPClient {
     udp::endpoint serverEndpoint;
     udp::socket socket;
     std::thread butler;
+    // boost::asio::io_context::strand strand;
 };
