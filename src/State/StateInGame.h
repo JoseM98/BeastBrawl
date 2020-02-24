@@ -67,8 +67,7 @@ class StateInGame : public State {
     void Input() override;
     void Update() override;
     void Render(double timeElapsed) override;
-    States GetState() { return State::States::INGAME_SINGLE; };
-    void setDeltaTime(float _deltaTime){deltaTime = _deltaTime;};
+    States GetState() { return State::States::INGAME_SINGLE; };    
 
     shared_ptr<ManCar> manCars;
 
@@ -88,8 +87,6 @@ class StateInGame : public State {
     SoundFacade *soundEngine = {nullptr};
 
     shared_ptr<Physics> physics;
-    //shared_ptr<float> deltaTime;
-    float deltaTime = 1.0/FRAME_RATE;
     shared_ptr<PhysicsPowerUp> phisicsPowerUp;
     shared_ptr<SystemBoxPowerUp> sysBoxPowerUp;
     shared_ptr<Collisions> collisions;

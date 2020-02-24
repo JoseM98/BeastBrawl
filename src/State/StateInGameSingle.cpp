@@ -1,6 +1,7 @@
 #include "StateInGameSingle.h"
 
 #include "../Components/CTotem.h"
+#include "../Systems/Utils.h"
 
 StateInGameSingle::StateInGameSingle() : StateInGame() {
     InitVirtualMethods();
@@ -16,28 +17,26 @@ void StateInGameSingle::InitState() {
     StateInGame::InitState();
 }
 
-
-
-void StateInGameSingle::CAMBIARCosasNavMesh(ManCar &manCars, ManNavMesh &manNavMesh){
+void StateInGameSingle::CAMBIARCosasNavMesh(ManCar &manCars, ManNavMesh &manNavMesh) {
     // vamos a asignar el navmesh al que pertenecemos
-    for(auto carAI : manCars.GetEntities()){
-        if(static_cast<Car*>(carAI.get())->GetTypeCar() == TypeCar::CarAI){
-            auto cTransformableCar = static_cast<CTransformable*>(carAI.get()->GetComponent(CompType::TransformableComp).get());     
-            for(auto navmesh : manNavMesh.GetEntities()){
-                auto cDimensions = static_cast<CDimensions*>(navmesh.get()->GetComponent(CompType::DimensionsComp).get());
-                auto cTransformableNav = static_cast<CTransformable*>(navmesh.get()->GetComponent(CompType::TransformableComp).get()); 
-                if( ( (cTransformableCar->position.x >= (cTransformableNav->position.x-(cDimensions->width/2))) && 
-                    (cTransformableCar->position.x <= (cTransformableNav->position.x+(cDimensions->width/2))) ) &&
-                ( (cTransformableCar->position.z >= (cTransformableNav->position.z-(cDimensions->depth/2))) && 
-                    (cTransformableCar->position.z <= (cTransformableNav->position.z+(cDimensions->depth/2))) )  ){
-                        auto cCurrentNavMesh = static_cast<CCurrentNavMesh*>(carAI.get()->GetComponent(CompType::CurrentNavMeshComp).get());
-                        auto cNavMesh = static_cast<CNavMesh*>(navmesh.get()->GetComponent(CompType::NavMeshComp).get());
-                        cCurrentNavMesh->currentNavMesh = cNavMesh->id;
-                        //std::cout << " EL NAVMESH DE LAS IA ES::::234563345677: " << cNavMesh->id << std::endl;
-                    }       
+    for (auto carAI : manCars.GetEntities()) {
+        if (static_cast<Car *>(carAI.get())->GetTypeCar() == TypeCar::CarAI) {
+            auto cTransformableCar = static_cast<CTransformable *>(carAI.get()->GetComponent(CompType::TransformableComp).get());
+            for (auto navmesh : manNavMesh.GetEntities()) {
+                auto cDimensions = static_cast<CDimensions *>(navmesh.get()->GetComponent(CompType::DimensionsComp).get());
+                auto cTransformableNav = static_cast<CTransformable *>(navmesh.get()->GetComponent(CompType::TransformableComp).get());
+                if (((cTransformableCar->position.x >= (cTransformableNav->position.x - (cDimensions->width / 2))) &&
+                     (cTransformableCar->position.x <= (cTransformableNav->position.x + (cDimensions->width / 2)))) &&
+                    ((cTransformableCar->position.z >= (cTransformableNav->position.z - (cDimensions->depth / 2))) &&
+                     (cTransformableCar->position.z <= (cTransformableNav->position.z + (cDimensions->depth / 2))))) {
+                    auto cCurrentNavMesh = static_cast<CCurrentNavMesh *>(carAI.get()->GetComponent(CompType::CurrentNavMeshComp).get());
+                    auto cNavMesh = static_cast<CNavMesh *>(navmesh.get()->GetComponent(CompType::NavMeshComp).get());
+                    cCurrentNavMesh->currentNavMesh = cNavMesh->id;
+                    //std::cout << " EL NAVMESH DE LAS IA ES::::234563345677: " << cNavMesh->id << std::endl;
+                }
             }
         }
-    }   
+    }
 }
 
 void StateInGameSingle::Input() {
@@ -45,47 +44,42 @@ void StateInGameSingle::Input() {
 }
 
 void StateInGameSingle::Update() {
+    //auto now_ms = std::chrono::time_point_cast<std::chrono::microseconds>(start);
+    //auto value = now_ms.time_since_epoch();
+    //long duration = value.count() - (timeElapsed - updateTickTime);
+    //std::cout << "valor: " << duration << std::endl;
+    //std::chrono::microseconds dur(duration);
+    //std::chrono::time_point<std::chrono::system_clock> dt(dur);
+    //start = dt;
+    //float prueba = duration_cast<std::chrono::microseconds>(system_clock::now()-startTime).count();
+    //std::cout << "valor: " << value.count() << "     -- otos valores: " << timeElapsed - updateTickTime << std::endl;
 
+    //std::cout << system_clock::now() <<
+    //setDeltaTime(timeElapsed/1000000.0);
+    //physics->setDeltaTime(timeElapsed/1000000.0);
+    //std::cout << "Tiempo: " << timeElapsed/1000000.0 << std::endl;  // esto es mi deltaTime
 
-        //auto now_ms = std::chrono::time_point_cast<std::chrono::microseconds>(start);
-        //auto value = now_ms.time_since_epoch();
-        //long duration = value.count() - (timeElapsed - updateTickTime);
-        //std::cout << "valor: " << duration << std::endl;
-        //std::chrono::microseconds dur(duration);
-        //std::chrono::time_point<std::chrono::system_clock> dt(dur);
-        //start = dt;
-        //float prueba = duration_cast<std::chrono::microseconds>(system_clock::now()-startTime).count();
-        //std::cout << "valor: " << value.count() << "     -- otos valores: " << timeElapsed - updateTickTime << std::endl;
+    // actualizar cosas normales
 
-        //std::cout << system_clock::now() <<
-        //setDeltaTime(timeElapsed/1000000.0);
-        //physics->setDeltaTime(timeElapsed/1000000.0);
-        //std::cout << "Tiempo: " << timeElapsed/1000000.0 << std::endl;  // esto es mi deltaTime
-        
-        
-        // actualizar cosas normales
-    
-
-        StateInGame::Update();
-        for (auto actualAI : manCars->GetEntities()) { // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
-            if (static_cast<Car*>(actualAI.get())->GetTypeCar() == TypeCar::CarAI){
-                manCars->UpdateCarAI(static_cast<CarAI*>(actualAI.get()), manPowerUps.get(), manBoxPowerUps.get(), manTotems.get(), manWayPoint.get(), manNavMesh.get(), manBoundingWall.get());
-                physicsEngine->UpdateCarAI(actualAI.get());
-            }
+    StateInGame::Update();
+    for (auto actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
+        if (static_cast<Car *>(actualAI.get())->GetTypeCar() == TypeCar::CarAI) {
+            manCars->UpdateCarAI(static_cast<CarAI *>(actualAI.get()), manPowerUps.get(), manBoxPowerUps.get(), manTotems.get(), manWayPoint.get(), manNavMesh.get(), manBoundingWall.get());
+            physicsEngine->UpdateCarAI(actualAI.get());
         }
-        CAMBIARCosasDeTotemUpdate();
+    }
+    CAMBIARCosasDeTotemUpdate();
 
-        // COLISIONES entre powerUp y IA
-        collisions->IntersectsCarsPowerUps(manCars.get(), manPowerUps.get(), manNavMesh.get());
-        // COLISIONES entre BoxPowerUp y IA
-        collisions->IntersectCarsBoxPowerUp(manCars.get(), manBoxPowerUps.get());
-        // COLISIONES  entre la IA y el Totem
-        collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
-
+    // COLISIONES entre powerUp y IA
+    collisions->IntersectsCarsPowerUps(manCars.get(), manPowerUps.get(), manNavMesh.get());
+    // COLISIONES entre BoxPowerUp y IA
+    collisions->IntersectCarsBoxPowerUp(manCars.get(), manBoxPowerUps.get());
+    // COLISIONES  entre la IA y el Totem
+    collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
 }
 
 void StateInGameSingle::Render(double timeElapsed) {
-    double percentTick = min(1.0, (timeElapsed / Constants::TIME_BETWEEN_UPDATES_us)); 
+    double percentTick = min(1.0, (timeElapsed / Constants::TIME_BETWEEN_UPDATES_us));
     cout << "PercentTick[" << percentTick << "]" << endl;
     physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
 
@@ -93,6 +87,17 @@ void StateInGameSingle::Render(double timeElapsed) {
         renderEngine->FacadeDrawBoundingBox(cars.get(), false);
     }
     //renderEngine->FacadeDrawBoundingBox(carPrincial, isColliding);
+    const auto &car = manCars->GetCar();
+    const auto cCar = static_cast<CCar *>(car.get()->GetComponent(CompType::CarComp).get());
+    const auto cTransformable = static_cast<CTransformable *>(car.get()->GetComponent(CompType::TransformableComp).get());
+
+    double currentSpeed = cCar->speed * Constants::DELTA_TIME;
+
+    cout << Utils::getISOCurrentTimestampMillis() << " El percentTick es " << percentTick << " y la current speed es " << currentSpeed
+         << "\n     la pos actual es " << cTransformable->positionPrev.x << "," << cTransformable->positionPrev.y << "," << cTransformable->positionPrev.z
+         << "\n     la pos siguiente es " << cTransformable->positionNext.x << "," << cTransformable->positionNext.y << "," << cTransformable->positionNext.z
+         << "\n     la pos actual es " << cTransformable->position.x << "," << cTransformable->position.y << "," << cTransformable->position.z
+         << endl;
     StateInGame::Render(timeElapsed);
 }
 
@@ -115,7 +120,6 @@ void StateInGameSingle::InitializeFacades() {
 
 void StateInGameSingle::AddElementsToRender() {
     StateInGame::AddElementsToRender();
-    
 }
 
 void StateInGameSingle::CAMBIARCosasDeTotemUpdate() {
@@ -133,10 +137,10 @@ void StateInGameSingle::CAMBIARCosasDeTotemUpdate() {
             cTransformTotem->position.y = 22.0f;
             // supuestamente esta el drawAll que te lo hace no?????????????????
             // si esta cambiando pero no se esta redibujando
-            break; // cuando encontramos a alguien que ya lleva el totem, nos salimos del for, no seguimos comprobando a los demás
+            break;  // cuando encontramos a alguien que ya lleva el totem, nos salimos del for, no seguimos comprobando a los demás
         }
     }
-    if(todosFalse){
+    if (todosFalse) {
         cTransformTotem->position.y = -100.0f;
     }
 
@@ -144,7 +148,7 @@ void StateInGameSingle::CAMBIARCosasDeTotemUpdate() {
 }
 
 void StateInGameSingle::CAMBIARInicializarCarAIS(ManCar &manCars, ManWayPoint &manWayPoint) {
-/*    
+    /*    
     auto cWayPoint = static_cast<CWayPoint *>(manWayPoint.GetEntities()[0]->GetComponent(CompType::WayPointComp).get());
     //Le asignamos el waypoint inicial, momentaneo a la IA
     manCars.CreateCarAI(glm::vec3(-200.0f, 20.0f, 700.0f), cWayPoint);

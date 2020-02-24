@@ -192,8 +192,8 @@ void SteeringBehaviours::UpdateSpeedAvoidance(CCar* m_cCar, CNitro* m_cNitro) co
 void SteeringBehaviours::UpdatePosition(CCar* m_cCar, CTransformable* m_cTransformableCar) const{
     // calculamos las posiciones
     float angleRotation = (m_cTransformableCar->rotation.y * PI) / 180.0;
-    m_cTransformableCar->position.x -= cos(angleRotation) * m_cCar->speed * 0.016;
-    m_cTransformableCar->position.z += sin(angleRotation) * m_cCar->speed * 0.016;
+    m_cTransformableCar->position.x -= cos(angleRotation) * m_cCar->speed * Constants::DELTA_TIME;
+    m_cTransformableCar->position.z += sin(angleRotation) * m_cCar->speed * Constants::DELTA_TIME;
     if(m_cCar->wheelRotation != 0){
         m_cTransformableCar->rotation.y += m_cCar->wheelRotation * 0.20;
         if(m_cTransformableCar->rotation.y>=360.0)
@@ -275,8 +275,8 @@ glm::vec2 SteeringBehaviours::Pursue(Entity* m_originCar, Entity* m_targetCar, c
     
     // calcular punto al que va a predecir
     float angleRotation = (cTransformableTarget->rotation.y * PI) / 180.0;
-    posTarget.x = cTransformableTarget->position.x - cos(angleRotation) * cCarTarget->speed * 0.016 * predictionTime*60;
-    posTarget.z = cTransformableTarget->position.z + sin(angleRotation) * cCarTarget->speed * 0.016 * predictionTime*60;
+    posTarget.x = cTransformableTarget->position.x - cos(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
+    posTarget.z = cTransformableTarget->position.z + sin(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
 
     return Seek(m_originCar, posTarget, m_velocityVector);
 }
@@ -307,8 +307,8 @@ glm::vec2 SteeringBehaviours::PursuePowerUp(Entity* m_originCar, Entity* m_targe
     
     // calcular punto al que va a predecir
     float angleRotation = (cTransformableTarget->rotation.y * PI) / 180.0;
-    posTarget.x = cTransformableTarget->position.x - cos(angleRotation) * cCarTarget->speed * 0.016 * predictionTime*60;
-    posTarget.z = cTransformableTarget->position.z + sin(angleRotation) * cCarTarget->speed * 0.016 * predictionTime*60;
+    posTarget.x = cTransformableTarget->position.x - cos(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
+    posTarget.z = cTransformableTarget->position.z + sin(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
     //std::cout << "Actual pos: ( " << cTransformableTarget->position.x << " , " << cTransformableTarget->position.z << " )    Predicted: ( " << posTarget.x << " , " << posTarget.z << " )" << std::endl;
     
     //  tiempo extra para calcular ya que al ser una esfera tarda un tiempo adicional en llegar le PowerUp
@@ -322,16 +322,16 @@ glm::vec2 SteeringBehaviours::PursuePowerUp(Entity* m_originCar, Entity* m_targe
     else if(angle2 >= 360)
         angle2 -= 360.0;
     float angleRotation2 = (angle2 * PI) / 180.0;
-    float posPUx = cTransformable->position.x - cos(angleRotation2) * 510.0 * 0.016 * predictionTime*60;
-    float posPUz = cTransformable->position.z + sin(angleRotation2) * 510.0 * 0.016 * predictionTime*60;
+    float posPUx = cTransformable->position.x - cos(angleRotation2) * 510.0 * Constants::DELTA_TIME * predictionTime*60;
+    float posPUz = cTransformable->position.z + sin(angleRotation2) * 510.0 * Constants::DELTA_TIME * predictionTime*60;
 
     float vetorDistancePUx = (posTarget.x - posPUx);
     float vetorDistancePUz = (posTarget.z - posPUz);
     float distancePU = sqrt(vetorDistancePUx*vetorDistancePUx + vetorDistancePUz*vetorDistancePUz);
     float predictionTimeExtra = distancePU / 510.0;
 
-    posTarget.x = cTransformableTarget->position.x - cos(angleRotation) * cCarTarget->speed * 0.016 * (predictionTime+predictionTimeExtra)*60;
-    posTarget.z = cTransformableTarget->position.z + sin(angleRotation) * cCarTarget->speed * 0.016 * (predictionTime+predictionTimeExtra)*60;
+    posTarget.x = cTransformableTarget->position.x - cos(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * (predictionTime+predictionTimeExtra)*60;
+    posTarget.z = cTransformableTarget->position.z + sin(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * (predictionTime+predictionTimeExtra)*60;
     //std::cout << distance << std::endl;
 
     return Seek(m_originCar, posTarget, m_velocityVector);

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include "../../include/glm/vec3.hpp"
+#include "../../include/date/date.h"
 
 using namespace glm;
 using namespace std;
@@ -56,6 +57,48 @@ class Utils {
         vector.y = 0.f;
         vector.z = sin(Utils::DegToRad(angle));
         return vector;
+    }
+
+    static string GetFullDateTime() {
+        auto time_point = system_clock::now();
+        auto micros = std::chrono::duration_cast<std::chrono::microseconds>(time_point.time_since_epoch()).count();
+        string microsString = to_string(micros % 1000000);
+        time_t now_c = system_clock::to_time_t(time_point);
+        string salida = ctime(&now_c);
+        salida = salida.substr(0, salida.size() - 1);
+        salida = salida.substr(0, 19) + "." + microsString + " " + salida.substr(20);
+        return salida;
+    }
+
+    template <class Precision>
+    static string getISOCurrentTimestamp() {
+        auto now = chrono::system_clock::now();
+        return date::format("%FT%TZ", date::floor<Precision>(now));
+    }
+
+    template <class Precision>
+    static string getISOCurrentTimestamp(chrono::system_clock::time_point tp) {
+        return date::format("%FT%TZ", date::floor<Precision>(tp));
+    }
+
+    static string getISOCurrentTimestampMillis() {
+        return getISOCurrentTimestamp<std::chrono::milliseconds>();
+    }
+
+    static string getISOCurrentTimestampMicros() {
+        return getISOCurrentTimestamp<std::chrono::microseconds>();
+    }
+
+    static string getISOCurrentTimestampSeconds() {
+        return getISOCurrentTimestamp<std::chrono::seconds>();
+    }
+
+    static int64_t getMicrosSinceEpoch() {
+        return std::chrono::duration_cast<std::chrono::microseconds>(system_clock::now().time_since_epoch()).count();
+    }
+
+    static int64_t getMillisSinceEpoch() {
+        return std::chrono::duration_cast<std::chrono::milliseconds>(system_clock::now().time_since_epoch()).count();
     }
 
     static string GetTime() {

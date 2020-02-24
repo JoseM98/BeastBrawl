@@ -48,8 +48,10 @@ void Physics::update(Car *car, Camera *cam) {
     auto cTransformableCam = static_cast<CTransformable *>(cam->GetComponent(CompType::TransformableComp).get());
     auto cSpeed = static_cast<CSpeed *>(car->GetComponent(CompType::SpeedComp).get());
     //std::cout << "( " << cTransformableCam->position.z << " )" << std::endl;
-    cTransformable->positionPrev = cTransformable->position;
-    cTransformableCam->positionPrev = cTransformableCam->position;
+    cTransformable->positionPrev = cTransformable->positionNext;
+    cTransformable->position = cTransformable->positionNext;
+    cTransformableCam->positionPrev = cTransformableCam->positionNext;
+    cTransformableCam->position = cTransformableCam->positionNext;
     if (cCar->speed >= 0)
         CalculatePosition(cCar, cTransformable, cSpeed, deltaTime);
     else
@@ -69,6 +71,7 @@ void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpe
     cSpeed->speed.y = 0.f;                 // TODO, esto lo cacharreará el CLPhysics
 
     cTransformable->positionNext.x = cTransformable->positionPrev.x - cSpeed->speed.x * cCar->speed * deltaTime;
+    cTransformable->positionNext.y = cTransformable->positionPrev.y - cSpeed->speed.y * cCar->speed * deltaTime;
     cTransformable->positionNext.z = cTransformable->positionPrev.z + cSpeed->speed.z * cCar->speed * deltaTime;
 
     //Si tiene rotacion, rotamos el coche

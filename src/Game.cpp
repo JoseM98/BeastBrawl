@@ -3,11 +3,12 @@
 #include "Facade/Physics/PhysicsFacadeManager.h"
 #include "Facade/Render/RenderFacadeManager.h"
 #include "State/StateEndRace.h"
-#include "State/StateInGameSingle.h"
 #include "State/StateInGameMulti.h"
+#include "State/StateInGameSingle.h"
+#include "State/StateLobbyMulti.h"
 #include "State/StateMenu.h"
 #include "State/StatePause.h"
-#include "State/StateLobbyMulti.h"
+#include "Systems/Utils.h"
 
 using namespace std;
 
@@ -20,7 +21,6 @@ Game* Game::GetInstance() {
 }
 
 void Game::SetState(State::States stateType) {
-
     cout << "GAME inicia estado nuevo" << endl;
 
     switch (stateType) {
@@ -81,7 +81,6 @@ void Game::SetState(State::States stateType) {
 }
 
 void Game::InitGame() {
-    
     RenderFacadeManager::GetInstance()->InitializeIrrlicht();
     InputFacadeManager::GetInstance()->InitializeIrrlicht();
     PhysicsFacadeManager::GetInstance()->InitializeIrrlicht();
@@ -96,7 +95,7 @@ void Game::InitGame() {
     cout << "**********************************************" << endl;
 }
 
-void Game::SuscribeEvents(){
+void Game::SuscribeEvents() {
     cout << "Suscripciones\n";
     EventManager::GetInstance().SuscribeMulti(Listener(
         EventType::STATE_MENU,
@@ -127,7 +126,6 @@ void Game::SuscribeEvents(){
         EventType::STATE_LOBBYMULTI,
         bind(&Game::SetStateLobbyMulti, this, placeholders::_1),
         "SetStateLobbyMulti"));
-
 }
 
 void Game::MainLoop() {
@@ -137,27 +135,29 @@ void Game::MainLoop() {
     renderFacadeMan->GetRenderFacade()->FacadeSetWindowCaption("Beast Brawl");
 
     while (renderFacadeMan->GetRenderFacade()->FacadeRun()) {
-
-        
-        timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();   
+        timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now() - start).count();
         // if(timeElapsed > updateTickTime){
-        if(timeElapsed >= Constants::TIME_BETWEEN_UPDATES_us - 1000){
-            cout << "////////////////// Entramos en el update /////////////////" << endl;
+        if (timeElapsed >= Constants::TIME_BETWEEN_UPDATES_us - 1000) {
+            cout << Utils::getISOCurrentTimestampMillis() << "////////////////// Entramos en el update /////////////////" << endl;
+            
             start = system_clock::now();
+            system_clock::time_point nextUpdate = start + milliseconds(Constants::TIME_BETWEEN_UPDATES_ms);
+            cout << "Reseteamos el reloj a las " << Utils::getISOCurrentTimestampMillis() << endl;
+            cout << "Debemos entrar al update después de las " << Utils::getISOCurrentTimestamp<chrono::milliseconds>(nextUpdate) << endl;
 
             currentState->Input();
             currentState->Update();
             // int64_t tiempoQueSePasa = timeElapsed - updateTickTime;
-            timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now()-start).count();
+            timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now() - start).count();
             cout << "El timeElapsed dentro del input es " << timeElapsed << endl;
             // cout << "El tiempoQueSePasa dentro del input es " << tiempoQueSePasa << endl;
             // timeElapsed += tiempoQueSePasa;
-            
         }
 
         //Actualiza el motor de audio.
         soundFacadeManager->GetSoundFacade()->Update();
 
+        cout << "TimeBetweenUpdates[" << Constants::TIME_BETWEEN_UPDATES_ms << "]" << endl;
         cout << "TimeElapsed[" << timeElapsed << "]" << endl;
         // cout << "UpdateTickTime[" << updateTickTime << "]" << endl;
 
@@ -176,28 +176,27 @@ void Game::TerminateGame() {
     cout << "Game Terminate" << endl;
 }
 
-
 //Funciones del EventManager
 
-void Game::SetStateMenu(DataMap* d){
+void Game::SetStateMenu(DataMap* d) {
     cout << "LLEGA\n";
     SetState(State::MENU);
 }
 
-void Game::SetStatePause(DataMap* d){
+void Game::SetStatePause(DataMap* d) {
     SetState(State::PAUSE);
 }
 
-void Game::SetStateInGameSingle(DataMap* d){
+void Game::SetStateInGameSingle(DataMap* d) {
     SetState(State::INGAME_SINGLE);
 }
 
-void Game::SetStateInGameMulti(DataMap* d){
+void Game::SetStateInGameMulti(DataMap* d) {
     //SetState(State::INGAME_MULTI);
     auto dataServer = any_cast<string>((*d)["dataServer"]);
     if (!gameStarted) {
         shared_ptr<State> newState;
-        if(dataServer == "")
+        if (dataServer == "")
             newState = make_shared<StateInGameMulti>();
         else
             newState = make_shared<StateInGameMulti>(dataServer);
@@ -209,11 +208,10 @@ void Game::SetStateInGameMulti(DataMap* d){
     }
 }
 
-
-void Game::SetStateEndRace(DataMap* d){
+void Game::SetStateEndRace(DataMap* d) {
     SetState(State::ENDRACE);
 }
 
-void Game::SetStateLobbyMulti(DataMap* d){
+void Game::SetStateLobbyMulti(DataMap* d) {
     SetState(State::LOBBY_MULTI);
 }
