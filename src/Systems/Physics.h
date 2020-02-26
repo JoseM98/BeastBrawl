@@ -25,7 +25,7 @@ class CNitro;
 
 class Physics {
    public:
-    Physics(float);
+    Physics();
     ~Physics(){};
     void update(Car* car, Camera* cam);
     void Accelerate(Car *, Camera *);
@@ -44,14 +44,12 @@ class Physics {
     void NotTurningHuman(CCar &cCar) const;
 
     void UpdateEveryFrame(Car* car, Camera* cam, const double percentTick);
-    // void setDeltaTime(float _deltaTime){deltaTime = _deltaTime;};
 
    protected:
    private:
-    void CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpeed *cSpeed, CExternalForce *cExternalForce, float deltaTime);
-    void CalculatePositionReverse(CCar *cCar, CTransformable *cTransformable, CExternalForce *cExternalForce, float deltaTime);
+    void CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpeed *cSpeed, CExternalForce *cExternalForce);
+    void CalculatePositionReverse(CCar *cCar, CTransformable *cTransformable, CExternalForce *cExternalForce);
     void CalculatePositionCamera(CTransformable *cTransformableCar, CTransformable *cTransformableCamera, CCamera *cCamera);
     glm::vec3 CalculateVecDirCar(CTransformable *cTransformable) const;
     void FrictionExternalForce(CCar *cCar, CExternalForce *externalForce) const;
-    float deltaTime {1/FRAME_RATE};
 };
