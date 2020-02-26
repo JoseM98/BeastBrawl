@@ -292,11 +292,11 @@ bool CLPhysics::CollisionsChassisGround(CTransformable &trCar, CBoundingChassis 
 }
 */
 void CLPhysics::RePositionCarY(CTransformable &trCar, CBoundingSphere &sp1Car, CBoundingSphere &sp2Car) const{
-    trCar.position.y = (sp1Car.center.y + sp2Car.center.y) / 2;
+    trCar.positionNext.y = (sp1Car.center.y + sp2Car.center.y) / 2;
 }
 
 void CLPhysics::RePositionEntityY(CTransformable &trEntity, CBoundingSphere &sphere) const{
-    trEntity.position.y = sphere.center.y;
+    trEntity.positionNext.y = sphere.center.y;
 }
 
 bool CLPhysics::CollisionsSphereGround(CTransformable &trCar, CBoundingSphere &spCar, CBoundingPlane &plane){
@@ -572,10 +572,10 @@ void CLPhysics::SeparateSpheres(CTransformable &trCar1, CBoundingSphere &spCar1,
     vec3 nuevaDirectionCar1 = -normalize(direction);
     vec3 nuevaDirectionCar2 = normalize(direction);
 
-    trCar1.position.x += nuevaDirectionCar1.x * (distanceCollided / 2);
-    trCar1.position.z += nuevaDirectionCar1.z * (distanceCollided / 2);
-    trCar2.position.x += nuevaDirectionCar2.x * (distanceCollided / 2);
-    trCar2.position.z += nuevaDirectionCar2.z * (distanceCollided / 2);
+    trCar1.positionNext.x += nuevaDirectionCar1.x * (distanceCollided / 2);
+    trCar1.positionNext.z += nuevaDirectionCar1.z * (distanceCollided / 2);
+    trCar2.positionNext.x += nuevaDirectionCar2.x * (distanceCollided / 2);
+    trCar2.positionNext.z += nuevaDirectionCar2.z * (distanceCollided / 2);
 }
 
 void CLPhysics::SeparateCilindreSphere(CTransformable &trCar1, glm::vec3 &cenCar1, const float &radCar1, CCar &ccarCar1, CTransformable &trCar2, glm::vec3 &cenCar2, const float &radCar2, CCar &ccarCar2) const{
@@ -589,10 +589,10 @@ void CLPhysics::SeparateCilindreSphere(CTransformable &trCar1, glm::vec3 &cenCar
     vec3 nuevaDirectionCar1 = -normalize(direction);
     vec3 nuevaDirectionCar2 = normalize(direction);
 
-    trCar1.position.x += nuevaDirectionCar1.x * (distanceCollided / 2);
-    trCar1.position.z += nuevaDirectionCar1.z * (distanceCollided / 2);
-    trCar2.position.x += nuevaDirectionCar2.x * (distanceCollided / 2);
-    trCar2.position.z += nuevaDirectionCar2.z * (distanceCollided / 2);
+    trCar1.positionNext.x += nuevaDirectionCar1.x * (distanceCollided / 2);
+    trCar1.positionNext.z += nuevaDirectionCar1.z * (distanceCollided / 2);
+    trCar2.positionNext.x += nuevaDirectionCar2.x * (distanceCollided / 2);
+    trCar2.positionNext.z += nuevaDirectionCar2.z * (distanceCollided / 2);
 }
 
 

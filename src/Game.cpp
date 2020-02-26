@@ -157,18 +157,19 @@ void Game::MainLoop() {
         timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now() - start).count();
         // if(timeElapsed > updateTickTime){
         if (timeElapsed >= Constants::TIME_BETWEEN_UPDATES_us - 1000) {
-            cout << Utils::getISOCurrentTimestampMillis() << "////////////////// Entramos en el update /////////////////" << endl;
+            // cout << Utils::getISOCurrentTimestampMillis() << "////////////////// Entramos en el update /////////////////" << endl;
             
             start = system_clock::now();
             system_clock::time_point nextUpdate = start + milliseconds(Constants::TIME_BETWEEN_UPDATES_ms);
-            cout << "Reseteamos el reloj a las " << Utils::getISOCurrentTimestampMillis() << endl;
-            cout << "Debemos entrar al update después de las " << Utils::getISOCurrentTimestamp<chrono::milliseconds>(nextUpdate) << endl;
+            // cout << "Reseteamos el reloj a las " << Utils::getISOCurrentTimestampMillis() << endl;
+            // cout << "Debemos entrar al update después de las " << Utils::getISOCurrentTimestamp<chrono::milliseconds>(nextUpdate) << endl;
 
             currentState->Input();
             currentState->Update();
             // int64_t tiempoQueSePasa = timeElapsed - updateTickTime;
             timeElapsed = duration_cast<std::chrono::microseconds>(system_clock::now() - start).count();
-            cout << "El timeElapsed dentro del input es " << timeElapsed << endl;
+            // cout << "El timeElapsed dentro del input es " << timeElapsed << endl;
+            
             // cout << "El tiempoQueSePasa dentro del input es " << tiempoQueSePasa << endl;
             // timeElapsed += tiempoQueSePasa;
         }
@@ -176,8 +177,8 @@ void Game::MainLoop() {
         //Actualiza el motor de audio.
         soundFacadeManager->GetSoundFacade()->Update();
 
-        cout << "TimeBetweenUpdates[" << Constants::TIME_BETWEEN_UPDATES_ms << "]" << endl;
-        cout << "TimeElapsed[" << timeElapsed << "]" << endl;
+        // cout << "TimeBetweenUpdates[" << Constants::TIME_BETWEEN_UPDATES_ms << "]" << endl;
+        // cout << "TimeElapsed[" << timeElapsed << "]" << endl;
         // cout << "UpdateTickTime[" << updateTickTime << "]" << endl;
 
         currentState->Render(timeElapsed);

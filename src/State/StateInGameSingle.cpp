@@ -106,7 +106,7 @@ void StateInGameSingle::Update() {
 
 void StateInGameSingle::Render(double timeElapsed) {
     double percentTick = std::min(1.0, (timeElapsed / Constants::TIME_BETWEEN_UPDATES_us));
-    cout << "PercentTick[" << percentTick << "]" << endl;
+    // cout << "PercentTick[" << percentTick << "]" << endl;
     physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
 
     for (auto cars : manCars->GetEntities()) {
@@ -117,13 +117,12 @@ void StateInGameSingle::Render(double timeElapsed) {
     const auto cCar = static_cast<CCar *>(car.get()->GetComponent(CompType::CarComp).get());
     const auto cTransformable = static_cast<CTransformable *>(car.get()->GetComponent(CompType::TransformableComp).get());
 
-    double currentSpeed = cCar->speed * Constants::DELTA_TIME;
-
-    cout << Utils::getISOCurrentTimestampMillis() << " El percentTick es " << percentTick << " y la current speed es " << currentSpeed
-         << "\n     la pos actual es " << cTransformable->positionPrev.x << "," << cTransformable->positionPrev.y << "," << cTransformable->positionPrev.z
-         << "\n     la pos siguiente es " << cTransformable->positionNext.x << "," << cTransformable->positionNext.y << "," << cTransformable->positionNext.z
-         << "\n     la pos actual es " << cTransformable->position.x << "," << cTransformable->position.y << "," << cTransformable->position.z
-         << endl;
+    // double currentSpeed = cCar->speed * Constants::DELTA_TIME;
+    // cout << Utils::getISOCurrentTimestampMillis() << " El percentTick es " << percentTick << " y la current speed es " << currentSpeed
+    //      << "\n     la pos actual es " << cTransformable->positionPrev.x << "," << cTransformable->positionPrev.y << "," << cTransformable->positionPrev.z
+    //      << "\n     la pos siguiente es " << cTransformable->positionNext.x << "," << cTransformable->positionNext.y << "," << cTransformable->positionNext.z
+    //      << "\n     la pos actual es " << cTransformable->position.x << "," << cTransformable->position.y << "," << cTransformable->position.z
+    //      << endl;
     StateInGame::Render(timeElapsed);
 }
 

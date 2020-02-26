@@ -27,4 +27,7 @@ public:
 
     glm::vec3 positionPrev;
     glm::vec3 positionNext;
+
+    glm::vec3 rotationPrev;
+    glm::vec3 rotationNext;
 };
