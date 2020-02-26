@@ -5,23 +5,22 @@
 #include <Components/CSpeed.h>
 #include <Entities/Camera.h>
 #include <Entities/Car.h>
-#include "../Entities/CarHuman.h"
-#include "../Components/COnline.h"
 #include "../Components/CExternalForce.h"
+#include "../Components/COnline.h"
+#include "../Entities/CarHuman.h"
 #include "../Systems/Utils.h"
 
 #include <cmath>
 
-#include <iostream>
 #include <math.h>
+#include <iostream>
 
 #include "../Constants.h"
 
 Physics::Physics(float _deltaTime) : deltaTime(_deltaTime) {
 }
 
-
-void Physics::UpdateEveryFrame(Car* car, Camera* cam, double percentTick){
+void Physics::UpdateEveryFrame(Car *car, Camera *cam, double percentTick) {
     // actualizar posiciones
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
     auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
@@ -31,21 +30,43 @@ void Physics::UpdateEveryFrame(Car* car, Camera* cam, double percentTick){
     cTransformable->position.x = (cTransformable->positionNext.x - cTransformable->positionPrev.x) * percentTick + cTransformable->positionPrev.x;
     cTransformable->position.y = (cTransformable->positionNext.y - cTransformable->positionPrev.y) * percentTick + cTransformable->positionPrev.y;
     cTransformable->position.z = (cTransformable->positionNext.z - cTransformable->positionPrev.z) * percentTick + cTransformable->positionPrev.z;
-    
-    cTransformable->rotation.y = (cTransformable->rotationNext.y - cTransformable->rotationPrev.y) * percentTick + cTransformable->rotationPrev.y;
-    std::cout << "rotation.y( " << cTransformable->rotationPrev.y << " , " << cTransformable->rotationNext.y << " , " << cTransformable->rotation.y << " ) --> " << percentTick << std::endl;
 
+    // inicio HACK
+    // aquí solucionamos que al pasar de 0º -> 355º, hace efectivamente eso, 0 a 355, en vez de 360 a 355,
+    // por tanto el salto lo hace así:
+    //      rotation.y( 0 , 355 , 1.9525 )
+    //      rotation.y( 0 , 355 , 89.6644 )
+    //      rotation.y( 0 , 355 , 179.173 )
+    //      rotation.y( 0 , 355 , 269.052 )
+    //      rotation.y( 0 , 355 , 355 )
+    // en vez de así:
+    //      rotation.y( 360 , 355 , 360 )
+    //      rotation.y( 360 , 355 , 358,75 )
+    //      rotation.y( 360 , 355 , 357,5 )
+    //      rotation.y( 360 , 355 , 356,25 )
+    //      rotation.y( 360 , 355 , 355 )
+    // Tenemos el mismo problema cuando pasamos de 360º a 5º
+    // si pasamos de alrededor de 355 a 5...
+    float auxNext = cTransformable->rotationNext.y;
+    float auxPrev = cTransformable->rotationPrev.y; 
+    if (cTransformable->rotationNext.y >= 360 - 15 && cTransformable->rotationPrev.y <= 15) {
+        auxPrev += 360;
+    } else if (cTransformable->rotationPrev.y >= 360 - 15 && cTransformable->rotationNext.y <= 15) {
+        auxPrev -= 360;
+    }
+    cTransformable->rotation.y = (auxNext - auxPrev) * percentTick + auxPrev;
+    // fin HACK
+
+    std::cout << "rotation.y( " << cTransformable->rotationPrev.y << " , " << cTransformable->rotationNext.y << " , " << cTransformable->rotation.y << " ) --> " << percentTick << std::endl;
 
     cTransformableCam->position.x = (cTransformableCam->positionNext.x - cTransformableCam->positionPrev.x) * percentTick + cTransformableCam->positionPrev.x;
     cTransformableCam->position.y = (cTransformableCam->positionNext.y - cTransformableCam->positionPrev.y) * percentTick + cTransformableCam->positionPrev.y;
     cTransformableCam->position.z = (cTransformableCam->positionNext.z - cTransformableCam->positionPrev.z) * percentTick + cTransformableCam->positionPrev.z;
-    
+
     cTransformableCam->rotation.y = (cTransformableCam->rotationNext.y - cTransformableCam->rotationPrev.y) * percentTick + cTransformableCam->rotationPrev.y;
-    
+
     // std::cout << "rotation.y( " << cTransformableCam->rotationPrev.y << " , " << cTransformableCam->rotationNext.y << " , " << cTransformableCam->rotation.y << " ) --> " << percentTick << std::endl;
 }
-
-
 
 void Physics::update(Car *car, Camera *cam) {
     // actualizar posiciones
@@ -80,7 +101,7 @@ void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpe
     float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
 
     // debemos de tener encuenta la fuerza externa, asi como la direccion final que tomaremos (el angulo final)
-    if(cExternalForce->force > 0){
+    if (cExternalForce->force > 0) {
         // Este paso es una tonteria porque ya lo devolvemos normalizado
         cExternalForce->dirExternalForce = normalize(cExternalForce->dirExternalForce);
     }
@@ -93,8 +114,6 @@ void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpe
     cTransformable->positionNext.x = cTransformable->positionPrev.x - cSpeed->speed.x * cCar->speed * deltaTime;
     cTransformable->positionNext.y = cTransformable->positionPrev.y - cSpeed->speed.y * cCar->speed * deltaTime;
     cTransformable->positionNext.z = cTransformable->positionPrev.z + cSpeed->speed.z * cCar->speed * deltaTime;
-
-    
 
     // Rotacion del coche
     // if (cCar->wheelRotation != 0) {
@@ -110,14 +129,12 @@ void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpe
     // }
 }
 
-vec3 Physics::CalculateVecDirCar(CTransformable *cTransformable) const{
+vec3 Physics::CalculateVecDirCar(CTransformable *cTransformable) const {
+    float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
+    float nextPosX = cTransformable->position.x - cos(angleRotation) * 1;
+    float nexPosZ = cTransformable->position.z + sin(angleRotation) * 1;
 
-   float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
-   float nextPosX    = cTransformable->position.x - cos(angleRotation) * 1;
-   float nexPosZ     = cTransformable->position.z + sin(angleRotation) * 1;
-
-   return vec3(nextPosX-cTransformable->position.x, 0, nexPosZ-cTransformable->position.z);
-
+    return vec3(nextPosX - cTransformable->position.x, 0, nexPosZ - cTransformable->position.z);
 }
 
 //Calcula la posicion del coche (duda con las formulas preguntar a Jose)
@@ -132,7 +149,6 @@ void Physics::CalculatePositionReverse(CCar *cCar, CTransformable *cTransformabl
 
     cTransformable->rotationNext.y = cTransformable->rotationPrev.y - cCar->wheelRotation * Constants::DELTA_TIME;
 
-
     //Si tiene rotacion, rotamos el coche
     if (cCar->wheelRotation != 0) {
         cTransformable->rotation.y -= cCar->wheelRotation * 0.20;
@@ -143,7 +159,6 @@ void Physics::CalculatePositionReverse(CCar *cCar, CTransformable *cTransformabl
     }
 }
 
-
 //Calcula la posicion de la camara (duda con las formulas preguntar a Jose)
 void Physics::CalculatePositionCamera(CTransformable *cTransformableCar, CTransformable *cTransformableCamera, CCamera *cCamera) {
     // comento la primera linea porque la pos de la cámara en altura (por ahora) es siempre la misma
@@ -151,8 +166,6 @@ void Physics::CalculatePositionCamera(CTransformable *cTransformableCar, CTransf
     cTransformableCamera->positionNext.x = (cTransformableCar->positionNext.x + 40 * cos(((cTransformableCar->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
     cTransformableCamera->positionNext.z = (cTransformableCar->positionNext.z - 40 * sin(((cTransformableCar->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
 }
-
-
 
 //Entra cuando se presiona la I
 void Physics::Accelerate(Car *car, Camera *cam) {
@@ -216,15 +229,14 @@ void Physics::Decelerate(Car *car, Camera *cam) {
 //Entra cuando se presiona la A
 void Physics::TurnLeft(Car *car, Camera *cam) {
     //Componentes de la camara
-    auto cCamera = static_cast<CCamera*>(cam->GetComponent(CompType::CameraComp).get());
+    auto cCamera = static_cast<CCamera *>(cam->GetComponent(CompType::CameraComp).get());
     //Componentes del coche
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
     auto cTrans = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
 
     std::cout << "Gira derecha: " << cTrans->rotation.y << "\n";
 
-
-    if (cCar->speed >= cCar->maxSpeed*0.15) {
+    if (cCar->speed >= cCar->maxSpeed * 0.15) {
         if (cCar->wheelRotation > -cCar->maxWheelRotation) {
             //Aumentamos la rotacion hacia la izquierda
             cCar->wheelRotation -= cCar->incrementWheelRotation;
@@ -233,7 +245,7 @@ void Physics::TurnLeft(Car *car, Camera *cam) {
         if (cCamera->rotExtraY > -(cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
             cCamera->rotExtraY -= cCar->incrementWheelRotation;
         }
-    } else if (cCar->speed <= -cCar->maxSpeed*0.15) {
+    } else if (cCar->speed <= -cCar->maxSpeed * 0.15) {
         if (cCar->wheelRotation > -cCar->maxWheelRotation) {
             //Aumentamos la rotacion hacia la izquierda
             cCar->wheelRotation -= cCar->incrementWheelRotation;
@@ -268,7 +280,7 @@ void Physics::TurnRight(Car *car, Camera *cam) {
     //Componentes del coche
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
 
-    if (cCar->speed >= cCar->maxSpeed*0.15) {
+    if (cCar->speed >= cCar->maxSpeed * 0.15) {
         if (cCar->wheelRotation < cCar->maxWheelRotation) {
             //Aumentamos la rotacion hacia la derecha
             cCar->wheelRotation += cCar->incrementWheelRotation;
@@ -277,7 +289,7 @@ void Physics::TurnRight(Car *car, Camera *cam) {
         if (cCamera->rotExtraY < (cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
             cCamera->rotExtraY += cCar->incrementWheelRotation;
         }
-    } else if (cCar->speed <= -cCar->maxSpeed*0.15) {
+    } else if (cCar->speed <= -cCar->maxSpeed * 0.15) {
         if (cCar->wheelRotation < cCar->maxWheelRotation) {
             //Aumentamos la rotacion hacia la derecha
             cCar->wheelRotation += cCar->incrementWheelRotation;
@@ -327,11 +339,9 @@ void Physics::NotAcceleratingOrDecelerating(Car *car, Camera *cam) {
     }
 }
 
-
-void Physics::FrictionExternalForce(CCar *cCar, CExternalForce *externalForce) const{
+void Physics::FrictionExternalForce(CCar *cCar, CExternalForce *externalForce) const {
     externalForce->force -= cCar->friction;
 }
-
 
 //Aqui entra cuando no se esta presionando ni A ni D
 void Physics::NotTurning(Car *car, Camera *cam) {
@@ -358,10 +368,6 @@ void Physics::NotTurning(Car *car, Camera *cam) {
     }
 }
 
-
-
-
-
 void Physics::UpdateHuman(Car *car) {
     auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
@@ -373,33 +379,32 @@ void Physics::UpdateHuman(Car *car) {
     bool accDec = false;
     bool turning = false;
     // actualizar inputs
-    for(Constants::InputTypes input : cOnline->inputs){
-        if(input == Constants::InputTypes::FORWARD){
+    for (Constants::InputTypes input : cOnline->inputs) {
+        if (input == Constants::InputTypes::FORWARD) {
             AccelerateHuman(*cCar, *cNitro);
             accDec = true;
-        }else if(input == Constants::InputTypes::BACK){
+        } else if (input == Constants::InputTypes::BACK) {
             DecelerateHuman(*cCar, *cNitro);
             accDec = true;
-        }else if(input == Constants::InputTypes::LEFT){
+        } else if (input == Constants::InputTypes::LEFT) {
             TurnLeftHuman(*cCar);
             turning = true;
-        }else if(input == Constants::InputTypes::RIGHT){
+        } else if (input == Constants::InputTypes::RIGHT) {
             TurnRightHuman(*cCar);
             turning = true;
-        }else if(input == Constants::InputTypes::CLAXON){
+        } else if (input == Constants::InputTypes::CLAXON) {
             // evento
-        }else if(input == Constants::InputTypes::LAUNCH_PU){
+        } else if (input == Constants::InputTypes::LAUNCH_PU) {
             shared_ptr<DataMap> data = make_shared<DataMap>();
 
             (*data)[DataType::ACTUAL_CAR] = car;
             EventManager::GetInstance().AddEventMulti(Event{EventType::THROW_POWERUP_HUMAN, data});
         }
     }
-    if(accDec == false)
+    if (accDec == false)
         NotAcceleratingOrDeceleratingHuman(*cCar, *cNitro);
-    if(turning == false)
+    if (turning == false)
         NotTurningHuman(*cCar);
-
 
     // actualizar posiciones
     if (cCar->speed >= 0)
@@ -408,11 +413,8 @@ void Physics::UpdateHuman(Car *car) {
         CalculatePositionReverse(cCar, cTransformable, cExternalForce, deltaTime);
 }
 
-
-
-
 //Entra cuando se presiona la I
-void Physics::AccelerateHuman(CCar &cCar, CNitro &cNitro) const{
+void Physics::AccelerateHuman(CCar &cCar, CNitro &cNitro) const {
     //Aumentamos la velocidad
     if (cNitro.activePowerUp == false) {
         cCar.speed += cCar.acceleration;
@@ -430,7 +432,7 @@ void Physics::AccelerateHuman(CCar &cCar, CNitro &cNitro) const{
 }
 
 //Entra cuando se presiona la O
-void Physics::DecelerateHuman(CCar &cCar, CNitro &cNitro) const{
+void Physics::DecelerateHuman(CCar &cCar, CNitro &cNitro) const {
     //Reducimos la velocidad
     if (cNitro.activePowerUp == false) {
         cCar.speed -= cCar.slowDown;
@@ -446,13 +448,13 @@ void Physics::DecelerateHuman(CCar &cCar, CNitro &cNitro) const{
 }
 
 //Entra cuando se presiona la A
-void Physics::TurnLeftHuman(CCar &cCar) const{
-    if (cCar.speed >= cCar.maxSpeed*0.15) {
+void Physics::TurnLeftHuman(CCar &cCar) const {
+    if (cCar.speed >= cCar.maxSpeed * 0.15) {
         if (cCar.wheelRotation > -cCar.maxWheelRotation) {
             //Aumentamos la rotacion hacia la izquierda
             cCar.wheelRotation -= cCar.incrementWheelRotation;
         }
-    } else if (cCar.speed <= -cCar.maxSpeed*0.15) {
+    } else if (cCar.speed <= -cCar.maxSpeed * 0.15) {
         if (cCar.wheelRotation > -cCar.maxWheelRotation) {
             //Aumentamos la rotacion hacia la izquierda
             cCar.wheelRotation -= cCar.incrementWheelRotation;
@@ -469,13 +471,13 @@ void Physics::TurnLeftHuman(CCar &cCar) const{
 }
 
 //Entra cuando se presiona la D
-void Physics::TurnRightHuman(CCar &cCar) const{
-    if (cCar.speed >= cCar.maxSpeed*0.15) {
+void Physics::TurnRightHuman(CCar &cCar) const {
+    if (cCar.speed >= cCar.maxSpeed * 0.15) {
         if (cCar.wheelRotation < cCar.maxWheelRotation) {
             //Aumentamos la rotacion hacia la derecha
             cCar.wheelRotation += cCar.incrementWheelRotation;
         }
-    } else if (cCar.speed <= -cCar.maxSpeed*0.15) {
+    } else if (cCar.speed <= -cCar.maxSpeed * 0.15) {
         if (cCar.wheelRotation < cCar.maxWheelRotation) {
             //Aumentamos la rotacion hacia la derecha
             cCar.wheelRotation += cCar.incrementWheelRotation;
@@ -492,7 +494,7 @@ void Physics::TurnRightHuman(CCar &cCar) const{
 }
 
 //Aqui entra cuando no se esta presionando ni I ni O
-void Physics::NotAcceleratingOrDeceleratingHuman(CCar &cCar, CNitro &cNitro) const{
+void Physics::NotAcceleratingOrDeceleratingHuman(CCar &cCar, CNitro &cNitro) const {
     if (cNitro.activePowerUp == false) {
         if (cCar.speed > 0) {
             cCar.speed -= cCar.friction;
@@ -511,9 +513,8 @@ void Physics::NotAcceleratingOrDeceleratingHuman(CCar &cCar, CNitro &cNitro) con
     }
 }
 
-
 //Aqui entra cuando no se esta presionando ni A ni D
-void Physics::NotTurningHuman(CCar &cCar) const{
+void Physics::NotTurningHuman(CCar &cCar) const {
     if (cCar.wheelRotation >= cCar.decrementWheelRotation) {
         cCar.wheelRotation -= cCar.decrementWheelRotation;
     } else if (cCar.wheelRotation <= -cCar.decrementWheelRotation) {
