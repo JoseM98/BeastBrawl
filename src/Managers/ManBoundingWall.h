@@ -11,7 +11,6 @@ class ManBoundingWall : public Manager {
     ManBoundingWall();
     ~ManBoundingWall();
     void CreateBoundingWall(glm::vec3 vertexA, glm::vec3 vertexB, glm::vec3 vertexC, glm::vec3 vertexD);
-    void Integrate() override;
     void SubscribeToEvents() override;
 
    private:
