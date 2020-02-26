@@ -105,6 +105,6 @@ void ManBoundingWall::SubscribeToEvents() {
     //     "AccelerateCar"));
 }
 
-void ManBoundingWall::Integrate(float delta) {
+void ManBoundingWall::Integrate() {
     //physics->update(GetCar().get(), cam.get());
 }

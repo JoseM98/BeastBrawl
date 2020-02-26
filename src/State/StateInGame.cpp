@@ -16,7 +16,10 @@ StateInGame::StateInGame() {
     // porque tiene que estar inicializado antes de llamar a InitializeManagers
     physics = make_unique<Physics>(Constants::DELTA_TIME);
 
-    cam = make_shared<Camera>(glm::vec3(100.0f, 30.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    // DEBUG_CAMERA
+    // cam = make_shared<Camera>(glm::vec3(100.0f, 30.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    cam = make_shared<Camera>(glm::vec3(100.0f, 400.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+
     ground = make_shared<GameObject>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "", "training_ground.obj");
 }
 
@@ -157,7 +160,7 @@ void StateInGame::Update() {
     // ACTUALIZACION DE LAS FISICAS DE LOS COCHES
     physics->update(manCars->GetCar().get(), cam.get());
 
-    clPhysics->Update(0.1666f);
+    clPhysics->Update();
     sysBoxPowerUp->update(manBoxPowerUps.get());
     for(auto& actualPowerUp : manPowerUps->GetEntities()){  // actualizamos las fisicas de los powerUps
         phisicsPowerUp->update(actualPowerUp.get());

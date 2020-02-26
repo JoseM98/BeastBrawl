@@ -38,8 +38,8 @@ void CLPhysics::AddManager(Manager &m) {
     managers.push_back(&m);
 }
 
-void CLPhysics::Update(float delta) {
-    Simulate(delta);
+void CLPhysics::Update() {
+    Simulate();
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ManCar *manCar = static_cast<ManCar *>(managers[0]);
     const auto& entities = manCar->GetEntities();
@@ -134,10 +134,10 @@ void CLPhysics::HandleCollisionsWithPlanes() {
     }
 }
 
-void CLPhysics::Simulate(float delta) {
+void CLPhysics::Simulate() {
     for (uint16_t i = 0; i < managers.size(); i++) {
         Manager *man = managers[i];
-        man->Integrate(delta);
+        man->Integrate();
     }
 }
 

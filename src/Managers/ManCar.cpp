@@ -660,7 +660,7 @@ void ManCar::AccelerateCar(DataMap* d) {
     physics->Accelerate(car.get(), cam);
 }
 
-void ManCar::Integrate(float delta) {
+void ManCar::Integrate() {
     //physics->update(GetCar().get(), cam.get());
 }
 

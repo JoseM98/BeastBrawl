@@ -24,8 +24,8 @@ class CLPhysics {
     ~CLPhysics(){};
 
     void AddManager(Manager &e);
-    void Simulate(float delta);
-    void Update(float delta);
+    void Simulate();
+    void Update();
     void HandleCollisions();
     void HandleCollisionsWithPlanes();
     void HandleCollisionsWithOBB();

@@ -104,6 +104,6 @@ void ManBoundingOBB::SubscribeToEvents() {
     // No tiene eventos actualmente
 }
 
-void ManBoundingOBB::Integrate(float delta) {
+void ManBoundingOBB::Integrate() {
     //No tiene integrate actualmente
 }

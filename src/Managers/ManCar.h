@@ -58,7 +58,7 @@ class ManCar : public Manager {
     CTransformable* calculateCloserCar(Entity* actualCar);
     bool carInVisionRange(Entity* actualCar, Entity* otherCar, uint32_t rangeVision);
     bool anyCarInVisionRange(Entity* actualCar, uint32_t rangeVision);
-    void Integrate(float) override;
+    void Integrate() override;
     Entity* GetDesirableTarget(Entity* actualCar);
     
 

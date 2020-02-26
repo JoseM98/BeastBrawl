@@ -19,7 +19,7 @@ class Manager {
     };
 
     
-    virtual void Integrate(float) {};
+    virtual void Integrate() {};
 
    protected:
     vector<shared_ptr<Entity>> entities;

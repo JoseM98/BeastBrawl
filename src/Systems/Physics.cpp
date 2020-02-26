@@ -58,7 +58,9 @@ void Physics::update(Car *car, Camera *cam) {
         CalculatePosition(cCar, cTransformable, cSpeed, cExternalForce, deltaTime);
     else
         CalculatePositionReverse(cCar, cTransformable, cExternalForce, deltaTime);
-    CalculatePositionCamera(cTransformable, cTransformableCam, cCamera);
+
+    // DEBUG_CAMERA
+    // CalculatePositionCamera(cTransformable, cTransformableCam, cCamera);
     //std::cout << "( " << cTransformableCam->position.z << " )" << std::endl;
 }
 
