@@ -102,6 +102,10 @@ void StateInGameMulti::Update() {
 }
 
 void StateInGameMulti::Render(double timeElapsed) {
+    double percentTick = std::min(1.0, (timeElapsed / Constants::TIME_BETWEEN_UPDATES_us));
+    // cout << "PercentTick[" << percentTick << "]" << endl;
+    physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
+
     renderEngine->FacadeDrawBoundingBox(manCars.get()->GetCar().get(), true);
     StateInGame::Render(timeElapsed);
 }

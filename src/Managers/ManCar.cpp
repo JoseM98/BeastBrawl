@@ -643,12 +643,12 @@ void ManCar::NotTurning(DataMap* d) {
 
 void ManCar::Decelerate(DataMap* d) {
     // cout << "Han llamado decel" << endl;
-    physics->Decelerate(car.get(), cam);
+    physics->Decelerate(car.get());
 }
 
 void ManCar::NotAcceleratingOrDecelerating(DataMap* d) {
     // cout << "Han llamado notaccel" << endl;
-    physics->NotAcceleratingOrDecelerating(car.get(), cam);
+    physics->NotAcceleratingOrDecelerating(car.get());
 }
 
 void ManCar::TurnRightCar(DataMap* d) {
@@ -665,7 +665,7 @@ void ManCar::AccelerateCar(DataMap* d) {
     // vector<int> mvect = any_cast<vector<int>>(d["vector"]);
     // cout << "Hemos recibido por evento un int=" << mint << " un float=" << mfloat << " y un vector de int con size=" << mvect.size() << endl;
 
-    physics->Accelerate(car.get(), cam);
+    physics->Accelerate(car.get());
 }
 
 

@@ -95,7 +95,7 @@ void Physics::update(Car *car, Camera *cam) {
     //std::cout << "( " << cTransformableCam->position.z << " )" << std::endl;
     cTransformable->positionPrev = cTransformable->positionNext;
     cTransformable->position = cTransformable->positionNext;
-    
+
     cTransformable->rotationPrev = cTransformable->rotationNext;
     cTransformable->rotation = cTransformable->rotationNext;
 
@@ -177,10 +177,8 @@ void Physics::CalculatePositionCamera(CTransformable *cTransformableCar, CTransf
 }
 
 //Entra cuando se presiona la I
-void Physics::Accelerate(Car *car, Camera *cam) {
-    // versión anterior
+void Physics::Accelerate(Car *car) {
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
-    //auto cSpeed = static_cast<CSpeed *>(car->GetComponent(CompType::SpeedComp).get());
     auto cNitro = static_cast<CNitro *>(car->GetComponent(CompType::NitroComp).get());
     //Aumentamos la velocidad
     if (cNitro->activePowerUp == false) {
@@ -196,29 +194,10 @@ void Physics::Accelerate(Car *car, Camera *cam) {
             cCar->speed = cNitro->nitroMaxSpeed;
         }
     }
-
-    // versión nueva
-    /*auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
-    auto cSpeed = static_cast<CSpeed *>(car->GetComponent(CompType::SpeedComp).get());
-    auto cNitro = static_cast<CNitro *>(car->GetComponent(CompType::NitroComp).get());
-    //Aumentamos la velocidad
-    if (cNitro->activePowerUp == false) {
-        cSpeed->speed += cCar->acceleration;
-        if (cSpeed->speed > cCar->maxSpeed) {
-            cSpeed->speed -= cCar->acceleration * 4.0;
-            if (cSpeed->speed < cCar->maxSpeed)
-                cSpeed->speed = cCar->maxSpeed;
-        }
-    } else {
-        cSpeed->speed += cNitro->nitroAcceleration;
-        if (cSpeed->speed > cNitro->nitroMaxSpeed) {
-            cSpeed->speed = cNitro->nitroMaxSpeed;
-        }
-    }*/
 }
 
 //Entra cuando se presiona la O
-void Physics::Decelerate(Car *car, Camera *cam) {
+void Physics::Decelerate(Car *car) {
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
     auto cNitro = static_cast<CNitro *>(car->GetComponent(CompType::NitroComp).get());
     //Reducimos la velocidad
@@ -234,7 +213,6 @@ void Physics::Decelerate(Car *car, Camera *cam) {
         }
     }
 }
-
 
 void Physics::TurnLeft(Car *car, Camera *cam) {
     //Componentes de la camara
@@ -326,7 +304,7 @@ void Physics::RepositionWheelInCenter(CCar *cCar, CCamera *cCamera) {
 }
 
 //Aqui entra cuando no se esta presionando ni I ni O
-void Physics::NotAcceleratingOrDecelerating(Car *car, Camera *cam) {
+void Physics::NotAcceleratingOrDecelerating(Car *car) {
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
     auto cNitro = static_cast<CNitro *>(car->GetComponent(CompType::NitroComp).get());
 
@@ -364,13 +342,7 @@ void Physics::NotTurning(Car *car, Camera *cam) {
     cCamera->rotExtraY = cCamera->rotExtraYNext;
     // cout << "antes: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
 
-    if (cCar->wheelRotation >= cCar->decrementWheelRotation) {
-        cCar->wheelRotation -= cCar->decrementWheelRotation;
-    } else if (cCar->wheelRotation <= -cCar->decrementWheelRotation) {
-        cCar->wheelRotation += cCar->decrementWheelRotation;
-    } else {
-        cCar->wheelRotation = 0;
-    }
+    CalculateWheelRotationWhenNotTurning(cCar);
 
     if (cCamera->rotExtraYNext >= cCar->decrementWheelRotation) {
         cCamera->rotExtraYNext -= cCar->decrementWheelRotation;
@@ -382,11 +354,21 @@ void Physics::NotTurning(Car *car, Camera *cam) {
     // cout << "antes: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
 }
 
+void Physics::CalculateWheelRotationWhenNotTurning(CCar *cCar) const{
+    if (cCar->wheelRotation >= cCar->decrementWheelRotation) {
+        cCar->wheelRotation -= cCar->decrementWheelRotation;
+    } else if (cCar->wheelRotation <= -cCar->decrementWheelRotation) {
+        cCar->wheelRotation += cCar->decrementWheelRotation;
+    } else {
+        cCar->wheelRotation = 0;
+    }
+}
+
 void Physics::UpdateHuman(Car *car) {
     auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
     auto cSpeed = static_cast<CSpeed *>(car->GetComponent(CompType::SpeedComp).get());
-    auto cNitro = static_cast<CNitro *>(car->GetComponent(CompType::NitroComp).get());
+    // auto cNitro = static_cast<CNitro *>(car->GetComponent(CompType::NitroComp).get());
     auto cOnline = static_cast<COnline *>(car->GetComponent(CompType::OnlineComp).get());
     auto cExternalForce = static_cast<CExternalForce *>(car->GetComponent(CompType::CompExternalForce).get());
 
@@ -395,10 +377,10 @@ void Physics::UpdateHuman(Car *car) {
     // actualizar inputs
     for (Constants::InputTypes input : cOnline->inputs) {
         if (input == Constants::InputTypes::FORWARD) {
-            AccelerateHuman(*cCar, *cNitro);
+            Accelerate(car);
             accDec = true;
         } else if (input == Constants::InputTypes::BACK) {
-            DecelerateHuman(*cCar, *cNitro);
+            Decelerate(car);
             accDec = true;
         } else if (input == Constants::InputTypes::LEFT) {
             TurnLeftHuman(*cCar);
@@ -416,7 +398,7 @@ void Physics::UpdateHuman(Car *car) {
         }
     }
     if (accDec == false)
-        NotAcceleratingOrDeceleratingHuman(*cCar, *cNitro);
+        NotAcceleratingOrDecelerating(car);
     if (turning == false)
         NotTurningHuman(*cCar);
 
@@ -427,8 +409,8 @@ void Physics::UpdateHuman(Car *car) {
         CalculatePositionReverse(cCar, cTransformable, cExternalForce);
 }
 
-//Entra cuando se presiona la I
-void Physics::AccelerateHuman(CCar &cCar, CNitro &cNitro) const {
+// Borrar en próximas versiones
+/*void Physics::AccelerateHuman(CCar &cCar, CNitro &cNitro) const {
     //Aumentamos la velocidad
     if (cNitro.activePowerUp == false) {
         cCar.speed += cCar.acceleration;
@@ -443,10 +425,10 @@ void Physics::AccelerateHuman(CCar &cCar, CNitro &cNitro) const {
             cCar.speed = cNitro.nitroMaxSpeed;
         }
     }
-}
+}*/
 
-//Entra cuando se presiona la O
-void Physics::DecelerateHuman(CCar &cCar, CNitro &cNitro) const {
+// Borrar en próximas versiones
+/*void Physics::DecelerateHuman(CCar &cCar, CNitro &cNitro) const {
     //Reducimos la velocidad
     if (cNitro.activePowerUp == false) {
         cCar.speed -= cCar.slowDown;
@@ -459,7 +441,7 @@ void Physics::DecelerateHuman(CCar &cCar, CNitro &cNitro) const {
             cCar.speed = cNitro.nitroMaxSpeed;
         }
     }
-}
+}*/
 
 //Entra cuando se presiona la A
 void Physics::TurnLeftHuman(CCar &cCar) const {
@@ -507,8 +489,8 @@ void Physics::TurnRightHuman(CCar &cCar) const {
     }
 }
 
-//Aqui entra cuando no se esta presionando ni I ni O
-void Physics::NotAcceleratingOrDeceleratingHuman(CCar &cCar, CNitro &cNitro) const {
+// Borrar en próximas versiones
+/*void Physics::NotAcceleratingOrDeceleratingHuman(CCar &cCar, CNitro &cNitro) const {
     if (cNitro.activePowerUp == false) {
         if (cCar.speed > 0) {
             cCar.speed -= cCar.friction;
@@ -525,15 +507,9 @@ void Physics::NotAcceleratingOrDeceleratingHuman(CCar &cCar, CNitro &cNitro) con
             cCar.speed = cNitro.nitroMaxSpeed;
         }
     }
-}
+}*/
 
 //Aqui entra cuando no se esta presionando ni A ni D
 void Physics::NotTurningHuman(CCar &cCar) const {
-    if (cCar.wheelRotation >= cCar.decrementWheelRotation) {
-        cCar.wheelRotation -= cCar.decrementWheelRotation;
-    } else if (cCar.wheelRotation <= -cCar.decrementWheelRotation) {
-        cCar.wheelRotation += cCar.decrementWheelRotation;
-    } else {
-        cCar.wheelRotation = 0;
-    }
+    CalculateWheelRotationWhenNotTurning(&cCar);
 }

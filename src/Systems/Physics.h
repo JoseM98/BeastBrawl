@@ -28,21 +28,21 @@ class Physics {
     Physics();
     ~Physics(){};
     void update(Car* car, Camera* cam);
-    void Accelerate(Car *, Camera *);
+    void Accelerate(Car *);
     void TurnLeft(Car *, Camera *);
     void TurnRight(Car *, Camera *);
     void Turn(Car *, Camera *, bool right);
 
-    void NotAcceleratingOrDecelerating(Car *, Camera *);
-    void Decelerate(Car *, Camera *);
+    void NotAcceleratingOrDecelerating(Car *);
+    void Decelerate(Car *);
     void NotTurning(Car *, Camera *);
 
     void UpdateHuman(Car* car);
-    void AccelerateHuman(CCar &cCar, CNitro &cNitro) const;
+    // void AccelerateHuman(CCar &cCar, CNitro &cNitro) const;
     void TurnLeftHuman(CCar &cCar) const;
     void TurnRightHuman(CCar &cCar) const;
-    void NotAcceleratingOrDeceleratingHuman(CCar &cCar, CNitro &cNitro) const;
-    void DecelerateHuman(CCar &cCar, CNitro &cNitro) const;
+    // void NotAcceleratingOrDeceleratingHuman(CCar &cCar, CNitro &cNitro) const;
+    // void DecelerateHuman(CCar &cCar, CNitro &cNitro) const;
     void NotTurningHuman(CCar &cCar) const;
     void RepositionWheelInCenter(CCar *cCar, CCamera *cCamera);
 
@@ -55,4 +55,5 @@ class Physics {
     void CalculatePositionCamera(CTransformable *cTransformableCar, CTransformable *cTransformableCamera, CCamera *cCamera);
     glm::vec3 CalculateVecDirCar(CTransformable *cTransformable) const;
     void FrictionExternalForce(CCar *cCar, CExternalForce *externalForce) const;
+    void CalculateWheelRotationWhenNotTurning(CCar *cCar) const;
 };
