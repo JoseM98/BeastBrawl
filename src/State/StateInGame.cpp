@@ -17,8 +17,8 @@ StateInGame::StateInGame() {
     physics = make_unique<Physics>();
 
     // DEBUG_CAMERA
-    cam = make_shared<Camera>(glm::vec3(100.0f, 30.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-    // cam = make_shared<Camera>(glm::vec3(100.0f, 400.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    // cam = make_shared<Camera>(glm::vec3(100.0f, 30.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    cam = make_shared<Camera>(glm::vec3(100.0f, 150.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
     ground = make_shared<GameObject>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "", "training_ground.obj");
 }
@@ -156,7 +156,7 @@ void StateInGame::InitState() {
 
 void StateInGame::Update() {
     EventManager &em = EventManager::GetInstance();
-    em.Update();
+    em.Update(); 
 
     //ACTUALIZAMOS MANAGER NAVMESH CAR PLAYER
     manNavMesh->UpdateNavMeshPlayer(manCars.get()->GetCar().get());

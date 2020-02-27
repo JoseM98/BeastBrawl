@@ -25,12 +25,14 @@ void Physics::UpdateEveryFrame(Car *car, Camera *cam, double percentTick) {
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
     auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
     auto cTransformableCam = static_cast<CTransformable *>(cam->GetComponent(CompType::TransformableComp).get());
+    auto cCamera = static_cast<CCamera *>(cam->GetComponent(CompType::CameraComp).get());
 
     // std::cout << "speed:" << cCar->speed << " ( " << cTransformableCam->positionPrev.z << " , " << cTransformableCam->positionNext.z << " , " << cTransformableCam->position.z << " ) --> " << percentTick << std::endl;
     cTransformable->position.x = (cTransformable->positionNext.x - cTransformable->positionPrev.x) * percentTick + cTransformable->positionPrev.x;
     cTransformable->position.y = (cTransformable->positionNext.y - cTransformable->positionPrev.y) * percentTick + cTransformable->positionPrev.y;
     cTransformable->position.z = (cTransformable->positionNext.z - cTransformable->positionPrev.z) * percentTick + cTransformable->positionPrev.z;
 
+    // cout << "posCar:" << cTransformable->position.x << ",\t" << cTransformable->position.y << ",\t" << cTransformable->position.z << endl;
     // inicio HACK
     // aquí solucionamos que al pasar de 0º -> 355º, hace efectivamente eso, 0 a 355, en vez de 360 a 355,
     // por tanto el salto lo hace así:
@@ -58,11 +60,27 @@ void Physics::UpdateEveryFrame(Car *car, Camera *cam, double percentTick) {
     // std::cout << "rotation.y( " << cTransformable->rotationPrev.y << " , " << cTransformable->rotationNext.y << " , " << cTransformable->rotation.y << " ) --> " << percentTick << std::endl;
     // fin HACK
 
-    cTransformableCam->position.x = (cTransformableCam->positionNext.x - cTransformableCam->positionPrev.x) * percentTick + cTransformableCam->positionPrev.x;
-    cTransformableCam->position.y = (cTransformableCam->positionNext.y - cTransformableCam->positionPrev.y) * percentTick + cTransformableCam->positionPrev.y;
-    cTransformableCam->position.z = (cTransformableCam->positionNext.z - cTransformableCam->positionPrev.z) * percentTick + cTransformableCam->positionPrev.z;
+    // DEBUG_CAMERA
+    cCamera->rotExtraY = (cCamera->rotExtraYNext - cCamera->rotExtraYPrev) * percentTick + cCamera->rotExtraYPrev;
+    // cout << "rotExtraY: " << cCamera->rotExtraY << endl;
+    // CalculatePositionCamera(cTransformable, cTransformableCam, cCamera);
 
-    cTransformableCam->rotation.y = (cTransformableCam->rotationNext.y - cTransformableCam->rotationPrev.y) * percentTick + cTransformableCam->rotationPrev.y;
+    // cTransformableCam->position.y = cTransformable->position.y + 20;
+    // cTransformableCam->position.x = (cTransformable->position.x + 40 * cos(((cTransformable->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
+    // cTransformableCam->position.z = (cTransformable->position.z - 40 * sin(((cTransformable->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
+
+    // cTransformableCam->position.x = (cTransformableCam->positionNext.x - cTransformableCam->positionPrev.x) * percentTick + cTransformableCam->positionPrev.x;
+    // cTransformableCam->position.y = (cTransformableCam->positionNext.y - cTransformableCam->positionPrev.y) * percentTick + cTransformableCam->positionPrev.y;
+    // cTransformableCam->position.z = (cTransformableCam->positionNext.z - cTransformableCam->positionPrev.z) * percentTick + cTransformableCam->positionPrev.z;
+
+    // cTransformableCam->rotation.y = (cTransformableCam->rotationNext.y - cTransformableCam->rotationPrev.y) * percentTick + cTransformableCam->rotationPrev.y;
+    // cout << "posCam:" << cTransformableCam->position.x << ",\t" << cTransformableCam->position.y << ",\t" << cTransformableCam->position.z << endl;
+    // cout << "resta:" << cTransformable->position.x - cTransformableCam->position.x
+    //      << ",\t" << cTransformable->position.y - cTransformableCam->position.y
+    //      << ",\t" << cTransformable->position.z - cTransformableCam->position.z << endl;
+
+    // glm::vec3 resta = cTransformable->position - cTransformableCam->position;
+    // cout << "length:" << glm::distance(cTransformable->position, cTransformableCam->position) << endl;
 
     // std::cout << "rotation.y( " << cTransformableCam->rotationPrev.y << " , " << cTransformableCam->rotationNext.y << " , " << cTransformableCam->rotation.y << " ) --> " << percentTick << std::endl;
 }
@@ -85,13 +103,16 @@ void Physics::update(Car *car, Camera *cam) {
     cTransformable->rotationPrev = cTransformable->rotationNext;
     cTransformable->rotation = cTransformable->rotationNext;
 
+    // cCamera->rotExtraY = cCamera->rotExtraYNext;
+    // cCamera->rotExtraYPrev = cCamera->rotExtraYNext;
+
     if (cCar->speed >= 0)
         CalculatePosition(cCar, cTransformable, cSpeed, cExternalForce);
     else
         CalculatePositionReverse(cCar, cTransformable, cExternalForce);
 
     // DEBUG_CAMERA
-    CalculatePositionCamera(cTransformable, cTransformableCam, cCamera);
+    // CalculatePositionCamera(cTransformable, cTransformableCam, cCamera);
     //std::cout << "( " << cTransformableCam->position.z << " )" << std::endl;
 }
 
@@ -159,9 +180,11 @@ void Physics::CalculatePositionReverse(CCar *cCar, CTransformable *cTransformabl
 
 //Calcula la posicion de la camara (duda con las formulas preguntar a Jose)
 void Physics::CalculatePositionCamera(CTransformable *cTransformableCar, CTransformable *cTransformableCamera, CCamera *cCamera) {
-    cTransformableCamera->positionNext.y = cTransformableCar->positionNext.y + 20;
-    cTransformableCamera->positionNext.x = (cTransformableCar->positionNext.x + 40 * cos(((cTransformableCar->rotationNext.y - cCamera->rotExtraY) * PI) / 180.0));
-    cTransformableCamera->positionNext.z = (cTransformableCar->positionNext.z - 40 * sin(((cTransformableCar->rotationNext.y - cCamera->rotExtraY) * PI) / 180.0));
+    cTransformableCamera->position.y = cTransformableCar->position.y + 20;
+    cTransformableCamera->position.x = (cTransformableCar->position.x + 40 * cos(((cTransformableCar->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
+    cTransformableCamera->position.z = (cTransformableCar->position.z - 40 * sin(((cTransformableCar->rotation.y - cCamera->rotExtraY) * PI) / 180.0));
+
+    cout << "cCam Rot Extra " << cCamera->rotExtraY << endl;
 }
 
 //Entra cuando se presiona la I
@@ -224,30 +247,38 @@ void Physics::Decelerate(Car *car, Camera *cam) {
 }
 
 //Entra cuando se presiona la A
-void Physics::TurnLeft(Car *car, Camera *cam) {
+/*void Physics::Turn(Car *car, Camera *cam, bool right) {
     //Componentes de la camara
     auto cCamera = static_cast<CCamera *>(cam->GetComponent(CompType::CameraComp).get());
     //Componentes del coche
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
     auto cTrans = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
 
+    int8_t multiplicador = -1;
+    if(right) 
+        multiplicador = 1;
+
+    cCamera->rotExtraYPrev = cCamera->rotExtraYNext;
+    cCamera->rotExtraY = cCamera->rotExtraYNext;
+    cout << "antes: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
 
     if (cCar->speed >= cCar->maxSpeed * 0.15) {
-        if (cCar->wheelRotation > -cCar->maxWheelRotation) {
+        if ( (!right && cCar->wheelRotation > -cCar->maxWheelRotation) 
+            || (right && cCar->wheelRotation < cCar->maxWheelRotation)) {
             //Aumentamos la rotacion hacia la izquierda
-            cCar->wheelRotation -= cCar->incrementWheelRotation;
-        }
+            cCar->wheelRotation += cCar->incrementWheelRotation * multiplicador;
+        } 
 
-        if (cCamera->rotExtraY > -(cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
-            cCamera->rotExtraY -= cCar->incrementWheelRotation * Constants::DELTA_TIME;
+        if (cCamera->rotExtraYNext > -(cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
+            cCamera->rotExtraYNext += cCar->incrementWheelRotation * Constants::DELTA_TIME * multiplicador;
         }
     } else if (cCar->speed <= -cCar->maxSpeed * 0.15) {
         if (cCar->wheelRotation > -cCar->maxWheelRotation) {
             //Aumentamos la rotacion hacia la izquierda
-            cCar->wheelRotation -= cCar->incrementWheelRotation;
+            cCar->wheelRotation += cCar->incrementWheelRotation * multiplicador;
         }
-        if (cCamera->rotExtraY > -(cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
-            cCamera->rotExtraY -= cCar->incrementWheelRotation * Constants::DELTA_TIME;
+        if (cCamera->rotExtraYNext > -(cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
+            cCamera->rotExtraYNext += cCar->incrementWheelRotation * Constants::DELTA_TIME * multiplicador;
         }
     } else {  // la rueda vuelve a su sitio original al no dejarte rotar
         if (cCar->wheelRotation >= cCar->decrementWheelRotation) {
@@ -258,14 +289,50 @@ void Physics::TurnLeft(Car *car, Camera *cam) {
             cCar->wheelRotation = 0;
         }
 
-        if (cCamera->rotExtraY >= cCar->decrementWheelRotation) {
-            cCamera->rotExtraY -= cCar->decrementWheelRotation;
-        } else if (cCamera->rotExtraY <= -cCar->decrementWheelRotation) {
-            cCamera->rotExtraY += cCar->decrementWheelRotation;
+        if (cCamera->rotExtraYNext >= cCar->decrementWheelRotation) {
+            cCamera->rotExtraYNext -= cCar->decrementWheelRotation;
+        } else if (cCamera->rotExtraYNext <= -cCar->decrementWheelRotation) {
+            cCamera->rotExtraYNext += cCar->decrementWheelRotation;
         } else {
-            cCamera->rotExtraY = 0;
+            cCamera->rotExtraYNext = 0;
         }
     }
+    cout << "después: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
+}*/
+
+void Physics::TurnLeft(Car *car, Camera *cam) {
+    //Componentes de la camara
+    auto cCamera = static_cast<CCamera *>(cam->GetComponent(CompType::CameraComp).get());
+
+    //Componentes del coche
+    auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
+
+    cCamera->rotExtraYPrev = cCamera->rotExtraYNext;
+    cCamera->rotExtraY = cCamera->rotExtraYNext;
+    cout << "antes: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
+
+    if (cCar->speed >= cCar->maxSpeed * 0.15) {
+        if (cCar->wheelRotation > -cCar->maxWheelRotation) {
+            //Aumentamos la rotacion hacia la izquierda
+            cCar->wheelRotation -= cCar->incrementWheelRotation;
+        }
+
+        if (cCamera->rotExtraYNext > -(cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
+            cCamera->rotExtraYNext -= cCar->incrementWheelRotation * Constants::DELTA_TIME;
+        }
+    } else if (cCar->speed <= -cCar->maxSpeed * 0.15) {
+        if (cCar->wheelRotation > -cCar->maxWheelRotation) {
+            //Aumentamos la rotacion hacia la izquierda
+            cCar->wheelRotation -= cCar->incrementWheelRotation;
+        }
+        if (cCamera->rotExtraYNext > -(cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
+            cCamera->rotExtraYNext -= cCar->incrementWheelRotation * Constants::DELTA_TIME;
+        }
+    } else {
+        // la rueda vuelve a su sitio original al no dejarte rotar
+        RepositionWheelInCenter(cCar, cCamera);
+    }
+    cout << "después: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
 }
 
 //Entra cuando se presiona la D
@@ -276,39 +343,49 @@ void Physics::TurnRight(Car *car, Camera *cam) {
     //Componentes del coche
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
 
+    cCamera->rotExtraYPrev = cCamera->rotExtraYNext;
+    cCamera->rotExtraY = cCamera->rotExtraYNext;
+    cout << "antes: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
+
     if (cCar->speed >= cCar->maxSpeed * 0.15) {
         if (cCar->wheelRotation < cCar->maxWheelRotation) {
             //Aumentamos la rotacion hacia la derecha
             cCar->wheelRotation += cCar->incrementWheelRotation;
         }
 
-        if (cCamera->rotExtraY < (cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
-            cCamera->rotExtraY += cCar->incrementWheelRotation * Constants::DELTA_TIME;
+        if (cCamera->rotExtraYNext < (cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
+            cCamera->rotExtraYNext += cCar->incrementWheelRotation * Constants::DELTA_TIME;
         }
     } else if (cCar->speed <= -cCar->maxSpeed * 0.15) {
         if (cCar->wheelRotation < cCar->maxWheelRotation) {
             //Aumentamos la rotacion hacia la derecha
             cCar->wheelRotation += cCar->incrementWheelRotation;
         }
-        if (cCamera->rotExtraY < (cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
-            cCamera->rotExtraY += cCar->incrementWheelRotation * Constants::DELTA_TIME;
+        if (cCamera->rotExtraYNext < (cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
+            cCamera->rotExtraYNext += cCar->incrementWheelRotation * Constants::DELTA_TIME;
         }
-    } else {  // la rueda vuelve a su sitio original al no dejarte rotar
-        if (cCar->wheelRotation >= cCar->decrementWheelRotation) {
-            cCar->wheelRotation -= cCar->decrementWheelRotation;
-        } else if (cCar->wheelRotation <= -cCar->decrementWheelRotation) {
-            cCar->wheelRotation += cCar->decrementWheelRotation;
-        } else {
-            cCar->wheelRotation = 0;
-        }
+    } else {
+        // la rueda vuelve a su sitio original al no dejarte rotar
+        RepositionWheelInCenter(cCar, cCamera);
+    }
+    cout << "después: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
+}
 
-        if (cCamera->rotExtraY >= cCar->decrementWheelRotation) {
-            cCamera->rotExtraY -= cCar->decrementWheelRotation;
-        } else if (cCamera->rotExtraY <= -cCar->decrementWheelRotation) {
-            cCamera->rotExtraY += cCar->decrementWheelRotation;
-        } else {
-            cCamera->rotExtraY = 0;
-        }
+void Physics::RepositionWheelInCenter(CCar *cCar, CCamera *cCamera) {
+    if (cCar->wheelRotation >= cCar->decrementWheelRotation) {
+        cCar->wheelRotation -= cCar->decrementWheelRotation;
+    } else if (cCar->wheelRotation <= -cCar->decrementWheelRotation) {
+        cCar->wheelRotation += cCar->decrementWheelRotation;
+    } else {
+        cCar->wheelRotation = 0;
+    }
+
+    if (cCamera->rotExtraY >= cCar->decrementWheelRotation) {
+        cCamera->rotExtraY -= cCar->decrementWheelRotation;
+    } else if (cCamera->rotExtraY <= -cCar->decrementWheelRotation) {
+        cCamera->rotExtraY += cCar->decrementWheelRotation;
+    } else {
+        cCamera->rotExtraY = 0;
     }
 }
 
@@ -347,6 +424,10 @@ void Physics::NotTurning(Car *car, Camera *cam) {
     //Componentes del coche
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
 
+    cCamera->rotExtraYPrev = cCamera->rotExtraYNext;
+    cCamera->rotExtraY = cCamera->rotExtraYNext;
+    cout << "antes: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
+
     if (cCar->wheelRotation >= cCar->decrementWheelRotation) {
         cCar->wheelRotation -= cCar->decrementWheelRotation;
     } else if (cCar->wheelRotation <= -cCar->decrementWheelRotation) {
@@ -355,13 +436,14 @@ void Physics::NotTurning(Car *car, Camera *cam) {
         cCar->wheelRotation = 0;
     }
 
-    if (cCamera->rotExtraY >= cCar->decrementWheelRotation) {
-        cCamera->rotExtraY -= cCar->decrementWheelRotation;
-    } else if (cCamera->rotExtraY <= -cCar->decrementWheelRotation) {
-        cCamera->rotExtraY += cCar->decrementWheelRotation;
+    if (cCamera->rotExtraYNext >= cCar->decrementWheelRotation) {
+        cCamera->rotExtraYNext -= cCar->decrementWheelRotation;
+    } else if (cCamera->rotExtraYNext <= -cCar->decrementWheelRotation) {
+        cCamera->rotExtraYNext += cCar->decrementWheelRotation;
     } else {
-        cCamera->rotExtraY = 0;
+        cCamera->rotExtraYNext = 0;
     }
+    cout << "antes: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
 }
 
 void Physics::UpdateHuman(Car *car) {

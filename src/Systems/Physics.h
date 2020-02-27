@@ -31,6 +31,8 @@ class Physics {
     void Accelerate(Car *, Camera *);
     void TurnLeft(Car *, Camera *);
     void TurnRight(Car *, Camera *);
+    void Turn(Car *, Camera *, bool right);
+
     void NotAcceleratingOrDecelerating(Car *, Camera *);
     void Decelerate(Car *, Camera *);
     void NotTurning(Car *, Camera *);
@@ -42,6 +44,7 @@ class Physics {
     void NotAcceleratingOrDeceleratingHuman(CCar &cCar, CNitro &cNitro) const;
     void DecelerateHuman(CCar &cCar, CNitro &cNitro) const;
     void NotTurningHuman(CCar &cCar) const;
+    void RepositionWheelInCenter(CCar *cCar, CCamera *cCamera);
 
     void UpdateEveryFrame(Car* car, Camera* cam, const double percentTick);
 

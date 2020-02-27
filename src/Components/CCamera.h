@@ -30,6 +30,8 @@ public:
     float tarZ;
 
     float rotExtraY;
+    float rotExtraYPrev;
+    float rotExtraYNext;
     float rotExtraCamera = 5.0;   // grados extra de la camara respecto al coche 
     CamType camType = CamType::NORMAL_CAM;        // Tipo de seguimiento
 

@@ -160,7 +160,7 @@ void Game::MainLoop() {
             // cout << Utils::getISOCurrentTimestampMillis() << "////////////////// Entramos en el update /////////////////" << endl;
             
             start = system_clock::now();
-            system_clock::time_point nextUpdate = start + milliseconds(Constants::TIME_BETWEEN_UPDATES_ms);
+            // system_clock::time_point nextUpdate = start + milliseconds(Constants::TIME_BETWEEN_UPDATES_ms);
             // cout << "Reseteamos el reloj a las " << Utils::getISOCurrentTimestampMillis() << endl;
             // cout << "Debemos entrar al update después de las " << Utils::getISOCurrentTimestamp<chrono::milliseconds>(nextUpdate) << endl;
 
