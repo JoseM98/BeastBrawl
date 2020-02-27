@@ -89,17 +89,13 @@ void Physics::update(Car *car, Camera *cam) {
     // actualizar posiciones
     auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
-    auto cCamera = static_cast<CCamera *>(cam->GetComponent(CompType::CameraComp).get());
-    auto cTransformableCam = static_cast<CTransformable *>(cam->GetComponent(CompType::TransformableComp).get());
     auto cSpeed = static_cast<CSpeed *>(car->GetComponent(CompType::SpeedComp).get());
     auto cExternalForce = static_cast<CExternalForce *>(car->GetComponent(CompType::CompExternalForce).get());
 
     //std::cout << "( " << cTransformableCam->position.z << " )" << std::endl;
     cTransformable->positionPrev = cTransformable->positionNext;
     cTransformable->position = cTransformable->positionNext;
-    cTransformableCam->positionPrev = cTransformableCam->positionNext;
-    cTransformableCam->position = cTransformableCam->positionNext;
-
+    
     cTransformable->rotationPrev = cTransformable->rotationNext;
     cTransformable->rotation = cTransformable->rotationNext;
 
