@@ -536,7 +536,7 @@ void RenderFacadeIrrlicht::UpdateCamera(Entity* cam, ManCar* manCars) {
 
         // DEBUG_CAMERA
         targetPosition.X = cTransformableCar->position.x;
-        targetPosition.Y = cTransformableCar->position.y;
+        targetPosition.Y = cTransformableCar->position.y + 17;
         targetPosition.Z = cTransformableCar->position.z;
         glm::vec3 auxTargetPosition(targetPosition.X, targetPosition.Y, targetPosition.Z);
         camera1->setTarget(targetPosition);
