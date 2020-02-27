@@ -531,15 +531,27 @@ void RenderFacadeIrrlicht::UpdateCamera(Entity* cam, ManCar* manCars) {
     }else if(cCamera->camType == CamType::NORMAL_CAM){
         float angleRotation = (70 * PI) / 180.0;
 
+        auto car = manCars->GetCar();
+        auto cTransformableCar = static_cast<CTransformable*>(car->GetComponent(CompType::TransformableComp).get());
+
         // DEBUG_CAMERA
-        targetPosition.X = 0.0;
-        targetPosition.Y = 0.0;
-        targetPosition.Z = -50.0;
-        
+        targetPosition.X = cTransformableCar->position.x;
+        targetPosition.Y = cTransformableCar->position.y;
+        targetPosition.Z = cTransformableCar->position.z;
+        glm::vec3 auxTargetPosition(targetPosition.X, targetPosition.Y, targetPosition.Z);
         camera1->setTarget(targetPosition);
         camera1->setFOV(angleRotation);
         // camera1->setPosition(core::vector3df(200, 100, 0));
         camera1->setPosition(core::vector3df(cTransformable->position.x, cTransformable->position.y, cTransformable->position.z));
+        // cout << "Los valores de la cam son: rotExtra[" << cCamera->rotExtraY << "] rot[" << cTransformable->rotation.y  << "]" << endl
+        //     << "\tx[" << cTransformable->position.x << "]" << " y[" << cTransformable->position.y << "]"<< " z[" << cTransformable->position.z << "]" << endl
+        //     << "\trotx[" << cTransformable->rotation.x << "]" << " roty[" << cTransformable->rotation.y << "]"<< " rotz[" << cTransformable->rotation.z << "]" << endl
+        //     << "\tcarx[" << cTransformableCar->position.x << "]" << " cary[" << cTransformableCar->position.y << "]"<< " carz[" << cTransformableCar->position.z << "]" << endl
+        //     << "\ttarx[" << targetPosition.X << "]" << " tary[" << targetPosition.Y << "]"<< " tarz[" << targetPosition.Z << "]" << endl
+        //     // << "\trestax[" << targetPosition.X - cTransformableCar->position.x << "]" << " restay[" << targetPosition.Y -cTransformableCar->position.y << "]"<< " restaz[" << targetPosition.Z -cTransformableCar->position.z<< "]"
+        //     << "\tdistanciaCamCoche[" << glm::distance(cTransformableCar->position, cTransformable->position) << "]" << endl
+        //     << "\tdistanciaCamTarget[" << glm::distance(cTransformableCar->position, auxTargetPosition) << "]" 
+        //     << endl;
     }else if (cCamera->camType == CamType::TOTEM_CAM){
         
 
@@ -602,16 +614,6 @@ void RenderFacadeIrrlicht::UpdateCamera(Entity* cam, ManCar* manCars) {
 void RenderFacadeIrrlicht::FacadeAddCamera(Entity* camera) {
     camera1 = smgr->addCameraSceneNode();
     device->getCursorControl()->setVisible(false);
-
-    auto cTransformable = static_cast<CTransformable*>(camera->GetComponent(CompType::TransformableComp).get());
-    auto cCamera = static_cast<CCamera*>(camera->GetComponent(CompType::CameraComp).get());
-
-    float posX = cCamera->tarX - 40.0 * sin(((cTransformable->rotation.x) * M_PI) / 180.0);
-    float posZ = cCamera->tarZ - 40.0 * cos(((cTransformable->rotation.z) * M_PI) / 180.0);
-    camera1->setTarget(core::vector3df(cCamera->tarX, cCamera->tarY, cCamera->tarZ));
-    camera1->setPosition(core::vector3df(posX, cTransformable->position.y, posZ));
-    //camera1->setFOV(40);
-    
 }
 
 bool RenderFacadeIrrlicht::FacadeRun() {

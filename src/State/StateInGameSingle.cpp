@@ -113,9 +113,9 @@ void StateInGameSingle::Render(double timeElapsed) {
         renderEngine->FacadeDrawBoundingBox(cars.get(), false);
     }
     //renderEngine->FacadeDrawBoundingBox(carPrincial, isColliding);
-    const auto &car = manCars->GetCar();
-    const auto cCar = static_cast<CCar *>(car.get()->GetComponent(CompType::CarComp).get());
-    const auto cTransformable = static_cast<CTransformable *>(car.get()->GetComponent(CompType::TransformableComp).get());
+    // const auto &car = manCars->GetCar();
+    // const auto cCar = static_cast<CCar *>(car.get()->GetComponent(CompType::CarComp).get());
+    // const auto cTransformable = static_cast<CTransformable *>(car.get()->GetComponent(CompType::TransformableComp).get());
 
     // double currentSpeed = cCar->speed * Constants::DELTA_TIME;
     // cout << Utils::getISOCurrentTimestampMillis() << " El percentTick es " << percentTick << " y la current speed es " << currentSpeed
