@@ -90,8 +90,6 @@ class CLPhysics {
     glm::vec3 CalculateProyectPointRecta(const glm::vec3 &extrem1, const glm::vec3 &extrem2, const glm::vec3 &point_) const;
     glm::vec3 CalculateVecDirCar(CTransformable &cTransformable) const;
     vector<Manager *> managers;
-    // const float gravityCar = -100.0f * Constants::DELTA_TIME;
-    // const float gravityPU = -7.5f * Constants::DELTA_TIME;
     const float gravityCar = -2.0f;
     const float gravityPU = -0.5f;
 };

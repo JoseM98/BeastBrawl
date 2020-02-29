@@ -7,6 +7,8 @@
 #include <Components/CTexture.h>
 #include "../Components/CBoundingSphere.h"
 #include "../Components/CBoundingCilindre.h"
+#include "../Components/CTotem.h"
+#include "../Constants.h"
 
 using namespace std;
 using namespace chrono;
@@ -44,7 +46,6 @@ void StateInGame::InitVirtualMethods() {
     InitializeFacades();
 
     CAMBIARCosasDeTotem(*manTotems.get());
-    //CAMBIARCosasDeBoxPU(*manWayPoint.get(), *manBoxPowerUps.get());
     //CAMBIARCosasNavMesh(*manNavMesh.get());
 
     // esta llamada lo ideal es que sea la última porque hace uso de todo
@@ -133,7 +134,7 @@ void StateInGame::InitializeManagers(Physics *physics, Camera *cam) {
     manBoundingOBB = make_shared<ManBoundingOBB>();
     manBoundingGround = make_shared<ManBoundingGround>();
     manTotems = make_shared<ManTotem>();
-    manNavMesh = make_shared<ManNavMesh>(manCars.get()->GetCar().get(), manTotems.get());
+    manNavMesh = make_shared<ManNavMesh>(manCars.get(), manTotems.get());
     manNamePlates = make_shared<ManNamePlate>(manCars.get());
 }
 
@@ -159,7 +160,7 @@ void StateInGame::Update() {
     em.Update(); 
 
     //ACTUALIZAMOS MANAGER NAVMESH CAR PLAYER
-    manNavMesh->UpdateNavMeshPlayer(manCars.get()->GetCar().get());
+    manNavMesh->UpdateNavMeshHuman(manCars.get()->GetCar().get());
     // ACTUALIZACION DE LOS MANAGERS DE LOS COCHES
     manCars->UpdateCar();
 
@@ -246,4 +247,49 @@ void StateInGame::Render(double timeElapsed) {
 
     renderEngine->FacadeDrawAIDebug(manCars.get(),manNavMesh.get(), manWayPoint.get());
     renderEngine->FacadeEndScene();
-} 
+}
+
+
+void StateInGame::CAMBIARCosasNavMesh(ManCar &manCars, ManNavMesh &manNavMesh){
+    // vamos a asignar el navmesh al que pertenecemos
+    for(auto& actualCar : manCars.GetEntities()){
+        auto cTransformableCar = static_cast<CTransformable*>(actualCar.get()->GetComponent(CompType::TransformableComp).get());     
+        for(auto& navmesh : manNavMesh.GetEntities()){
+            auto cDimensions = static_cast<CDimensions*>(navmesh.get()->GetComponent(CompType::DimensionsComp).get());
+            auto cTransformableNav = static_cast<CTransformable*>(navmesh.get()->GetComponent(CompType::TransformableComp).get()); 
+            if( ( (cTransformableCar->position.x >= (cTransformableNav->position.x-(cDimensions->width/2))) && 
+                (cTransformableCar->position.x <= (cTransformableNav->position.x+(cDimensions->width/2))) ) &&
+            ( (cTransformableCar->position.z >= (cTransformableNav->position.z-(cDimensions->depth/2))) && 
+                (cTransformableCar->position.z <= (cTransformableNav->position.z+(cDimensions->depth/2))) )  ){
+                    auto cCurrentNavMesh = static_cast<CCurrentNavMesh*>(actualCar.get()->GetComponent(CompType::CurrentNavMeshComp).get());
+                    auto cNavMesh = static_cast<CNavMesh*>(navmesh.get()->GetComponent(CompType::NavMeshComp).get());
+                    cCurrentNavMesh->currentNavMesh = cNavMesh->id;
+                    //std::cout << " EL NAVMESH DE LAS IA ES::::234563345677: " << cNavMesh->id << std::endl;
+                }       
+        }
+    } 
+}
+
+
+void StateInGame::CAMBIARPositionTotemAboveCar() {
+    bool todosFalse = true;
+    auto cTransformTotem = static_cast<CTransformable *>(totemOnCar->GetComponent(CompType::TransformableComp).get());
+    cTransformTotem->rotation.y += 0.1;
+    for (const auto& carAI : manCars->GetEntities()) {  // actualizamos los coche IA
+        // comprobamos el componente totem y si lo tienen se lo ponemos justo encima para que se sepa quien lo lleva
+        auto cTotem = static_cast<CTotem *>(carAI.get()->GetComponent(CompType::TotemComp).get());
+        if (cTotem->active) {
+            todosFalse = false;
+            auto cTransformCar = static_cast<CTransformable *>(carAI.get()->GetComponent(CompType::TransformableComp).get());
+            cTransformTotem->position.x = cTransformCar->position.x;
+            cTransformTotem->position.z = cTransformCar->position.z;
+            cTransformTotem->position.y = 22.0f;
+            break; // cuando encontramos a alguien que ya lleva el totem, nos salimos del for, no seguimos comprobando a los demás
+        }
+    }
+    if(todosFalse){
+        cTransformTotem->position.y = -100.0f;
+    }
+
+    renderEngine->UpdateTransformable(totemOnCar.get());
+}

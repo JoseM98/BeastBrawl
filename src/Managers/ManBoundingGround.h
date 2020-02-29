@@ -11,7 +11,6 @@ class ManBoundingGround : public Manager {
     ManBoundingGround();
     ~ManBoundingGround();
     void CreateBoundingGround(glm::vec3 vertexA, glm::vec3 vertexB, glm::vec3 vertexC, glm::vec3 vertexD);
-    
     void SubscribeToEvents() override;
 
    private:

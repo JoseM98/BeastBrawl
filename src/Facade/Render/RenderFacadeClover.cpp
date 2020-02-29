@@ -86,11 +86,11 @@ const void RenderFacadeClover::FacadeAddObjects(vector<Entity*> entities) {
 //INPUTS : Una entidad GameObject
 //RETURNS: El Id del objeto añadido
 const uint16_t RenderFacadeClover::FacadeAddObject(Entity* entity) {
-    // auto cTransformable = static_cast<CTransformable*>(entity->GetComponent(CompType::TransformableComp).get());
+    auto cTransformable = static_cast<CTransformable*>(entity->GetComponent(CompType::TransformableComp).get());
     auto cId = static_cast<CId*>(entity->GetComponent(CompType::IdComp).get());
-    // auto cTexture = static_cast<CTexture*>(entity->GetComponent(CompType::TextureComp).get());
-    // auto cType = static_cast<CType*>(entity->GetComponent(CompType::TypeComp).get());
-    // auto cMesh = static_cast<CMesh*>(entity->GetComponent(CompType::MeshComp).get());
+    auto cTexture = static_cast<CTexture*>(entity->GetComponent(CompType::TextureComp).get());
+    auto cType = static_cast<CType*>(entity->GetComponent(CompType::TypeComp).get());
+    auto cMesh = static_cast<CMesh*>(entity->GetComponent(CompType::MeshComp).get());
 
     //Esto luego deberia calcular con opengl las dimensiones
     //Sacamos sus dimensiones

@@ -29,8 +29,8 @@ void PhysicsPowerUp::updatePudinDeFrambuesa(Entity* pu){
        // Movimiento
       auto cTransformable = static_cast<CTransformable*>(pu->GetComponent(CompType::TransformableComp).get());
       float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
-      cTransformable->position.x -= cos(angleRotation) * cPuActual->speed * 0.016;
-      cTransformable->position.z += sin(angleRotation) * cPuActual->speed * 0.016;
+      cTransformable->position.x -= cos(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
+      cTransformable->position.z += sin(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
       cPuActual->speed -= cPuActual->deceleration;
       if(cPuActual->speed > 0)
          cPuActual->speed = 0; 
@@ -49,7 +49,7 @@ void PhysicsPowerUp::updateTeleBanana(Entity* pu){
       }
       // Movimiento
       float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
-      cTransformable->position.x -= cos(angleRotation) * cPuActual->speed * Constants::DEBUG_SHOW_SPHERES;
+      cTransformable->position.x -= cos(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
       cTransformable->position.z += sin(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
 
    }else if(static_cast<CTargetEntity*>(pu->GetComponent(CompType::TargetEntityComp).get())->cTransTarget != nullptr){

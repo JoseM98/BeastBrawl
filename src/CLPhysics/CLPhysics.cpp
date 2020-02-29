@@ -47,6 +47,9 @@ CLPhysics::CLPhysics() {
 void CLPhysics::AddManager(Manager &m) {
     managers.push_back(&m);
 }
+
+
+
 /*
 * [0] manCars
 * [1] manWalls
@@ -688,7 +691,7 @@ void CLPhysics::SeparateSphereFromPlane(IntersectData &intersData, CTransformabl
     //cout << "NO SEPARO" << endl;
     vec3 direction = spCar1.center - plane.normal;  // te da la dirección al otro bounding en x, y, z, es decir, si tenemos 200, 10, 30, significa que estamos a 200 de distancia en x, a 10 en y y a 30 en z
     vec3 nuevaDirectionCar1 = -normalize(direction);
-    float correctedDistance = intersData.GetDistance();
+    float correctedDistance = intersData.GetDistance() + 0.1;
     trCar1.positionNext.x += nuevaDirectionCar1.x * correctedDistance;
     trCar1.positionNext.z += nuevaDirectionCar1.z * correctedDistance;
 }
@@ -1174,6 +1177,7 @@ double CLPhysics::Angle2Vectors(const vec3 &a, const vec3 &b) const{
 
 
 void CLPhysics::IntersectCarsTotem(ManCar &manCars, ManTotem &manTotem){
+    //cout << "ENTRAMOS" << endl;
     for(const auto& currentCar : manCars.GetEntities()){
         auto cChassisCar = static_cast<CBoundingChassis *>(currentCar.get()->GetComponent(CompType::CompBoundingChassis).get());  
         for(shared_ptr<Entity> currentTotem : manTotem.GetEntities()){  
@@ -1185,10 +1189,11 @@ void CLPhysics::IntersectCarsTotem(ManCar &manCars, ManTotem &manTotem){
                 intersect = cChassisCar->sphereFront->IntersectSphere(*cSphereTotem);
             if(intersect.intersects){   //TRUE
                 // debemos coger el TOTEM
+                //cout << "colisionamos con el totem " << endl;
                 shared_ptr<DataMap> dataCollisionTotem = make_shared<DataMap>();                                                                         
                 (*dataCollisionTotem)[TOTEM] = currentTotem;              // nos guardamos el puntero para eliminar el powerUp  
                 (*dataCollisionTotem)[ACTUAL_CAR] = currentCar.get();                                           
-                EventManager::GetInstance().AddEventMulti(Event{EventType::COLLISION_AI_TOTEM, dataCollisionTotem});
+                EventManager::GetInstance().AddEventMulti(Event{EventType::COLLISION_PLAYER_TOTEM, dataCollisionTotem});
             }
         }
     }

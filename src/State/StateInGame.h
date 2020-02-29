@@ -111,10 +111,9 @@ class StateInGame : public State {
     virtual void InitializeSystems(ManCar&, ManBoundingWall&, ManBoundingOBB&, ManBoundingGround&, ManPowerUp&, ManNavMesh&, ManBoxPowerUp&, ManTotem &);
     virtual void InitializeFacades();
     virtual void AddElementsToRender();
-    virtual void CAMBIARCosasDeTotemUpdate(){};
 
     void CAMBIARCosasDeTotem(ManTotem &);
-    void CAMBIARCosasDeBoxPU(ManWayPoint &, ManBoxPowerUp &);
-    void CAMBIARCosasNavMesh(ManNavMesh &);
+    void CAMBIARCosasNavMesh(ManCar &, ManNavMesh &);
+    void CAMBIARPositionTotemAboveCar();
 
 };
