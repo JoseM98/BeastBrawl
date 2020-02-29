@@ -1,10 +1,9 @@
 #pragma once
 
-
 #include <EventManager/Event.h>
 #include <EventManager/EventManager.h>
-#include <glm/vec3.hpp>
 #include <glm/geometric.hpp>
+#include <glm/vec3.hpp>
 #include "../Constants.h"
 
 #include <math.h>
@@ -27,7 +26,7 @@ class Physics {
    public:
     Physics();
     ~Physics(){};
-    void update(Car* car, Camera* cam);
+    void update(Car *car, Camera *cam);
     void Accelerate(Car *);
     void TurnLeft(Car *, Camera *);
     void TurnRight(Car *, Camera *);
@@ -37,7 +36,7 @@ class Physics {
     void Decelerate(Car *);
     void NotTurning(Car *, Camera *);
 
-    void UpdateHuman(Car* car);
+    void UpdateHuman(Car *car);
     // void AccelerateHuman(CCar &cCar, CNitro &cNitro) const;
     void TurnLeftHuman(CCar &cCar) const;
     void TurnRightHuman(CCar &cCar) const;
@@ -46,7 +45,7 @@ class Physics {
     void NotTurningHuman(CCar &cCar) const;
     void RepositionWheelInCenter(CCar *cCar, CCamera *cCamera);
 
-    void UpdateEveryFrame(Car* car, Camera* cam, const double percentTick);
+    void UpdateEveryFrame(Car *car, Camera *cam, const double percentTick);
 
    protected:
    private:

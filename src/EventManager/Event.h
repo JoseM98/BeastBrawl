@@ -1,20 +1,18 @@
 #pragma once
+#include <Aliases.h>
+#include <Components/CPowerUp.h>
+#include <Components/CTransformable.h>
+#include <Entities/Entity.h>
 #include <stdarg.h>
 #include <any>
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
-#include "Lambda.h"
-#include <Aliases.h>
-#include <Entities/Entity.h>
-#include <Components/CTransformable.h>
-#include <Components/CPowerUp.h>
 
 using namespace std;
-
 
 //El orden de los enums define la prioridad del evento
 enum EventType {
@@ -128,7 +126,6 @@ struct Listener {
     // Lambda<void(Data d)> callback;
     // template <typename Args>
     // Lambda<void(int)> callback;
-
 
     function<void(DataMap*)> callback;
     string name;  // Nombre del listener

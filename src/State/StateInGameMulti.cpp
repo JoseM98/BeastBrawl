@@ -23,6 +23,8 @@ StateInGameMulti::StateInGameMulti(uint16_t IdOnline, const vector<uint16_t> IdP
 
     auto cTransformable = static_cast<CTransformable *>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
     cTransformable->position = posIniciales[IdOnline - 1];
+    cTransformable->positionNext = posIniciales[IdOnline - 1];
+    cTransformable->positionPrev = posIniciales[IdOnline - 1];
     COnline *cOnline = static_cast<COnline *>(manCars->GetCar()->GetComponent(CompType::OnlineComp).get());
     cOnline->idClient = IdOnline;
 
@@ -46,7 +48,7 @@ StateInGameMulti::StateInGameMulti(uint16_t IdOnline, const vector<uint16_t> IdP
         const auto cTransformable = static_cast<CTransformable *>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
 
         shared_ptr<CBufferOnline> buffer = make_shared<CBufferOnline>();        
-        BuffElement elem(inputs, cTransformable->position, cTransformable->rotation);
+        BuffElement elem(inputs, cTransformable->positionNext, cTransformable->rotationNext);
         buffer->elems.push_back(elem);
 
         car->AddComponent(buffer);

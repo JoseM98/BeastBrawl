@@ -1,14 +1,12 @@
 #pragma once
 
-#include <unordered_map>
-#include <string>
 #include <any>
-
-
+#include <string>
+#include <unordered_map>
 
 class EventManager;
 
-enum DataType{
+enum DataType {
     TYPE_POWER_UP,
     CAR_WITH_TOTEM,
     CAR_WITHOUT_TOTEM,
@@ -39,4 +37,4 @@ enum DataType{
 
 using EM = EventManager;
 
-using DataMap = std::unordered_map<DataType, std::any>;// DataMap;
+using DataMap = std::unordered_map<DataType, std::any>;  // DataMap;

@@ -60,9 +60,9 @@ void Physics::UpdateEveryFrame(Car *car, Camera *cam, double percentTick) {
     // std::cout << "rotation.y( " << cTransformable->rotationPrev.y << " , " << cTransformable->rotationNext.y << " , " << cTransformable->rotation.y << " ) --> " << percentTick << std::endl;
     // fin HACK
 
-    // DEBUG_CAMERA
     cCamera->rotExtraY = (cCamera->rotExtraYNext - cCamera->rotExtraYPrev) * percentTick + cCamera->rotExtraYPrev;
-    // cout << "rotExtraY: " << cCamera->rotExtraY << endl;
+    
+    // DEBUG_CAMERA
     CalculatePositionCamera(cTransformable, cTransformableCam, cCamera);
 
     // cTransformableCam->position.y = cTransformable->position.y + 20;
@@ -354,7 +354,7 @@ void Physics::NotTurning(Car *car, Camera *cam) {
     // cout << "antes: prev[" << cCamera->rotExtraYPrev << "] next[" << cCamera->rotExtraYNext << "] current[" << cCamera->rotExtraY << "]" << endl;
 }
 
-void Physics::CalculateWheelRotationWhenNotTurning(CCar *cCar) const{
+void Physics::CalculateWheelRotationWhenNotTurning(CCar *cCar) const {
     if (cCar->wheelRotation >= cCar->decrementWheelRotation) {
         cCar->wheelRotation -= cCar->decrementWheelRotation;
     } else if (cCar->wheelRotation <= -cCar->decrementWheelRotation) {
