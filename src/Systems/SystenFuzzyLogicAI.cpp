@@ -122,16 +122,16 @@ float calculateAngle(CPosDestination* posDestination, CarAI* car,CCar* cCar){
     auto cTransformable = static_cast<CTransformable*>(car->GetComponent(CompType::TransformableComp).get());
 
     // calcular vector al wayPoint
-    float vetorWaypointX = (posDestination->position.x - cTransformable->position.x );
-    float vetorWaypointZ = (posDestination->position.z - cTransformable->position.z);
+    float vetorWaypointX = (posDestination->position.x - cTransformable->positionNext.x );
+    float vetorWaypointZ = (posDestination->position.z - cTransformable->positionNext.z);
     
     // se calcula el siguiente punto al que avanzara el coche
     float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
-    float posXSiguiente = cTransformable->position.x - cos(angleRotation) * cCar->speed;
-    float posZSiguiente = cTransformable->position.z + sin(angleRotation) * cCar->speed;
+    float posXSiguiente = cTransformable->positionNext.x - cos(angleRotation) * cCar->speed;
+    float posZSiguiente = cTransformable->positionNext.z + sin(angleRotation) * cCar->speed;
     // se calcula el vector entre el siguiente punto y y el punto actual del coche
-    float xCoche = (posXSiguiente - cTransformable->position.x );
-    float zCoche = (posZSiguiente - cTransformable->position.z);
+    float xCoche = (posXSiguiente - cTransformable->positionNext.x );
+    float zCoche = (posZSiguiente - cTransformable->positionNext.z);
 
     // se calcula el angulo entre los dos vectores
     float numerador = xCoche*vetorWaypointX + zCoche*vetorWaypointZ;
@@ -203,7 +203,7 @@ void SystemFuzzyLogicAI::Update(CarAI* car, float deltaTime){
     float angleRange = 0;
     float angle = 0;
     //float distance2P = sqrt( pow((cWayPoint->position.x - cTransformable->position.x),2) + pow((cWayPoint->position.z - cTransformable->position.z),2) );
-    float distance2P = sqrt( pow((cPosDestination->position.x - cTransformable->position.x),2) + pow((cPosDestination->position.z - cTransformable->position.z),2) );
+    float distance2P = sqrt( pow((cPosDestination->position.x - cTransformable->positionNext.x),2) + pow((cPosDestination->position.z - cTransformable->positionNext.z),2) );
 
 
     // LOGICA DIFUSA:
@@ -245,8 +245,8 @@ void SystemFuzzyLogicAI::Update(CarAI* car, float deltaTime){
 
     // calculamos las posiciones
     float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
-    cTransformable->position.x -= cos(angleRotation) * cCar->speed * deltaTime;
-    cTransformable->position.z += sin(angleRotation) * cCar->speed * deltaTime;
+    cTransformable->positionNext.x -= cos(angleRotation) * cCar->speed * deltaTime;
+    cTransformable->positionNext.z += sin(angleRotation) * cCar->speed * deltaTime;
     if(cCar->wheelRotation != 0){
         cTransformable->rotation.y += cCar->wheelRotation * 0.20;
         if(cTransformable->rotation.y>=360.0)

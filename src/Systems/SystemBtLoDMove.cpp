@@ -95,8 +95,8 @@ struct InDistanceRange_LoDMove : public behaviourTree {
     virtual bool run(Blackboard* blackboard) override {
         auto cTransformableCar = static_cast<CTransformable*>(blackboard->manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
         auto cTransformableCarAI = static_cast<CTransformable*>(blackboard->actualCar->GetComponent(CompType::TransformableComp).get());
-        float vetorDistanceX = (cTransformableCarAI->position.x - cTransformableCar->position.x);
-        float vetorDistanceZ = (cTransformableCarAI->position.x - cTransformableCar->position.z);
+        float vetorDistanceX = (cTransformableCarAI->positionNext.x - cTransformableCar->positionNext.x);
+        float vetorDistanceZ = (cTransformableCarAI->positionNext.x - cTransformableCar->positionNext.z);
         float distanceToCarAI = sqrt(vetorDistanceX*vetorDistanceX + vetorDistanceZ*vetorDistanceZ);
 
         if(distanceToCarAI < 2000.0){ // To-Do: ajustar distancia

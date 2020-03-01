@@ -201,7 +201,7 @@ struct MoveToCarTotem_mt : public behaviourTree {
                             auto cTransformable = static_cast<CTransformable*>(actualAI->GetComponent(CompType::TransformableComp).get());
                             shared_ptr<DataMap> dataCarTotem = make_shared<DataMap>();                                                                    
                             (*dataCarTotem)[ACTUAL_CAR] = actualCar;             
-                            (*dataCarTotem)[POS_DESTINATION] = cTransformable->position;                                        
+                            (*dataCarTotem)[POS_DESTINATION] = cTransformable->positionNext;                                        
                             EventManager::GetInstance().AddEventMulti(Event{EventType::CHANGE_DESTINATION, dataCarTotem}); 
                             return true;
                         //}else{

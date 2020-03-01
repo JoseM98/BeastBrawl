@@ -346,7 +346,7 @@ void CLPhysics::RepositionBounding(){
         CTransformable *trPU = static_cast<CTransformable *>(currentPU->GetComponent(CompType::TransformableComp).get());
         CBoundingSphere *cBoundingSphere = static_cast<CBoundingSphere *>(currentPU->GetComponent(CompType::CompBoundingSphere).get());
         //PositionSphereIntoTransformable(*trPU, *cBoundingSphere);
-        cBoundingSphere->center = trPU->position; 
+        cBoundingSphere->center = trPU->positionNext;
     }
 }
 
@@ -482,7 +482,7 @@ void CLPhysics::checkCollisionNitro(Entity* car1, Entity* car2){
 }
 
 void CLPhysics::PositionSphereIntoTransformable(CTransformable &tr, CBoundingSphere &sp) const{
-    sp.center = tr.position;
+    sp.center = tr.positionNext;
     float x = -cos(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
     float z = sin(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
     sp.center.x += x;
@@ -491,8 +491,8 @@ void CLPhysics::PositionSphereIntoTransformable(CTransformable &tr, CBoundingSph
 
 
 void CLPhysics::PositionSphBehindIntoTransf(CTransformable &tr, CBoundingSphere &sp) const{
-    sp.center.x = tr.position.x;
-    sp.center.z = tr.position.z;
+    sp.center.x = tr.positionNext.x;
+    sp.center.z = tr.positionNext.z;
     float x = -cos(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
     float z = sin(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
     sp.center.x += x;
@@ -501,8 +501,8 @@ void CLPhysics::PositionSphBehindIntoTransf(CTransformable &tr, CBoundingSphere 
 }
 
 void CLPhysics::PositionSphFrontIntoTransf(CTransformable &tr, CBoundingSphere &sp) const{
-    sp.center.x = tr.position.x;
-    sp.center.z = tr.position.z;
+    sp.center.x = tr.positionNext.x;
+    sp.center.z = tr.positionNext.z;
     float x = -cos(Utils::DegToRad(tr.rotation.y)) * (sp.radius+10);
     float z = sin(Utils::DegToRad(tr.rotation.y)) * (sp.radius+10);
     sp.center.x += x;
@@ -679,10 +679,10 @@ void CLPhysics::CollisionsSphereOBB(CTransformable &trCar, CBoundingChassis &cha
 vec3 CLPhysics::CalculateVecDirCar(CTransformable &cTransformable) const{
 
    float angleRotation = (cTransformable.rotation.y * M_PI) / 180.0;
-   float nextPosX    = cTransformable.position.x - cos(angleRotation) * 1;
-   float nexPosZ     = cTransformable.position.z + sin(angleRotation) * 1;
+   float nextPosX    = cTransformable.positionNext.x - cos(angleRotation) * 1;
+   float nexPosZ     = cTransformable.positionNext.z + sin(angleRotation) * 1;
 
-   return vec3(nextPosX-cTransformable.position.x, 0, nexPosZ-cTransformable.position.z);
+   return vec3(nextPosX-cTransformable.positionNext.x, 0, nexPosZ-cTransformable.positionNext.z);
 
 }
 
@@ -1132,7 +1132,7 @@ IntersectData CLPhysics::HandleCollisionsRayWithSpheres(CTransformable &trCar1, 
 }
 
 IntersectData CLPhysics::HandleCollisionsRayWithPlane(CTransformable &trRayOrigin,  glm::vec3 &rayNormalNormalized, CBoundingPlane &planeObject){
-    glm::vec3 positionRayOrigin(trRayOrigin.position.x, trRayOrigin.position.y, trRayOrigin.position.z);
+    glm::vec3 positionRayOrigin(trRayOrigin.positionNext.x, trRayOrigin.positionNext.y, trRayOrigin.positionNext.z);
     IntersectData intersData = planeObject.IntersectRay(positionRayOrigin, rayNormalNormalized);
 
     return intersData;

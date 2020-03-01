@@ -426,8 +426,8 @@ CTransformable* ManCar::calculateCloserCar(Entity* actualCar) {
     for (const shared_ptr<Entity>& cars : entities) {
         if (actualCar != cars.get() && carInVisionRange(actualCar, cars.get(), 60) == true) {
             auto cTransNextCar = static_cast<CTransformable*>(cars.get()->GetComponent(CompType::TransformableComp).get());
-            vectorXNext = cTransNextCar->position.x - cTransActualCar->position.x;
-            vectorZNext = cTransNextCar->position.z - cTransActualCar->position.z;
+            vectorXNext = cTransNextCar->positionNext.x - cTransActualCar->positionNext.x;
+            vectorZNext = cTransNextCar->positionNext.z - cTransActualCar->positionNext.z;
             distanceNext = sqrt((vectorXNext * vectorXNext) + (vectorZNext * vectorZNext));
 
             if (distanceMimum > distanceNext) {
@@ -598,13 +598,13 @@ bool ManCar::carInVisionRange(Entity* actualCar, Entity* otherCar, uint32_t rang
     float seeCar = false;
     // calcular un desplazamiento para ser en tercera persona
     auto cTransformableActual = static_cast<CTransformable*>(actualCar->GetComponent(CompType::TransformableComp).get());
-    float posXActualCar = cTransformableActual->position.x + 40 * cos((cTransformableActual->rotation.y * PI) / 180.0);
-    float posZActualCar = cTransformableActual->position.z - 40 * sin((cTransformableActual->rotation.y * PI) / 180.0);
+    float posXActualCar = cTransformableActual->positionNext.x + 40 * cos((cTransformableActual->rotationNext.y * PI) / 180.0);
+    float posZActualCar = cTransformableActual->positionNext.z - 40 * sin((cTransformableActual->rotationNext.y * PI) / 180.0);
 
     // vector between actualCar and otherCar
     auto cTransformableOther = static_cast<CTransformable*>(otherCar->GetComponent(CompType::TransformableComp).get());
-    float vetorWaypointX = (cTransformableOther->position.x - posXActualCar);
-    float vetorWaypointZ = (cTransformableOther->position.z - posZActualCar);
+    float vetorWaypointX = (cTransformableOther->positionNext.x - posXActualCar);
+    float vetorWaypointZ = (cTransformableOther->positionNext.z - posZActualCar);
 
     // calculate position rotated of otherCar atan2
     float valueAtan2 = atan2(vetorWaypointZ, vetorWaypointX) * 180 / PI;
@@ -613,16 +613,16 @@ bool ManCar::carInVisionRange(Entity* actualCar, Entity* otherCar, uint32_t rang
         valueAtan2 += 360;
 
     //compare with actualCar actualRotation
-    if (cTransformableActual->rotation.y - rangeVision >= 0 && cTransformableActual->rotation.y + rangeVision < 360) {
-        if (cTransformableActual->rotation.y - rangeVision < valueAtan2 && cTransformableActual->rotation.y + rangeVision > valueAtan2) {
+    if (cTransformableActual->rotationNext.y - rangeVision >= 0 && cTransformableActual->rotationNext.y + rangeVision < 360) {
+        if (cTransformableActual->rotationNext.y - rangeVision < valueAtan2 && cTransformableActual->rotationNext.y + rangeVision > valueAtan2) {
             seeCar = true;
         }
     } else {  // coge el angulo 0 de por medio
-        float rotMin = cTransformableActual->rotation.y - rangeVision;
-        float rotMax = cTransformableActual->rotation.y + rangeVision;
-        if (cTransformableActual->rotation.y - rangeVision < 0)
+        float rotMin = cTransformableActual->rotationNext.y - rangeVision;
+        float rotMax = cTransformableActual->rotationNext.y + rangeVision;
+        if (cTransformableActual->rotationNext.y - rangeVision < 0)
             rotMin += 360;
-        if (cTransformableActual->rotation.y + rangeVision >= 360)
+        if (cTransformableActual->rotationNext.y + rangeVision >= 360)
             rotMax -= 360;
         if (rotMin < valueAtan2 || rotMax > valueAtan2) {
             seeCar = true;
@@ -709,8 +709,8 @@ Entity* ManCar::GetDesirableTarget(Entity* actualCar) {
         }
     }
     auto cTransActualCar = static_cast<CTransformable*>(actualCar->GetComponent(CompType::TransformableComp).get());
-    float vectorX = closestCar->position.x - cTransActualCar->position.x;
-    float vectorZ = closestCar->position.z - cTransActualCar->position.z;
+    float vectorX = closestCar->positionNext.x - cTransActualCar->positionNext.x;
+    float vectorZ = closestCar->positionNext.z - cTransActualCar->positionNext.z;
     float distanceMimum = sqrt((vectorX * vectorX) + (vectorZ * vectorZ));
 
     // reducimos cierta distancia en caso de que se encuentre en el radio de vision
@@ -729,8 +729,8 @@ Entity* ManCar::GetDesirableTarget(Entity* actualCar) {
     for (shared_ptr<Entity> carAI : entities) {
         if (actualCar != carAI.get()) {
             auto cTransNextCar = static_cast<CTransformable*>(carAI.get()->GetComponent(CompType::TransformableComp).get());
-            vectorXNext = cTransNextCar->position.x - cTransActualCar->position.x;
-            vectorZNext = cTransNextCar->position.z - cTransActualCar->position.z;
+            vectorXNext = cTransNextCar->positionNext.x - cTransActualCar->positionNext.x;
+            vectorZNext = cTransNextCar->positionNext.z - cTransActualCar->positionNext.z;
             distanceNext = sqrt((vectorXNext * vectorXNext) + (vectorZNext * vectorZNext));
 
             if (carInVisionRange(actualCar, carAI.get(), 60) == true)

@@ -186,8 +186,8 @@ void SteeringBehaviours::UpdateSpeedAvoidance(CCar* m_cCar, CNitro* m_cNitro) co
 void SteeringBehaviours::UpdatePosition(CCar* m_cCar, CTransformable* m_cTransformableCar) const{
     // calculamos las posiciones
     float angleRotation = (m_cTransformableCar->rotation.y * PI) / 180.0;
-    m_cTransformableCar->position.x -= cos(angleRotation) * m_cCar->speed * Constants::DELTA_TIME;
-    m_cTransformableCar->position.z += sin(angleRotation) * m_cCar->speed * Constants::DELTA_TIME;
+    m_cTransformableCar->positionNext.x -= cos(angleRotation) * m_cCar->speed * Constants::DELTA_TIME;
+    m_cTransformableCar->positionNext.z += sin(angleRotation) * m_cCar->speed * Constants::DELTA_TIME;
     if(m_cCar->wheelRotation != 0){
         m_cTransformableCar->rotation.y += m_cCar->wheelRotation * 0.20;
         if(m_cTransformableCar->rotation.y>=360.0)
@@ -209,8 +209,8 @@ glm::vec2 SteeringBehaviours::Seek(Entity* m_originCar, const glm::vec3& m_posTa
     auto cTransformable = static_cast<CTransformable*>(m_originCar->GetComponent(CompType::TransformableComp).get());
 
     // Velocidad deseada
-    float vetorToTargetX = (m_posTargetCar.x - cTransformable->position.x);
-    float vetorToTargetZ = (m_posTargetCar.z - cTransformable->position.z);
+    float vetorToTargetX = (m_posTargetCar.x - cTransformable->positionNext.x);
+    float vetorToTargetZ = (m_posTargetCar.z - cTransformable->positionNext.z);
 
     vectorForce.x = vetorToTargetX;
     vectorForce.y = vetorToTargetZ;
@@ -227,8 +227,8 @@ glm::vec2 SteeringBehaviours::Arrive(Entity* m_originCar, const glm::vec3& m_pos
     auto cCar = static_cast<CCar*>(m_originCar->GetComponent(CompType::CarComp).get());
 
     // Velocidad deseada
-    float vetorToTargetX = (m_posTargetCar.x - cTransformable->position.x);
-    float vetorToTargetZ = (m_posTargetCar.z - cTransformable->position.z);
+    float vetorToTargetX = (m_posTargetCar.x - cTransformable->positionNext.x);
+    float vetorToTargetZ = (m_posTargetCar.z - cTransformable->positionNext.z);
 
     vectorForce.x = vetorToTargetX;
     vectorForce.y = vetorToTargetZ;
@@ -255,8 +255,8 @@ glm::vec2 SteeringBehaviours::Pursue(Entity* m_originCar, Entity* m_targetCar, c
     posTarget.y = 0.0;
 
     // Calcular distancia
-    float vetorToTargetX = (cTransformableTarget->position.x - cTransformable->position.x);
-    float vetorToTargetZ = (cTransformableTarget->position.z - cTransformable->position.z);
+    float vetorToTargetX = (cTransformableTarget->positionNext.x - cTransformable->positionNext.x);
+    float vetorToTargetZ = (cTransformableTarget->positionNext.z - cTransformable->positionNext.z);
     float distance = sqrt(vetorToTargetX*vetorToTargetX + vetorToTargetZ*vetorToTargetZ);
 
     // calcular tiempo que se tarda v = e / t
@@ -269,14 +269,15 @@ glm::vec2 SteeringBehaviours::Pursue(Entity* m_originCar, Entity* m_targetCar, c
     
     // calcular punto al que va a predecir
     float angleRotation = (cTransformableTarget->rotation.y * PI) / 180.0;
-    posTarget.x = cTransformableTarget->position.x - cos(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
-    posTarget.z = cTransformableTarget->position.z + sin(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
+    posTarget.x = cTransformableTarget->positionNext.x - cos(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
+    posTarget.z = cTransformableTarget->positionNext.z + sin(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
 
     return Seek(m_originCar, posTarget, m_velocityVector);
 }
 
 
 
+// debug_interpolation: aquí está tocando transformables de powerups y coches mezclados y ya no sé cuál es cuál, revisar
 // calcula el punto que crees que va a estar el objetivo y se lo pasa a seek
 glm::vec2 SteeringBehaviours::PursuePowerUp(Entity* m_originCar, Entity* m_targetCar, const glm::vec2& m_velocityVector) const{
     auto cTransformableTarget = static_cast<CTransformable*>(m_targetCar->GetComponent(CompType::TransformableComp).get());
@@ -287,8 +288,8 @@ glm::vec2 SteeringBehaviours::PursuePowerUp(Entity* m_originCar, Entity* m_targe
     posTarget.y = 0.0;
 
     // Calcular distancia
-    float vetorWaypointX = (cTransformableTarget->position.x - cTransformable->position.x);
-    float vetorWaypointZ = (cTransformableTarget->position.z - cTransformable->position.z);
+    float vetorWaypointX = (cTransformableTarget->positionNext.x - cTransformable->positionNext.x);
+    float vetorWaypointZ = (cTransformableTarget->positionNext.z - cTransformable->positionNext.z);
     float distance = sqrt(vetorWaypointX*vetorWaypointX + vetorWaypointZ*vetorWaypointZ);
 
     // calcular tiempo que se tarda v = e / t
@@ -301,8 +302,8 @@ glm::vec2 SteeringBehaviours::PursuePowerUp(Entity* m_originCar, Entity* m_targe
     
     // calcular punto al que va a predecir
     float angleRotation = (cTransformableTarget->rotation.y * PI) / 180.0;
-    posTarget.x = cTransformableTarget->position.x - cos(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
-    posTarget.z = cTransformableTarget->position.z + sin(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
+    posTarget.x = cTransformableTarget->positionNext.x - cos(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
+    posTarget.z = cTransformableTarget->positionNext.z + sin(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
     //std::cout << "Actual pos: ( " << cTransformableTarget->position.x << " , " << cTransformableTarget->position.z << " )    Predicted: ( " << posTarget.x << " , " << posTarget.z << " )" << std::endl;
     
     //  tiempo extra para calcular ya que al ser una esfera tarda un tiempo adicional en llegar le PowerUp
@@ -532,9 +533,9 @@ bool SteeringBehaviours::CollisionFaceToFace(Entity* m_Car, Entity *m_object) co
 glm::vec2 SteeringBehaviours::CalculateVectorVelocity(CCar &m_cCar, CTransformable &transformableCar) const{
     if(m_cCar.speed==0) m_cCar.speed=0.1;
     float angleRotation = (transformableCar.rotation.y * PI) / 180.0;
-    float posXSiguiente = transformableCar.position.x - cos(angleRotation) * m_cCar.speed;
-    float posZSiguiente = transformableCar.position.z + sin(angleRotation) * m_cCar.speed;
-    return glm::vec2(posXSiguiente - transformableCar.position.x , posZSiguiente - transformableCar.position.z );
+    float posXSiguiente = transformableCar.positionNext.x - cos(angleRotation) * m_cCar.speed;
+    float posZSiguiente = transformableCar.positionNext.z + sin(angleRotation) * m_cCar.speed;
+    return glm::vec2(posXSiguiente - transformableCar.positionNext.x , posZSiguiente - transformableCar.positionNext.z );
 }
 
 

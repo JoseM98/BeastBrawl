@@ -246,8 +246,8 @@ void SystemPathPlanning::UpdateDijkstra(CarAI* carAI, ManWayPoint* graph, ManNav
     float radious = cPosDestination->radious;
 
     //Vamos a comprobar si esta en el rango del waypoint
-    if((cPosDestination->position.z - radious) < cTransformable->position.z && (cPosDestination->position.z + radious) >= cTransformable->position.z 
-        && (cPosDestination->position.x - radious) < cTransformable->position.x && (cPosDestination->position.x + radious) >= cTransformable->position.x){
+    if((cPosDestination->position.z - radious) < cTransformable->positionNext.z && (cPosDestination->position.z + radious) >= cTransformable->positionNext.z 
+        && (cPosDestination->position.x - radious) < cTransformable->positionNext.x && (cPosDestination->position.x + radious) >= cTransformable->positionNext.x){
         //Tenemos que comprobar si le quedan mas nodos que visitar en el path
         auto cPath = static_cast<CPath*>(carAI->GetComponent(CompType::PathComp).get());
         auto cTargetNavMesh = static_cast<CTargetNavMesh*>(carAI->GetComponent(CompType::TargetNavMeshComp).get());

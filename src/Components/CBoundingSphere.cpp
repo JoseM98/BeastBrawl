@@ -44,7 +44,7 @@ IntersectData CBoundingSphere::IntersectSphere(const CBoundingSphere &other) con
 // https://gamedev.stackexchange.com/questions/96459/fast-ray-sphere-collision-code
 IntersectData CBoundingSphere::IntersectRay(const CTransformable &transCarRay, const vec3 &normalRay) const{
 
-    vec3 vecDiferenceM = vec3(transCarRay.position.x , transCarRay.position.y, transCarRay.position.z) - center;
+    vec3 vecDiferenceM = vec3(transCarRay.positionNext.x , transCarRay.positionNext.y, transCarRay.positionNext.z) - center;
     // Producto escalar
     float b = vecDiferenceM.x * normalRay.x + 0.0 + vecDiferenceM.z * normalRay.z;
     float c = vecDiferenceM.x * vecDiferenceM.x + 0.0 + vecDiferenceM.z * vecDiferenceM.z - (radius+radius+radius) * (radius+radius+radius);
@@ -60,7 +60,7 @@ IntersectData CBoundingSphere::IntersectRay(const CTransformable &transCarRay, c
     // If t is negative, ray started inside sphere so clamp t to zero 
     if (distance < 0.0f) distance = 0.0f; 
     // punto que punto corta el rayo la esfera
-    vec3 q = vec3(transCarRay.position.x , transCarRay.position.y, transCarRay.position.z) + distance * normalRay; 
+    vec3 q = vec3(transCarRay.positionNext.x , transCarRay.positionNext.y, transCarRay.positionNext.z) + distance * normalRay;
     //std::cout << "Veo obstaculo: " << t << std::endl;
 
 

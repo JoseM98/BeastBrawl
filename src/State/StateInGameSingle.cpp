@@ -1,6 +1,7 @@
 #include "StateInGameSingle.h"
 
 #include "../Systems/Utils.h"
+
 StateInGameSingle::StateInGameSingle() : StateInGame() {
     systemBtPowerUp = make_unique<SystemBtPowerUp>();
     systemBtMoveTo = make_unique<SystemBtMoveTo>();
@@ -44,7 +45,7 @@ void StateInGameSingle::Update() {
     // actualizar cosas normales
 
     StateInGame::Update();
-    for (auto actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
+    for (const auto& actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
         if (static_cast<Car *>(actualAI.get())->GetTypeCar() == TypeCar::CarAI) {
             manCars->UpdateCarAI(
                 static_cast<CarAI *>(actualAI.get()),

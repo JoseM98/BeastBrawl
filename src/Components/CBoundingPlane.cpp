@@ -311,9 +311,9 @@ IntersectData CBoundingPlane::IntersectRay(const vec3 &posRayOrigin, const vec3 
 vec3 CBoundingPlane::CalculateVecDirCar(const CTransformable &cTransformable) const{
 
    float angleRotation = (cTransformable.rotation.y * M_PI) / 180.0;
-   float nextPosX    = cTransformable.position.x - cos(angleRotation) * 1;
-   float nexPosZ     = cTransformable.position.z + sin(angleRotation) * 1;
+   float nextPosX    = cTransformable.positionNext.x - cos(angleRotation) * 1;
+   float nexPosZ     = cTransformable.positionNext.z + sin(angleRotation) * 1;
 
-   return vec3(nextPosX-cTransformable.position.x, 0, nexPosZ-cTransformable.position.z);
+   return vec3(nextPosX-cTransformable.positionNext.x, 0, nexPosZ-cTransformable.positionNext.z);
 
 }

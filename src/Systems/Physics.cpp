@@ -146,7 +146,7 @@ void Physics::update(Car *car, Camera *cam) {
 
 //Calcula la posicion del coche (duda con las formulas preguntar a Jose)
 void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpeed *cSpeed, CExternalForce *cExternalForce) {
-    float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
+    float angleRotation = (cTransformable->rotationNext.y * PI) / 180.0;
 
     // debemos de tener encuenta la fuerza externa, asi como la direccion final que tomaremos (el angulo final)
     if (cExternalForce->force > 0) {
@@ -177,13 +177,16 @@ void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpe
     // }
 }
 
-vec3 Physics::CalculateVecDirCar(CTransformable *cTransformable) const {
+/**
+ * @Unused, si alguien usa esta función, cambiad el comentario plis
+ */
+/*vec3 Physics::CalculateVecDirCar(CTransformable *cTransformable) const {
     float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
     float nextPosX = cTransformable->position.x - cos(angleRotation) * 1;
     float nexPosZ = cTransformable->position.z + sin(angleRotation) * 1;
 
     return vec3(nextPosX - cTransformable->position.x, 0, nexPosZ - cTransformable->position.z);
-}
+}*/
 
 //Calcula la posicion del coche (duda con las formulas preguntar a Jose)
 void Physics::CalculatePositionReverse(CCar *cCar, CTransformable *cTransformable, CExternalForce *cExternalForce) {
