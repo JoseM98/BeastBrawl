@@ -3,7 +3,7 @@
 #include <Components/CTotem.h>
 #include "../Components/COnline.h"
 #include "../Systems/SystemOnline.h"
-#include "../Systems/Utils.h"
+
 
 StateInGameMulti::StateInGameMulti(uint16_t IdOnline, const vector<uint16_t> IdPlayersOnline) : StateInGame() {
     InitVirtualMethods();
@@ -86,7 +86,7 @@ void StateInGameMulti::Input() {
 void StateInGameMulti::Update() {
     StateInGame::Update();
 
-    for (auto actualCar : manCars->GetEntities()) {
+    for (const auto& actualCar : manCars->GetEntities()) {
         if (actualCar.get() != manCars->GetCar().get()) {
             manNavMesh->UpdateNavMeshHuman(actualCar.get());  // actualizamos el navemesh en el que se encuentra al human
             // funcion para recibir los inputs del servidor, otra para enviar los nuestros, crear componente de input
@@ -114,7 +114,7 @@ void StateInGameMulti::Render(double timeElapsed) {
         physics->UpdateEveryFrame(car, percentTick);
     }
 
-    renderEngine->FacadeDrawBoundingBox(manCars.get()->GetCar().get(), true);
+    renderEngine->FacadeDrawBoundingBox(manCars->GetCar().get(), true);
     StateInGame::Render(timeElapsed);
 }
 

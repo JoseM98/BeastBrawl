@@ -10,12 +10,11 @@ StateInGameSingle::StateInGameSingle() : StateInGame() {
     InitVirtualMethods();
 
     //std::cout << "ENTRAMOS AL MANAGER DE NAVMESH LOCOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" << std::endl;
-    CAMBIARCosasNavMesh(*manCars.get(), *manNavMesh.get());
+    CAMBIARCosasNavMesh(*manCars, *manNavMesh);
     //std::cout << "despues de la llamada LOOOOOOOOOOOCOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" << std::endl;
 }
 
-StateInGameSingle::~StateInGameSingle() {
-}
+StateInGameSingle::~StateInGameSingle() = default;
 
 void StateInGameSingle::InitState() {
     StateInGame::InitState();
@@ -71,7 +70,7 @@ void StateInGameSingle::Update() {
     //collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
 
     // Actualizamos posicion en Irrlicht
-    for (auto actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
+    for (const auto& actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
         if (static_cast<Car *>(actualAI.get())->GetTypeCar() == TypeCar::CarAI) {
             physicsEngine->UpdateCarAI(actualAI.get());
         }
@@ -87,7 +86,7 @@ void StateInGameSingle::Render(double timeElapsed) {
         physics->UpdateEveryFrame(car, percentTick);
     }
 
-    for (auto cars : manCars->GetEntities()) {
+    for (const auto& cars : manCars->GetEntities()) {
         renderEngine->FacadeDrawBoundingBox(cars.get(), false);
     }
     //renderEngine->FacadeDrawBoundingBox(carPrincial, isColliding);

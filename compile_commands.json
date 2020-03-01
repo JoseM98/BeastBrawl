@@ -1,0 +1,2342 @@
+[
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Physics/PhysicsFacadeIrrlicht.o",
+   "-c",
+   "src/Facade/Physics/PhysicsFacadeIrrlicht.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Physics/PhysicsFacadeIrrlicht.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Physics/PhysicsFacadeClover.o",
+   "-c",
+   "src/Facade/Physics/PhysicsFacadeClover.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Physics/PhysicsFacadeClover.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Physics/PhysicsFacadeManager.o",
+   "-c",
+   "src/Facade/Physics/PhysicsFacadeManager.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Physics/PhysicsFacadeManager.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Render/RenderFacadeIrrlicht.o",
+   "-c",
+   "src/Facade/Render/RenderFacadeIrrlicht.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Render/RenderFacadeIrrlicht.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Render/RenderFacadeManager.o",
+   "-c",
+   "src/Facade/Render/RenderFacadeManager.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Render/RenderFacadeManager.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Render/RenderFacadeClover.o",
+   "-c",
+   "src/Facade/Render/RenderFacadeClover.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Render/RenderFacadeClover.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Input/InputFacadeClover.o",
+   "-c",
+   "src/Facade/Input/InputFacadeClover.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Input/InputFacadeClover.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Input/InputFacadeManager.o",
+   "-c",
+   "src/Facade/Input/InputFacadeManager.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Input/InputFacadeManager.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Input/InputFacadeIrrlicht.o",
+   "-c",
+   "src/Facade/Input/InputFacadeIrrlicht.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Input/InputFacadeIrrlicht.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Sound/SoundFacadeFMOD.o",
+   "-c",
+   "src/Facade/Sound/SoundFacadeFMOD.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Sound/SoundFacadeFMOD.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Facade/Sound/SoundFacadeManager.o",
+   "-c",
+   "src/Facade/Sound/SoundFacadeManager.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Facade/Sound/SoundFacadeManager.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/NavMesh.o",
+   "-c",
+   "src/Entities/NavMesh.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/NavMesh.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/Camera.o",
+   "-c",
+   "src/Entities/Camera.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/Camera.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/CarHuman.o",
+   "-c",
+   "src/Entities/CarHuman.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/CarHuman.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/BoxPowerUp.o",
+   "-c",
+   "src/Entities/BoxPowerUp.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/BoxPowerUp.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/CarAI.o",
+   "-c",
+   "src/Entities/CarAI.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/CarAI.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/BoundingWall.o",
+   "-c",
+   "src/Entities/BoundingWall.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/BoundingWall.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/GameObject.o",
+   "-c",
+   "src/Entities/GameObject.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/GameObject.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/Car.o",
+   "-c",
+   "src/Entities/Car.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/Car.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/BoundingOBB.o",
+   "-c",
+   "src/Entities/BoundingOBB.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/BoundingOBB.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/Totem.o",
+   "-c",
+   "src/Entities/Totem.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/Totem.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/PowerUp.o",
+   "-c",
+   "src/Entities/PowerUp.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/PowerUp.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/Entity.o",
+   "-c",
+   "src/Entities/Entity.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/Entity.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/WayPoint.o",
+   "-c",
+   "src/Entities/WayPoint.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/WayPoint.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Entities/NamePlate.o",
+   "-c",
+   "src/Entities/NamePlate.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Entities/NamePlate.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/State/StateInGame.o",
+   "-c",
+   "src/State/StateInGame.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/State/StateInGame.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/State/StateLobbyMulti.o",
+   "-c",
+   "src/State/StateLobbyMulti.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/State/StateLobbyMulti.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/State/StateInGameMulti.o",
+   "-c",
+   "src/State/StateInGameMulti.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/State/StateInGameMulti.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/State/StateMenu.o",
+   "-c",
+   "src/State/StateMenu.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/State/StateMenu.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/State/State.o",
+   "-c",
+   "src/State/State.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/State/State.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/State/StateEndRace.o",
+   "-c",
+   "src/State/StateEndRace.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/State/StateEndRace.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/State/StatePause.o",
+   "-c",
+   "src/State/StatePause.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/State/StatePause.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/State/StateInGameSingle.o",
+   "-c",
+   "src/State/StateInGameSingle.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/State/StateInGameSingle.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Online/UDPClient.o",
+   "-c",
+   "src/Online/UDPClient.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Online/UDPClient.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Online/TCPClient.o",
+   "-c",
+   "src/Online/TCPClient.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Online/TCPClient.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/fuzzyLogic/fuzzyLogic.o",
+   "-c",
+   "src/fuzzyLogic/fuzzyLogic.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/fuzzyLogic/fuzzyLogic.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/fuzzyLogic/fuzzySet_RightShoulder.o",
+   "-c",
+   "src/fuzzyLogic/fuzzySet_RightShoulder.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/fuzzyLogic/fuzzySet_RightShoulder.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/fuzzyLogic/membershipFunctions.o",
+   "-c",
+   "src/fuzzyLogic/membershipFunctions.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/fuzzyLogic/membershipFunctions.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/fuzzyLogic/fuzzyVariable.o",
+   "-c",
+   "src/fuzzyLogic/fuzzyVariable.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/fuzzyLogic/fuzzyVariable.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/fuzzyLogic/fuzzySet_Triangle.o",
+   "-c",
+   "src/fuzzyLogic/fuzzySet_Triangle.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/fuzzyLogic/fuzzySet_Triangle.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/fuzzyLogic/fuzzySet_LeftShoulder.o",
+   "-c",
+   "src/fuzzyLogic/fuzzySet_LeftShoulder.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/fuzzyLogic/fuzzySet_LeftShoulder.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/fuzzyLogic/fuzzyRules.o",
+   "-c",
+   "src/fuzzyLogic/fuzzyRules.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/fuzzyLogic/fuzzyRules.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/fuzzyLogic/fuzzySet.o",
+   "-c",
+   "src/fuzzyLogic/fuzzySet.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/fuzzyLogic/fuzzySet.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/fuzzyLogic/FzAND.o",
+   "-c",
+   "src/fuzzyLogic/FzAND.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/fuzzyLogic/FzAND.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/main.o",
+   "-c",
+   "src/main.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/main.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManBoundingWall.o",
+   "-c",
+   "src/Managers/ManBoundingWall.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManBoundingWall.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManNavMesh.o",
+   "-c",
+   "src/Managers/ManNavMesh.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManNavMesh.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManCar.o",
+   "-c",
+   "src/Managers/ManCar.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManCar.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManTotem.o",
+   "-c",
+   "src/Managers/ManTotem.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManTotem.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManBoundingGround.o",
+   "-c",
+   "src/Managers/ManBoundingGround.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManBoundingGround.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManBoundingOBB.o",
+   "-c",
+   "src/Managers/ManBoundingOBB.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManBoundingOBB.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManBoxPowerUp.o",
+   "-c",
+   "src/Managers/ManBoxPowerUp.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManBoxPowerUp.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/Manager.o",
+   "-c",
+   "src/Managers/Manager.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/Manager.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManPowerUp.o",
+   "-c",
+   "src/Managers/ManPowerUp.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManPowerUp.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManWayPoint.o",
+   "-c",
+   "src/Managers/ManWayPoint.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManWayPoint.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Managers/ManNamePlate.o",
+   "-c",
+   "src/Managers/ManNamePlate.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Managers/ManNamePlate.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/behaviourTree/decorator.o",
+   "-c",
+   "src/behaviourTree/decorator.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/behaviourTree/decorator.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/behaviourTree/selector.o",
+   "-c",
+   "src/behaviourTree/selector.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/behaviourTree/selector.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/behaviourTree/sequence.o",
+   "-c",
+   "src/behaviourTree/sequence.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/behaviourTree/sequence.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/behaviourTree/behaviourTree.o",
+   "-c",
+   "src/behaviourTree/behaviourTree.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/behaviourTree/behaviourTree.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/behaviourTree/Blackboard.o",
+   "-c",
+   "src/behaviourTree/Blackboard.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/behaviourTree/Blackboard.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/SystemBtLoDMove.o",
+   "-c",
+   "src/Systems/SystemBtLoDMove.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/SystemBtLoDMove.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/SystemBoxPowerUp.o",
+   "-c",
+   "src/Systems/SystemBoxPowerUp.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/SystemBoxPowerUp.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/SystemBtMoveTo.o",
+   "-c",
+   "src/Systems/SystemBtMoveTo.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/SystemBtMoveTo.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/SystenFuzzyLogicAI.o",
+   "-c",
+   "src/Systems/SystenFuzzyLogicAI.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/SystenFuzzyLogicAI.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/Utils.o",
+   "-c",
+   "src/Systems/Utils.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/Utils.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/Collisions.o",
+   "-c",
+   "src/Systems/Collisions.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/Collisions.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/SystemPathPlanning.o",
+   "-c",
+   "src/Systems/SystemPathPlanning.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/SystemPathPlanning.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/SteeringBehaviours.o",
+   "-c",
+   "src/Systems/SteeringBehaviours.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/SteeringBehaviours.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/SystemOnline.o",
+   "-c",
+   "src/Systems/SystemOnline.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/SystemOnline.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/PhysicsAI.o",
+   "-c",
+   "src/Systems/PhysicsAI.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/PhysicsAI.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/PhysicsPowerUp.o",
+   "-c",
+   "src/Systems/PhysicsPowerUp.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/PhysicsPowerUp.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/SystemBtPowerUp.o",
+   "-c",
+   "src/Systems/SystemBtPowerUp.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/SystemBtPowerUp.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Systems/Physics.o",
+   "-c",
+   "src/Systems/Physics.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Systems/Physics.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Game.o",
+   "-c",
+   "src/Game.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Game.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CBoundingSphere.o",
+   "-c",
+   "src/Components/CBoundingSphere.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CBoundingSphere.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CNitro.o",
+   "-c",
+   "src/Components/CNitro.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CNitro.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CPosDestination.o",
+   "-c",
+   "src/Components/CPosDestination.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CPosDestination.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CShield.o",
+   "-c",
+   "src/Components/CShield.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CShield.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CGravity.o",
+   "-c",
+   "src/Components/CGravity.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CGravity.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CBoundingCilindre.o",
+   "-c",
+   "src/Components/CBoundingCilindre.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CBoundingCilindre.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CTargetEntity.o",
+   "-c",
+   "src/Components/CTargetEntity.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CTargetEntity.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CPath.o",
+   "-c",
+   "src/Components/CPath.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CPath.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CSpeed.o",
+   "-c",
+   "src/Components/CSpeed.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CSpeed.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CBoundingOBB.o",
+   "-c",
+   "src/Components/CBoundingOBB.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CBoundingOBB.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CBoundingChassis.o",
+   "-c",
+   "src/Components/CBoundingChassis.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CBoundingChassis.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CColliding.o",
+   "-c",
+   "src/Components/CColliding.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CColliding.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CBoundingRay.o",
+   "-c",
+   "src/Components/CBoundingRay.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CBoundingRay.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/Component.o",
+   "-c",
+   "src/Components/Component.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/Component.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CCurrentNavMesh.o",
+   "-c",
+   "src/Components/CCurrentNavMesh.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CCurrentNavMesh.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CCamera.o",
+   "-c",
+   "src/Components/CCamera.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CCamera.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CNavMesh.o",
+   "-c",
+   "src/Components/CNavMesh.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CNavMesh.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CRay.o",
+   "-c",
+   "src/Components/CRay.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CRay.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CDimensions.o",
+   "-c",
+   "src/Components/CDimensions.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CDimensions.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CType.o",
+   "-c",
+   "src/Components/CType.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CType.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CCar.o",
+   "-c",
+   "src/Components/CCar.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CCar.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CRemovableObject.o",
+   "-c",
+   "src/Components/CRemovableObject.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CRemovableObject.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CBoxPowerUp.o",
+   "-c",
+   "src/Components/CBoxPowerUp.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CBoxPowerUp.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CTexture.o",
+   "-c",
+   "src/Components/CTexture.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CTexture.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CBoundingPlane.o",
+   "-c",
+   "src/Components/CBoundingPlane.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CBoundingPlane.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CNamePlate.o",
+   "-c",
+   "src/Components/CNamePlate.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CNamePlate.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CTargetNavMesh.o",
+   "-c",
+   "src/Components/CTargetNavMesh.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CTargetNavMesh.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CPowerUp.o",
+   "-c",
+   "src/Components/CPowerUp.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CPowerUp.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CRoboJorobo.o",
+   "-c",
+   "src/Components/CRoboJorobo.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CRoboJorobo.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CWayPoint.o",
+   "-c",
+   "src/Components/CWayPoint.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CWayPoint.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CAABoundingBox.o",
+   "-c",
+   "src/Components/CAABoundingBox.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CAABoundingBox.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CBufferOnline.o",
+   "-c",
+   "src/Components/CBufferOnline.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CBufferOnline.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CWheel.o",
+   "-c",
+   "src/Components/CWheel.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CWheel.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/COnline.o",
+   "-c",
+   "src/Components/COnline.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/COnline.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CId.o",
+   "-c",
+   "src/Components/CId.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CId.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CMovementType.o",
+   "-c",
+   "src/Components/CMovementType.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CMovementType.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CTotem.o",
+   "-c",
+   "src/Components/CTotem.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CTotem.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CTransformable.o",
+   "-c",
+   "src/Components/CTransformable.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CTransformable.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CWayPointEdges.o",
+   "-c",
+   "src/Components/CWayPointEdges.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CWayPointEdges.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/Components/CMesh.o",
+   "-c",
+   "src/Components/CMesh.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/Components/CMesh.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/CLPhysics/CLPhysics.o",
+   "-c",
+   "src/CLPhysics/CLPhysics.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/CLPhysics/CLPhysics.cpp"
+ },
+ {
+  "directory": "/home/jose/V1/Beast_Brawl",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-Wno-unknown-pragmas",
+   "-std=c++17",
+   "-pthread",
+   "-O3",
+   "-o",
+   "obj/src/EventManager/EventManager.o",
+   "-c",
+   "src/EventManager/EventManager.cpp",
+   "-I./include",
+   "-I./src",
+   "-I./include/fmod/core",
+   "-I./include/fmod/studio"
+  ],
+  "file": "src/EventManager/EventManager.cpp"
+ }
+]
