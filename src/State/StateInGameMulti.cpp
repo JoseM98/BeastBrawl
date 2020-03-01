@@ -21,15 +21,15 @@ StateInGameMulti::StateInGameMulti(uint16_t IdOnline, const vector<uint16_t> IdP
         vec3(50.0f, 10.0f, -200.0f),
         vec3(0.0f, 10.0f, 0.0f)};
 
-    auto cTransformable = static_cast<CTransformable *>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
-    cTransformable->position = posIniciales[IdOnline - 1];
+    const auto& cTransformable = static_cast<CTransformable *>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
     cTransformable->positionNext = posIniciales[IdOnline - 1];
-    cTransformable->positionPrev = posIniciales[IdOnline - 1];
+    cTransformable->position = cTransformable->positionNext;
+    cTransformable->positionPrev = cTransformable->positionNext;
     COnline *cOnline = static_cast<COnline *>(manCars->GetCar()->GetComponent(CompType::OnlineComp).get());
     cOnline->idClient = IdOnline;
 
-    for (auto idEnemy : IdPlayersOnline) {
-        vec3 pos = posIniciales[idEnemy - 1];
+    for (const auto idEnemy : IdPlayersOnline) {
+        const auto& pos = posIniciales[idEnemy - 1];
         manCars->CreateHumanCar(pos);
         shared_ptr<Entity> car = manCars->GetEntities()[manCars->GetEntities().size() - 1];
         COnline *cOnline = static_cast<COnline *>(car->GetComponent(CompType::OnlineComp).get());

@@ -28,7 +28,7 @@ void PhysicsPowerUp::updatePudinDeFrambuesa(Entity* pu){
       auto cPuActual = static_cast<CPowerUp*>(pu->GetComponent(CompType::PowerUpComp).get());
        // Movimiento
       auto cTransformable = static_cast<CTransformable*>(pu->GetComponent(CompType::TransformableComp).get());
-      float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
+      float angleRotation = (cTransformable->rotationNext.y * PI) / 180.0;
       cTransformable->positionNext.x -= cos(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
       cTransformable->positionNext.z += sin(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
       cPuActual->speed -= cPuActual->deceleration;
@@ -48,7 +48,7 @@ void PhysicsPowerUp::updateTeleBanana(Entity* pu){
             cPuActual->calculate = true;
       }
       // Movimiento
-      float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
+      float angleRotation = (cTransformable->rotationNext.y * PI) / 180.0;
       cTransformable->positionNext.x -= cos(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
       cTransformable->positionNext.z += sin(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
 
@@ -64,7 +64,7 @@ void PhysicsPowerUp::updateTeleBanana(Entity* pu){
       cTransformable->positionNext.z += (vectorZ/divisorUnitario) * cPuActual->speed * Constants::DELTA_TIME;
    }else{
       // Movimiento como melon molon
-      float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
+      float angleRotation = (cTransformable->rotationNext.y * PI) / 180.0;
       cTransformable->positionNext.x -= cos(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
       cTransformable->positionNext.z += sin(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
    }
@@ -78,7 +78,7 @@ void PhysicsPowerUp::updateMelonMolon(Entity* pu){
    //cPuActual->effectActive = true;
    // Movimiento
    auto cTransformable = static_cast<CTransformable*>(pu->GetComponent(CompType::TransformableComp).get());
-   float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
+   float angleRotation = (cTransformable->rotationNext.y * PI) / 180.0;
    cTransformable->positionNext.x -= cos(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
    cTransformable->positionNext.z += sin(angleRotation) * cPuActual->speed * Constants::DELTA_TIME;
 }
