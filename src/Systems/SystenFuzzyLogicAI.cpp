@@ -126,7 +126,7 @@ float calculateAngle(CPosDestination* posDestination, CarAI* car,CCar* cCar){
     float vetorWaypointZ = (posDestination->position.z - cTransformable->positionNext.z);
     
     // se calcula el siguiente punto al que avanzara el coche
-    float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
+    float angleRotation = (cTransformable->rotationNext.y * PI) / 180.0;
     float posXSiguiente = cTransformable->positionNext.x - cos(angleRotation) * cCar->speed;
     float posZSiguiente = cTransformable->positionNext.z + sin(angleRotation) * cCar->speed;
     // se calcula el vector entre el siguiente punto y y el punto actual del coche
@@ -157,12 +157,12 @@ float calculateAngle(CPosDestination* posDestination, CarAI* car,CCar* cCar){
     // sentido de giro
     float prueba = 0.0;
     if(valueAtan2>=180){ // este if se hace para comprobar que se pueda hacer el && y no caiga en la parte que se reinician los grados
-        if(cTransformable->rotation.y>oppositeAngleAtan2 && cTransformable->rotation.y<valueAtan2)
+        if(cTransformable->rotationNext.y>oppositeAngleAtan2 && cTransformable->rotationNext.y<valueAtan2)
             prueba = angle2;
         else
             prueba = angle2 * (-1);
     }else{
-        if(cTransformable->rotation.y>valueAtan2 && cTransformable->rotation.y<oppositeAngleAtan2)
+        if(cTransformable->rotationNext.y>valueAtan2 && cTransformable->rotationNext.y<oppositeAngleAtan2)
             prueba = angle2 * (-1);
         else
             prueba = angle2;
@@ -244,15 +244,15 @@ void SystemFuzzyLogicAI::Update(CarAI* car, float deltaTime){
 
 
     // calculamos las posiciones
-    float angleRotation = (cTransformable->rotation.y * PI) / 180.0;
+    float angleRotation = (cTransformable->rotationNext.y * PI) / 180.0;
     cTransformable->positionNext.x -= cos(angleRotation) * cCar->speed * deltaTime;
     cTransformable->positionNext.z += sin(angleRotation) * cCar->speed * deltaTime;
     if(cCar->wheelRotation != 0){
-        cTransformable->rotation.y += cCar->wheelRotation * 0.20;
-        if(cTransformable->rotation.y>=360.0)
-            cTransformable->rotation.y -= 360.0;
-        else if(cTransformable->rotation.y < 0.0)
-            cTransformable->rotation.y += 360.0;
+        cTransformable->rotationNext.y += cCar->wheelRotation * 0.20;
+        if(cTransformable->rotationNext.y>=360.0)
+            cTransformable->rotationNext.y -= 360.0;
+        else if(cTransformable->rotationNext.y < 0.0)
+            cTransformable->rotationNext.y += 360.0;
     }
     
 }

@@ -268,7 +268,7 @@ glm::vec2 SteeringBehaviours::Pursue(Entity* m_originCar, Entity* m_targetCar, c
     }
     
     // calcular punto al que va a predecir
-    float angleRotation = (cTransformableTarget->rotation.y * PI) / 180.0;
+    float angleRotation = (cTransformableTarget->rotationNext.y * PI) / 180.0;
     posTarget.x = cTransformableTarget->positionNext.x - cos(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
     posTarget.z = cTransformableTarget->positionNext.z + sin(angleRotation) * cCarTarget->speed * Constants::DELTA_TIME * predictionTime*60;
 
@@ -506,7 +506,7 @@ bool SteeringBehaviours::CollisionFaceToFace(Entity* m_Car, Entity *m_object) co
     if(carSpeed==0) carSpeed=0.1;
     if(objectSpeed==0) objectSpeed =0.1;
 
-    float angleRotationCar = (cTransCar->rotation.y * PI) / 180.0;
+    float angleRotationCar = (cTransCar->rotationNext.y * PI) / 180.0;
     glm::vec2 carVector(cos(angleRotationCar) * carSpeed, sin(angleRotationCar) * carSpeed);
 
     float angleRotationObject = (cTransObject->rotation.y * PI) / 180.0;
@@ -532,7 +532,7 @@ bool SteeringBehaviours::CollisionFaceToFace(Entity* m_Car, Entity *m_object) co
 
 glm::vec2 SteeringBehaviours::CalculateVectorVelocity(CCar &m_cCar, CTransformable &transformableCar) const{
     if(m_cCar.speed==0) m_cCar.speed=0.1;
-    float angleRotation = (transformableCar.rotation.y * PI) / 180.0;
+    float angleRotation = (transformableCar.rotationNext.y * PI) / 180.0;
     float posXSiguiente = transformableCar.positionNext.x - cos(angleRotation) * m_cCar.speed;
     float posZSiguiente = transformableCar.positionNext.z + sin(angleRotation) * m_cCar.speed;
     return glm::vec2(posXSiguiente - transformableCar.positionNext.x , posZSiguiente - transformableCar.positionNext.z );
