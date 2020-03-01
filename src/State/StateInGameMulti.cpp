@@ -107,11 +107,14 @@ void StateInGameMulti::Update() {
 
 void StateInGameMulti::Render(double timeElapsed) {
     double percentTick = std::min(1.0, (timeElapsed / Constants::TIME_BETWEEN_UPDATES_us));
-    // cout << "PercentTick[" << percentTick << "]" << endl;
-    physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
+    
+    // recorremos los coches 
     for (const auto &carEnt : manCars->GetEntities()) {
         const auto car = static_cast<Car *>(carEnt.get());
+        // calculamos su pos interpolada
         physics->UpdateEveryFrame(car, percentTick);
+        // y la actualizamos en la fachada de render
+        physicsEngine->UpdateCarAI(car);
     }
 
     renderEngine->FacadeDrawBoundingBox(manCars->GetCar().get(), true);

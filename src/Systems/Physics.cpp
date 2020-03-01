@@ -85,10 +85,10 @@ void Physics::UpdateEveryFrame(Car *car, Camera *cam, double percentTick) {
     // std::cout << "rotation.y( " << cTransformableCam->rotationPrev.y << " , " << cTransformableCam->rotationNext.y << " , " << cTransformableCam->rotation.y << " ) --> " << percentTick << std::endl;
 }
 
-void Physics::UpdateEveryFrame(Car *car, double percentTick) {
+void Physics::UpdateEveryFrame(Entity *entity, double percentTick) {
     // actualizar posiciones
     // auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
-    auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
+    auto cTransformable = static_cast<CTransformable *>(entity->GetComponent(CompType::TransformableComp).get());
 
     // std::cout << "speed:" << cCar->speed << " ( " << cTransformableCam->positionPrev.z << " , " << cTransformableCam->positionNext.z << " , " << cTransformableCam->position.z << " ) --> " << percentTick << std::endl;
     cTransformable->position.x = (cTransformable->positionNext.x - cTransformable->positionPrev.x) * percentTick + cTransformable->positionPrev.x;
@@ -139,13 +139,13 @@ void Physics::update(Car *car, Camera *cam) {
     // cTransformable->rotation = cTransformable->rotationNext;
 
     if (cCar->speed >= 0)
-        CalculatePosition(cCar, cTransformable, cSpeed, cExternalForce);
+        CalculatePosition(cCar, cTransformable, cExternalForce);
     else
         CalculatePositionReverse(cCar, cTransformable, cExternalForce);
 }
 
 //Calcula la posicion del coche (duda con las formulas preguntar a Jose)
-void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpeed *cSpeed, CExternalForce *cExternalForce) {
+void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CExternalForce *cExternalForce) {
     float angleRotation = (cTransformable->rotationNext.y * PI) / 180.0;
 
     // debemos de tener encuenta la fuerza externa, asi como la direccion final que tomaremos (el angulo final)
@@ -155,13 +155,9 @@ void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpe
     }
 
     // Movimiento del coche
-    cSpeed->speed.x = cos(angleRotation);  // * cCar->speed;
-    cSpeed->speed.z = sin(angleRotation);  // * cCar->speed;
-    cSpeed->speed.y = 0.f;                 // TODO, esto lo cacharreará el CLPhysics
-
-    cTransformable->positionNext.x = cTransformable->positionPrev.x - cSpeed->speed.x * cCar->speed * Constants::DELTA_TIME;
-    cTransformable->positionNext.y = cTransformable->positionPrev.y - cSpeed->speed.y * cCar->speed * Constants::DELTA_TIME;
-    cTransformable->positionNext.z = cTransformable->positionPrev.z + cSpeed->speed.z * cCar->speed * Constants::DELTA_TIME;
+    cTransformable->positionNext.x = cTransformable->positionPrev.x - cos(angleRotation) * cCar->speed * Constants::DELTA_TIME;
+    cTransformable->positionNext.y = cTransformable->positionPrev.y - cCar->speed * Constants::DELTA_TIME;
+    cTransformable->positionNext.z = cTransformable->positionPrev.z + sin(angleRotation) * cCar->speed * Constants::DELTA_TIME;
 
     // Rotacion del coche
     // if (cCar->wheelRotation != 0) {
@@ -409,7 +405,7 @@ void Physics::CalculateWheelRotationWhenNotTurning(CCar *cCar) const {
 void Physics::UpdateHuman(Car *car) {
     auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
     auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
-    auto cSpeed = static_cast<CSpeed *>(car->GetComponent(CompType::SpeedComp).get());
+    // auto cSpeed = static_cast<CSpeed *>(car->GetComponent(CompType::SpeedComp).get());
     // auto cNitro = static_cast<CNitro *>(car->GetComponent(CompType::NitroComp).get());
     auto cOnline = static_cast<COnline *>(car->GetComponent(CompType::OnlineComp).get());
     auto cExternalForce = static_cast<CExternalForce *>(car->GetComponent(CompType::CompExternalForce).get());
@@ -446,7 +442,7 @@ void Physics::UpdateHuman(Car *car) {
 
     // actualizar posiciones
     if (cCar->speed >= 0)
-        CalculatePosition(cCar, cTransformable, cSpeed, cExternalForce);
+        CalculatePosition(cCar, cTransformable, cExternalForce);
     else
         CalculatePositionReverse(cCar, cTransformable, cExternalForce);
 }

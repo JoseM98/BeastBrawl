@@ -60,7 +60,11 @@ PowerUp::PowerUp(glm::vec3 _position, glm::vec3 _rotation, typeCPowerUp _typePow
     
     CTransformable *cTransformable = (CTransformable *)m_components[CompType::TransformableComp].get();
     cTransformable->position = _position;
+    cTransformable->positionNext = _position;
+    cTransformable->positionPrev = _position;
     cTransformable->rotation = _rotation;
+    cTransformable->rotationNext = _rotation;
+    cTransformable->rotationPrev = _rotation;
 
     //CBoundingSphere *cBoundingSphere = (CBoundingSphere *)m_components[CompType::CompBoundingSphere].get();
     //cBoundingSphere->center = _position;

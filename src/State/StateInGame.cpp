@@ -164,6 +164,15 @@ void StateInGame::AdjustPrevInterpolations() {
         ctrans->rotationPrev = ctrans->rotationNext;
         ctrans->rotation = ctrans->rotationNext;
     }
+
+    for(const auto& puAux : manPowerUps->GetEntities()) {
+        PowerUp *pu = static_cast<PowerUp *>(puAux.get());
+        CTransformable *ctrans = static_cast<CTransformable *>(pu->GetComponent(CompType::TransformableComp).get());
+        ctrans->positionPrev = ctrans->positionNext;
+        ctrans->position = ctrans->positionNext;
+        ctrans->rotationPrev = ctrans->rotationNext;
+        ctrans->rotation = ctrans->rotationNext;
+    }
 }
 
 void StateInGame::Update() {
@@ -199,12 +208,21 @@ void StateInGame::Update() {
 }
 
 void StateInGame::Render(double timeElapsed) {
+    double percentTick = std::min(1.0, (timeElapsed / Constants::TIME_BETWEEN_UPDATES_us));
+    
+    // Calculamos la pos interpolada del coche principal. Es distinta
+    // de las demás porque tiene cámara
+    physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
+
+    
     // Actualizaciones en Irrlich
     renderEngine->UpdateCamera(cam.get(), manCars.get());
     physicsEngine->UpdateCar(manCars->GetCar().get(), cam.get());
 
-    for (const auto& actualPowerUp : manPowerUps->GetEntities())  // actualizamos los powerUp en irrlich
+    for (const auto& actualPowerUp : manPowerUps->GetEntities())  { // actualizamos los powerUp en irrlich
+        physics->UpdateEveryFrame(actualPowerUp.get(), percentTick);
         physicsEngine->UpdatePowerUps(actualPowerUp.get());
+    } 
     renderEngine->FacadeUpdatePlates(manNamePlates.get());
 
     /*

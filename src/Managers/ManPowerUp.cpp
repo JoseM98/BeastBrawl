@@ -46,14 +46,14 @@ void ManPowerUp::CreatePowerUp(DataMap* d) {
 
    float angleRotation = (transforSalida->rotation.y * 3.141592) / 180.0;
    if(type == typeCPowerUp::PudinDeFrambuesa){
-        posX = transforSalida->position.x - cos(angleRotation)* (-1*((dimensionsCarSalida->width/2)+medidaPowerUp));
-        posZ = transforSalida->position.z + sin(angleRotation)* (-1*((dimensionsCarSalida->depth/2)+medidaPowerUp));
+        posX = transforSalida->positionNext.x - cos(angleRotation)* (-1*((dimensionsCarSalida->width/2)+medidaPowerUp));
+        posZ = transforSalida->positionNext.z + sin(angleRotation)* (-1*((dimensionsCarSalida->depth/2)+medidaPowerUp));
    }else{
-        posX = transforSalida->position.x - cos(angleRotation) * ((dimensionsCarSalida->width/2)+medidaPowerUp);
-        posZ = transforSalida->position.z + sin(angleRotation) * ((dimensionsCarSalida->depth/2)+medidaPowerUp);    
+        posX = transforSalida->positionNext.x - cos(angleRotation) * ((dimensionsCarSalida->width/2)+medidaPowerUp);
+        posZ = transforSalida->positionNext.z + sin(angleRotation) * ((dimensionsCarSalida->depth/2)+medidaPowerUp);    
    }
 
-    vec3 positionPowerUp = vec3(posX,transforSalida->position.y+10,posZ);
+    vec3 positionPowerUp = vec3(posX,transforSalida->positionNext.y+10,posZ);
 
     shared_ptr<PowerUp> powerUp = make_shared<PowerUp>(positionPowerUp, transforSalida->rotation, type, transforPerse);
     auto cTypePU = static_cast<CType*>(powerUp->GetComponent(CompType::TypeComp).get())->type;

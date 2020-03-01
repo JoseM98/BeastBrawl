@@ -46,11 +46,11 @@ class Physics {
     void RepositionWheelInCenter(CCar *cCar, CCamera *cCamera);
 
     void UpdateEveryFrame(Car *car, Camera *cam, const double percentTick);
-    void UpdateEveryFrame(Car *car, const double percentTick);
+    void UpdateEveryFrame(Entity *entity, const double percentTick);
 
    protected:
    private:
-    void CalculatePosition(CCar *cCar, CTransformable *cTransformable, CSpeed *cSpeed, CExternalForce *cExternalForce);
+    void CalculatePosition(CCar *cCar, CTransformable *cTransformable, CExternalForce *cExternalForce);
     void CalculatePositionReverse(CCar *cCar, CTransformable *cTransformable, CExternalForce *cExternalForce);
     void CalculatePositionCamera(CTransformable *cTransformableCar, CTransformable *cTransformableCamera, CCamera *cCamera);
     glm::vec3 CalculateVecDirCar(CTransformable *cTransformable) const;

@@ -45,7 +45,7 @@ void StateInGameSingle::Update() {
     // actualizar cosas normales
 
     StateInGame::Update();
-    for (const auto& actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
+    for (const auto &actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
         if (static_cast<Car *>(actualAI.get())->GetTypeCar() == TypeCar::CarAI) {
             manCars->UpdateCarAI(
                 static_cast<CarAI *>(actualAI.get()),
@@ -69,27 +69,23 @@ void StateInGameSingle::Update() {
     //collisions->IntersectCarsBoxPowerUp(manCars.get(), manBoxPowerUps.get());
     // COLISIONES  entre la IA y el Totem
     //collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
-
-    
 }
 
 void StateInGameSingle::Render(double timeElapsed) {
     double percentTick = std::min(1.0, (timeElapsed / Constants::TIME_BETWEEN_UPDATES_us));
-    // cout << "PercentTick[" << percentTick << "]" << endl;
-    physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
+
+    // Recorremos los coches IA
     for (const auto &carEnt : manCars->GetEntities()) {
         const auto car = static_cast<Car *>(carEnt.get());
-        physics->UpdateEveryFrame(car, percentTick);
-    }
-
-    // Actualizamos posicion en Irrlicht
-    for (const auto& actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
-        if (static_cast<Car *>(actualAI.get())->GetTypeCar() == TypeCar::CarAI) {
-            physicsEngine->UpdateCarAI(actualAI.get());
+        if (car->GetTypeCar() == TypeCar::CarAI) {
+            // calculamos su pos interpolada
+            physics->UpdateEveryFrame(car, percentTick);
+            // actualizamos la pos interpolada en la fachada de render
+            physicsEngine->UpdateCarAI(car);
         }
     }
 
-    for (const auto& cars : manCars->GetEntities()) {
+    for (const auto &cars : manCars->GetEntities()) {
         renderEngine->FacadeDrawBoundingBox(cars.get(), false);
     }
     //renderEngine->FacadeDrawBoundingBox(carPrincial, isColliding);
