@@ -70,12 +70,7 @@ void StateInGameSingle::Update() {
     // COLISIONES  entre la IA y el Totem
     //collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
 
-    // Actualizamos posicion en Irrlicht
-    for (const auto& actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
-        if (static_cast<Car *>(actualAI.get())->GetTypeCar() == TypeCar::CarAI) {
-            physicsEngine->UpdateCarAI(actualAI.get());
-        }
-    }
+    
 }
 
 void StateInGameSingle::Render(double timeElapsed) {
@@ -85,6 +80,13 @@ void StateInGameSingle::Render(double timeElapsed) {
     for (const auto &carEnt : manCars->GetEntities()) {
         const auto car = static_cast<Car *>(carEnt.get());
         physics->UpdateEveryFrame(car, percentTick);
+    }
+
+    // Actualizamos posicion en Irrlicht
+    for (const auto& actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
+        if (static_cast<Car *>(actualAI.get())->GetTypeCar() == TypeCar::CarAI) {
+            physicsEngine->UpdateCarAI(actualAI.get());
+        }
     }
 
     for (const auto& cars : manCars->GetEntities()) {

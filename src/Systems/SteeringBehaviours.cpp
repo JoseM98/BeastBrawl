@@ -37,7 +37,7 @@ void SteeringBehaviours::UpdateSeek(Entity* m_actualCar){
     glm::vec3 posTarget = glm::vec3(cPosDestination->position.x, cPosDestination->position.y, cPosDestination->position.z);
     glm::vec2 vectorForce = Seek(m_actualCar, posTarget, vectorVelocity);
 
-    float angle = CalculateAngle(vectorVelocity, vectorForce, cTransformable->rotation.y);
+    float angle = CalculateAngle(vectorVelocity, vectorForce, cTransformable->rotationNext.y);
     UpdateAngleRotation(cCar, angle);
     UpdateSpeed(cCar, cNitro);
     UpdatePosition(cCar, cTransformable);
@@ -57,7 +57,7 @@ void SteeringBehaviours::UpdateArrive(Entity* m_actualCar){
     glm::vec3 posTarget = glm::vec3(cPosDestination->position.x, cPosDestination->position.y, cPosDestination->position.z);
     glm::vec2 vectorForce = Arrive(m_actualCar, posTarget, vectorVelocity);
 
-    float angle = CalculateAngle(vectorVelocity, vectorForce, cTransformable->rotation.y);
+    float angle = CalculateAngle(vectorVelocity, vectorForce, cTransformable->rotationNext.y);
     UpdateAngleRotation(cCar, angle);
     UpdateSpeed(cCar, cNitro);
     UpdatePosition(cCar, cTransformable);
@@ -76,7 +76,7 @@ float SteeringBehaviours::UpdatePursuePowerUp(Entity* m_actualCar, Entity* m_tar
     // Pursue
     glm::vec2 vectorForce = PursuePowerUp(m_actualCar, m_targetCar, vectorVelocity);
 
-    float angle = CalculateAngle(vectorVelocity, vectorForce, cTransformable->rotation.y);
+    float angle = CalculateAngle(vectorVelocity, vectorForce, cTransformable->rotationNext.y);
     UpdateAngleRotation(cCar, angle);
     UpdateSpeed(cCar, cNitro);
     UpdatePosition(cCar, cTransformable);
@@ -99,7 +99,7 @@ bool SteeringBehaviours::UpdateObstacleAvoidance(Entity* m_Car, ManCar* m_manCar
 
     if(vectorForceAvoid.x != 0.0 || vectorForceAvoid.y != 0.0 ){
         //std::cout << "Se viene choque" << std::endl;
-        float angle = CalculateAngle(vectorVelocity, vectorForceAvoid, cTransformable->rotation.y);
+        float angle = CalculateAngle(vectorVelocity, vectorForceAvoid, cTransformable->rotationNext.y);
         UpdateAngleRotation(cCar, angle);
         UpdateSpeedAvoidance(cCar, cNitro);
         UpdatePosition(cCar, cTransformable);
@@ -120,7 +120,7 @@ bool SteeringBehaviours::UpdateWallAvoidance(Entity* m_Car,  ManBoundingWall* m_
     glm::vec2 vectorForceAvoid = WallAvoidance(m_Car, m_manBoundingWall, vectorVelocity);
 
     if(vectorForceAvoid.x != 0.0 || vectorForceAvoid.y != 0.0 ){
-        float angle = CalculateAngle(vectorVelocity, vectorForceAvoid, cTransformable->rotation.y);
+        float angle = CalculateAngle(vectorVelocity, vectorForceAvoid, cTransformable->rotationNext.y);
         UpdateAngleRotation(cCar, angle);
         UpdateSpeedAvoidance(cCar, cNitro);
         UpdatePosition(cCar, cTransformable);
@@ -185,15 +185,15 @@ void SteeringBehaviours::UpdateSpeedAvoidance(CCar* m_cCar, CNitro* m_cNitro) co
 // Actualiza la posicion
 void SteeringBehaviours::UpdatePosition(CCar* m_cCar, CTransformable* m_cTransformableCar) const{
     // calculamos las posiciones
-    float angleRotation = (m_cTransformableCar->rotation.y * PI) / 180.0;
+    float angleRotation = (m_cTransformableCar->rotationNext.y * PI) / 180.0;
     m_cTransformableCar->positionNext.x -= cos(angleRotation) * m_cCar->speed * Constants::DELTA_TIME;
     m_cTransformableCar->positionNext.z += sin(angleRotation) * m_cCar->speed * Constants::DELTA_TIME;
     if(m_cCar->wheelRotation != 0){
-        m_cTransformableCar->rotation.y += m_cCar->wheelRotation * 0.20;
-        if(m_cTransformableCar->rotation.y>=360.0)
-            m_cTransformableCar->rotation.y -= 360.0;
-        else if(m_cTransformableCar->rotation.y < 0.0)
-            m_cTransformableCar->rotation.y += 360.0;
+        m_cTransformableCar->rotationNext.y += m_cCar->wheelRotation * 0.20;
+        if(m_cTransformableCar->rotationNext.y>=360.0)
+            m_cTransformableCar->rotationNext.y -= 360.0;
+        else if(m_cTransformableCar->rotationNext.y < 0.0)
+            m_cTransformableCar->rotationNext.y += 360.0;
     }
 }
 
