@@ -116,4 +116,6 @@ class StateInGame : public State {
     void CAMBIARCosasNavMesh(ManCar &, ManNavMesh &);
     void CAMBIARPositionTotemAboveCar();
 
+    void AdjustPrevInterpolations();
+
 };

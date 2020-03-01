@@ -288,8 +288,14 @@ void ManCar::NewSyncReceived(DataMap* d) {
                 auto cTran = static_cast<CTransformable*>(car->GetComponent(CompType::TransformableComp).get());
                 auto cPowerUp = static_cast<CPowerUp*>(car->GetComponent(CompType::PowerUpComp).get());
                 auto cTotem = static_cast<CTotem*>(car->GetComponent(CompType::TotemComp).get());
-                cTran->position = any_cast<glm::vec3>((*d)[DataType::VEC3_POS]);
-                cTran->rotation = any_cast<glm::vec3>((*d)[DataType::VEC3_ROT]);
+                // debug_positions
+                // cTran->positionPrev = cTran->positionNext;
+                // cTran->position = cTran->positionNext;
+                // cTran->rotationPrev = cTran->rotationNext;
+                // cTran->rotation = cTran->rotationNext;
+                
+                cTran->positionNext = any_cast<glm::vec3>((*d)[DataType::VEC3_POS]);
+                cTran->rotationNext = any_cast<glm::vec3>((*d)[DataType::VEC3_ROT]);
                 cPowerUp->typePowerUp = any_cast<typeCPowerUp>((*d)[DataType::TYPE_POWER_UP]);
                 // cTotem->active = any_cast<bool>((*d)[DataType::CAR_WITH_TOTEM]);
                 cTotem->accumulatedTime = any_cast<int64_t>((*d)[DataType::TIME_TOTEM]);

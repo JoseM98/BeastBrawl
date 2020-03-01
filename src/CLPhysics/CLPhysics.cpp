@@ -961,9 +961,10 @@ void VersionSumaVectores() {
 }
 
 /**
+ * @Deprecated
  * Esta versión hace que los coches que han colisionado intercambien sus vectores de velocidad y rotación
  */
-void CLPhysics::ExchangeVectors(CTransformable &trCar1, CCar &cCar1, CTransformable &trCar2, CCar &cCar2) {
+/*void CLPhysics::ExchangeVectors(CTransformable &trCar1, CCar &cCar1, CTransformable &trCar2, CCar &cCar2) {
     float aux = trCar1.rotation.y;
     trCar1.rotation.y = trCar2.rotation.y;
     trCar2.rotation.y = aux;
@@ -971,7 +972,7 @@ void CLPhysics::ExchangeVectors(CTransformable &trCar1, CCar &cCar1, CTransforma
     aux = cCar1.speed;
     cCar1.speed = 5 + cCar2.speed / 2;
     cCar2.speed = 5 + aux / 2;
-}
+}*/
 
 /**
  * Esta versión hace que los coches que han colisionado se reflejen entre sí

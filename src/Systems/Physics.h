@@ -46,6 +46,7 @@ class Physics {
     void RepositionWheelInCenter(CCar *cCar, CCamera *cCamera);
 
     void UpdateEveryFrame(Car *car, Camera *cam, const double percentTick);
+    void UpdateEveryFrame(Car *car, const double percentTick);
 
    protected:
    private:

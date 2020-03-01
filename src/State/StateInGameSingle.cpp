@@ -21,10 +21,6 @@ void StateInGameSingle::InitState() {
     StateInGame::InitState();
 }
 
-
-
-
-
 void StateInGameSingle::Input() {
     renderEngine->FacadeCheckInputSingle();
     inputEngine->CheckInput();
@@ -49,18 +45,18 @@ void StateInGameSingle::Update() {
     // actualizar cosas normales
 
     StateInGame::Update();
-    for (auto actualAI : manCars->GetEntities()) { // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
-        if (static_cast<Car*>(actualAI.get())->GetTypeCar() == TypeCar::CarAI){
+    for (auto actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
+        if (static_cast<Car *>(actualAI.get())->GetTypeCar() == TypeCar::CarAI) {
             manCars->UpdateCarAI(
-                static_cast<CarAI*>(actualAI.get()), 
-                manPowerUps.get(), 
-                manBoxPowerUps.get(), 
-                manTotems.get(), 
-                manWayPoint.get(), 
-                manNavMesh.get(), 
-                manBoundingWall.get(), 
-                systemBtPowerUp.get(), 
-                systemBtMoveTo.get(), 
+                static_cast<CarAI *>(actualAI.get()),
+                manPowerUps.get(),
+                manBoxPowerUps.get(),
+                manTotems.get(),
+                manWayPoint.get(),
+                manNavMesh.get(),
+                manBoundingWall.get(),
+                systemBtPowerUp.get(),
+                systemBtMoveTo.get(),
                 systemBtLoDMove.get(),
                 systemPathPlanning.get());
         }
@@ -75,19 +71,21 @@ void StateInGameSingle::Update() {
     //collisions->IntersectCarsTotem(manCars.get(), manTotems.get());
 
     // Actualizamos posicion en Irrlicht
-    for (auto actualAI : manCars->GetEntities()) { // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
-        if (static_cast<Car*>(actualAI.get())->GetTypeCar() == TypeCar::CarAI){
+    for (auto actualAI : manCars->GetEntities()) {  // CUIDADO!!! -> el static cast que solo se use en el single player, si no peta
+        if (static_cast<Car *>(actualAI.get())->GetTypeCar() == TypeCar::CarAI) {
             physicsEngine->UpdateCarAI(actualAI.get());
         }
     }
-
-
 }
 
 void StateInGameSingle::Render(double timeElapsed) {
     double percentTick = std::min(1.0, (timeElapsed / Constants::TIME_BETWEEN_UPDATES_us));
     // cout << "PercentTick[" << percentTick << "]" << endl;
     physics->UpdateEveryFrame(manCars->GetCar().get(), cam.get(), percentTick);
+    for (const auto &carEnt : manCars->GetEntities()) {
+        const auto car = static_cast<Car *>(carEnt.get());
+        physics->UpdateEveryFrame(car, percentTick);
+    }
 
     for (auto cars : manCars->GetEntities()) {
         renderEngine->FacadeDrawBoundingBox(cars.get(), false);
@@ -127,7 +125,6 @@ void StateInGameSingle::AddElementsToRender() {
     StateInGame::AddElementsToRender();
 }
 
-
 void StateInGameSingle::CAMBIARInicializarCarAIS(ManCar &manCars, ManWayPoint &manWayPoint) {
     /*    
     auto cWayPoint = static_cast<CWayPoint *>(manWayPoint.GetEntities()[0]->GetComponent(CompType::WayPointComp).get());
@@ -157,8 +154,9 @@ void StateInGameSingle::CAMBIARInicializarCarAIS(ManCar &manCars, ManWayPoint &m
     pathInit3.push(5);
     manCars.GetEntitiesAI()[2]->SetPath(pathInit3);
 */
-    manCars.CreateCarAI(glm::vec3(-200.0f, 10.0f, 700.0f));
-    manCars.CreateCarAI(glm::vec3(400.0f, 10.0f, -50.0f));
+    // debug_create_car
+    manCars.CreateCarAI(glm::vec3(-50.0f, -100.0f, 700.0f));
+    // manCars.CreateCarAI(glm::vec3(400.0f, 10.0f, -50.0f));
     //manCars.CreateHumanCar(glm::vec3(20.0, 10.0, 20.0));
-    manCars.CreateCarAI(glm::vec3(300.0f, 50.0f, -300.0f));
+    // manCars.CreateCarAI(glm::vec3(300.0f, 50.0f, -300.0f));
 }

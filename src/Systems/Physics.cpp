@@ -85,6 +85,45 @@ void Physics::UpdateEveryFrame(Car *car, Camera *cam, double percentTick) {
     // std::cout << "rotation.y( " << cTransformableCam->rotationPrev.y << " , " << cTransformableCam->rotationNext.y << " , " << cTransformableCam->rotation.y << " ) --> " << percentTick << std::endl;
 }
 
+void Physics::UpdateEveryFrame(Car *car, double percentTick) {
+    // actualizar posiciones
+    // auto cCar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
+    auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
+
+    // std::cout << "speed:" << cCar->speed << " ( " << cTransformableCam->positionPrev.z << " , " << cTransformableCam->positionNext.z << " , " << cTransformableCam->position.z << " ) --> " << percentTick << std::endl;
+    cTransformable->position.x = (cTransformable->positionNext.x - cTransformable->positionPrev.x) * percentTick + cTransformable->positionPrev.x;
+    cTransformable->position.y = (cTransformable->positionNext.y - cTransformable->positionPrev.y) * percentTick + cTransformable->positionPrev.y;
+    cTransformable->position.z = (cTransformable->positionNext.z - cTransformable->positionPrev.z) * percentTick + cTransformable->positionPrev.z;
+
+    // cout << "posCar:" << cTransformable->position.x << ",\t" << cTransformable->position.y << ",\t" << cTransformable->position.z << endl;
+    // inicio HACK
+    // aquí solucionamos que al pasar de 0º -> 355º, hace efectivamente eso, 0 a 355, en vez de 360 a 355,
+    // por tanto el salto lo hace así:
+    //      rotation.y( 0 , 355 , 1.9525 )
+    //      rotation.y( 0 , 355 , 89.6644 )
+    //      rotation.y( 0 , 355 , 179.173 )
+    //      rotation.y( 0 , 355 , 269.052 )
+    //      rotation.y( 0 , 355 , 355 )
+    // en vez de así:
+    //      rotation.y( 360 , 355 , 360 )
+    //      rotation.y( 360 , 355 , 358,75 )
+    //      rotation.y( 360 , 355 , 357,5 )
+    //      rotation.y( 360 , 355 , 356,25 )
+    //      rotation.y( 360 , 355 , 355 )
+    // Tenemos el mismo problema cuando pasamos de 360º a 5º
+    // si pasamos de alrededor de 355 a 5...
+    float auxNext = cTransformable->rotationNext.y;
+    float auxPrev = cTransformable->rotationPrev.y;
+    if (cTransformable->rotationNext.y >= 360 - 15 && cTransformable->rotationPrev.y <= 15) {
+        auxPrev += 360;
+    } else if (cTransformable->rotationPrev.y >= 360 - 15 && cTransformable->rotationNext.y <= 15) {
+        auxPrev -= 360;
+    }
+    cTransformable->rotation.y = (auxNext - auxPrev) * percentTick + auxPrev;
+    // std::cout << "rotation.y( " << cTransformable->rotationPrev.y << " , " << cTransformable->rotationNext.y << " , " << cTransformable->rotation.y << " ) --> " << percentTick << std::endl;
+    // fin HACK    
+}
+
 void Physics::update(Car *car, Camera *cam) {
     // actualizar posiciones
     auto cTransformable = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
@@ -93,11 +132,11 @@ void Physics::update(Car *car, Camera *cam) {
     auto cExternalForce = static_cast<CExternalForce *>(car->GetComponent(CompType::CompExternalForce).get());
 
     //std::cout << "( " << cTransformableCam->position.z << " )" << std::endl;
-    cTransformable->positionPrev = cTransformable->positionNext;
-    cTransformable->position = cTransformable->positionNext;
-
-    cTransformable->rotationPrev = cTransformable->rotationNext;
-    cTransformable->rotation = cTransformable->rotationNext;
+    // debug_positions
+    // cTransformable->positionPrev = cTransformable->positionNext;
+    // cTransformable->position = cTransformable->positionNext;
+    // cTransformable->rotationPrev = cTransformable->rotationNext;
+    // cTransformable->rotation = cTransformable->rotationNext;
 
     if (cCar->speed >= 0)
         CalculatePosition(cCar, cTransformable, cSpeed, cExternalForce);
