@@ -62,7 +62,7 @@ class CLPhysics;
 class StateInGame : public State {
    public:
     StateInGame();
-    ~StateInGame();
+    ~StateInGame() override;
     void InitVirtualMethods();
     void InitState() override;
     virtual void Input() = 0;
@@ -107,6 +107,10 @@ class StateInGame : public State {
     time_point<system_clock> then;
     // vector<float> deltas;
     //float CalculateDelta(float);
+
+    //TODO: Reloj de la partida total
+    time_point<system_clock> gameClock;
+    int64_t gameTimeAcummulated { 0 };
 
     virtual void InitializeCLPhysics(ManCar&, ManBoundingWall&, ManBoundingOBB&, ManBoundingGround&, ManPowerUp&, ManNavMesh&, ManBoxPowerUp&, ManTotem &);
     virtual void InitializeManagers(Physics *, Camera *);
