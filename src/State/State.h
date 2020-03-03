@@ -7,8 +7,8 @@ using namespace std;
 class State{
     public:
         enum States{ NO_STATE, INTRO, MENU, MAP, INGAME_SINGLE, INGAME_MULTI, ENDRACE, PAUSE, CONTROLS, CREDITS, LOBBY_MULTI};
-        State() = default;
-        virtual ~State() = default;
+        State();
+        virtual ~State();
         virtual void InitState() = 0;
         virtual void Update() = 0;
         virtual void Input() = 0;

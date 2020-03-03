@@ -23,8 +23,6 @@ StateInGame::StateInGame() {
 
     cam = make_shared<Camera>(glm::vec3(100.0f, 600.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
     ground = make_shared<GameObject>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "", "training_ground.obj");
-
-    gameClock = system_clock::now();
 }
 
 StateInGame::~StateInGame() {
@@ -222,17 +220,13 @@ void StateInGame::Update() {
         cout << "DEBERIA DE DAR FALSE Y...... LO DA 3" << endl;
     }
     */
-
-    //RELOJ DEL JUEGO
-    gameTimeAcummulated += duration_cast<milliseconds>(system_clock::now() - gameClock).count();
-    gameClock = system_clock::now();
 }
 
 void StateInGame::Render() {
     renderEngine->FacadeBeginScene();
     // renderEngine->FacadeDraw();  //Para dibujar primitivas debe ir entre el drawAll y el endScene
     renderEngine->FacadeDrawAll();
-    renderEngine->FacadeDrawHUD(manCars->GetCar().get(), manCars.get(), gameTimeAcummulated);
+    renderEngine->FacadeDrawHUD(manCars->GetCar().get(), manCars.get());
     renderEngine->FacadeDrawGraphEdges(manWayPoint.get());
     // renderEngine->FacadeDrawBoundingBox(manCars.get()->GetCar().get(), isColliding);
 

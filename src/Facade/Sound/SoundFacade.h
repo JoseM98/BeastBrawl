@@ -4,7 +4,7 @@ using namespace std;
 
 class SoundFacade {
     public:
-        SoundFacade() = default;
+        explicit SoundFacade() = default;
         virtual ~SoundFacade() = default;
 
         virtual void InitSoundEngine() = 0;

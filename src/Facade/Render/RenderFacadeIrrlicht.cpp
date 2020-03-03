@@ -107,8 +107,7 @@ void RenderFacadeIrrlicht::FacadeUpdatePowerUpHUD(DataMap* d) {
     currentPowerUp = int(type);
 }
 
-//TODO: GAME TIME
-void RenderFacadeIrrlicht::FacadeDrawHUD(Entity* car, ManCar* manCars, int64_t gameTime) {
+void RenderFacadeIrrlicht::FacadeDrawHUD(Entity* car, ManCar* manCars) {
 
     //Voy a actualizar aqui las posiciones donde van porque es el unico sitio donde tengo ambos tipos de coches
 
