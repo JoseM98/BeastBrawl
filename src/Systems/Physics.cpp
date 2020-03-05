@@ -162,6 +162,7 @@ void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CExt
     // Rotacion del coche
     // if (cCar->wheelRotation != 0) {
     // cTransformable->rotation.y += cCar->wheelRotation * 0.20;
+    cout << "El wheel rotation de physics es " << cCar->wheelRotation << endl;
     cTransformable->rotationNext.y = cTransformable->rotationNext.y + cCar->wheelRotation * 12 * Constants::DELTA_TIME;
 
     if (cTransformable->rotationNext.y >= 360.0)

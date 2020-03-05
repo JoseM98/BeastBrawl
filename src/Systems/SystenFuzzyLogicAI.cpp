@@ -86,9 +86,9 @@ void SystemFuzzyLogicAI::fuzzyRulesAngle(){
     shared_ptr<FzSet> Direction_Right = Direction->AddRightShoulderSet("Direction_Right", 0, 180, 180);
 
     shared_ptr<FuzzyVariable> Rotation = flAngle->CreateFLV("Rotation");
-    shared_ptr<FzSet> Rotation_Left = Rotation->AddLeftShoulderSet("Rotation_Left", -10, -5, 0);
+    shared_ptr<FzSet> Rotation_Left = Rotation->AddLeftShoulderSet("Rotation_Left", -15, -5, 0);
     shared_ptr<FzSet> Rotation_None = Rotation->AddTriangularSet("Rotation_None", -5, 0, 5);
-    shared_ptr<FzSet> Rotation_Right = Rotation->AddRightShoulderSet("Rotation_Right", 0, 5, 10);
+    shared_ptr<FzSet> Rotation_Right = Rotation->AddRightShoulderSet("Rotation_Right", 0, 5, 15);
 
 // TODO
 // SI VA A COLISIONAR ----- HARA LA ROTACION HARD... QUE SERÁ DERRAPAR  
@@ -229,6 +229,7 @@ void SystemFuzzyLogicAI::Update(CarAI* car, float deltaTime){
     auto cNitro2 = static_cast<CNitro *>(car->GetComponent(CompType::NitroComp).get());
 
     cCar->wheelRotation = fuzzyRotation;
+    cout << "El wheel rotation de fuzzy es " << cCar->wheelRotation << endl;
     if(cNitro2->activePowerUp == false){
         cCar->speed += fuzzyAceleration;
         if (cCar->speed > cCar->maxSpeed) {
@@ -250,7 +251,7 @@ void SystemFuzzyLogicAI::Update(CarAI* car, float deltaTime){
     cTransformable->positionNext.z += sin(angleRotation) * cCar->speed * deltaTime;
     if(cCar->wheelRotation != 0){
         // cTransformable->rotationNext.y += cCar->wheelRotation * 0.20;
-        cTransformable->rotationNext.y = cTransformable->rotationPrev.y + cCar->wheelRotation * Constants::DELTA_TIME;
+        cTransformable->rotationNext.y = cTransformable->rotationNext.y + cCar->wheelRotation * 12 * Constants::DELTA_TIME;
         if(cTransformable->rotationNext.y>=360.0)
             cTransformable->rotationNext.y -= 360.0;
         else if(cTransformable->rotationNext.y < 0.0)
