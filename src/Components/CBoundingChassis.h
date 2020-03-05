@@ -1,13 +1,12 @@
 #pragma once
 
-#include "../../include/glm/geometric.hpp"
-#include "../../include/glm/vec3.hpp"
+#include <glm/glm.hpp>
+#include <vector>
+#include <memory>
 
 #include "../Components/CTransformable.h"
 #include "../Components/CCar.h"
-#include <vector>
 #include "Component.h"
-#include <memory>
 
 
 

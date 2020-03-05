@@ -1,11 +1,11 @@
 #pragma once
 
 #include "composite.h"
-#include <memory>
+
+struct Blackboard;
 
 using namespace std;
 
-struct Blackboard;
 
 class sequence: public composite{
   

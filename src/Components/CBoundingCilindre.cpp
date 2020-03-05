@@ -2,12 +2,10 @@
 #include "CBoundingCilindre.h"
 #include "CBoundingSphere.h"
 #include "CBoundingOBB.h"
-#include <math.h>
-#include <cmath>
+
 #include <iostream>
-
-
 #include <limits>
+
 typedef std::numeric_limits< double > dbl;
 
 
@@ -36,13 +34,13 @@ void CBoundingCilindre::CalculateCenterMass(const vec3 &ext1,const vec3 &ext2){
 }
 
 IntersectData CBoundingCilindre::IntersectSphere(const CBoundingSphere &other) const{
-    // trataremos al cilindro como una recta que contiene infinitas esferas en todo su tramo
+    // trataremos al cilindro como una recta que contiene infinitas esferas en to-do su tramo
     // es por ello que calculamos el punto perpendicular a la recta que pasa por el centro de la esfera para saber si hay colision
     vec3 virtualSphereCenter = CalculateProyectPointOnRecta(other.center);
     // ponemos el radio como "virtual" aunque siemre es el mismo por legibilidad
     float virtualSphereRadius = radius;
 
-    // YA LO TENEMOS TODO PARA COMPROBAR LA COLSION ENTRE ESFERAS Y CILINDROS UEEE
+    // YA LO TENEMOS PARA COMPROBAR LA COLSION ENTRE ESFERAS Y CILINDROS UEEE
     float radiusDistance = virtualSphereRadius + other.radius; 
     vec3 direction = other.center - virtualSphereCenter; 
     float centerDistance = glm::length(direction); 
@@ -52,13 +50,10 @@ IntersectData CBoundingCilindre::IntersectSphere(const CBoundingSphere &other) c
     bool intersects = distance < 0;
 
     // FINALMENTE DEBEMOS COMPROBAR SI ESTAMOS DENTRO DEL RADIO DE LOS DOS EXTREMOS
+    // SIMPLIFICADO POR CLION
     if(intersects){
-       if(EuclideanDis(extreme1,extreme2) > EuclideanDis(extreme1, virtualSphereCenter) && 
-            EuclideanDis(extreme1,extreme2) > EuclideanDis(extreme2, virtualSphereCenter)){
-                intersects = true;
-        }else{
-            intersects = false;
-        }
+        intersects = EuclideanDis(extreme1, extreme2) > EuclideanDis(extreme1, virtualSphereCenter) &&
+                     EuclideanDis(extreme1, extreme2) > EuclideanDis(extreme2, virtualSphereCenter);
     }
 
 

@@ -1,13 +1,11 @@
 #include "CBoundingChassis.h"
-#include <math.h>
-#include <iostream>
+
 #include "CBoundingSphere.h"
 #include "CBoundingPlane.h"
 #include "CBoundingCilindre.h"
-#include <math.h>
-#include <cmath>
 
 #include <limits>
+
 typedef std::numeric_limits< double > dbl;
 
 

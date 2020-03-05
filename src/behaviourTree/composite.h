@@ -7,13 +7,12 @@
 
 using namespace std;
 
-class composite : public behaviourTree{
+class composite : public behaviourTree {
 
 	public:
-		const list<shared_ptr<behaviourTree>>& getChildren() const {return children;}
-		void addChild (shared_ptr<behaviourTree> child) {children.push_back(child);}
+		[[nodiscard]] const list<shared_ptr<behaviourTree>>& getChildren() const {return children;}
+		void addChild (const shared_ptr<behaviourTree>& child) {children.push_back(child);}
 
     private:
 		list<shared_ptr<behaviourTree>> children;
-
 };

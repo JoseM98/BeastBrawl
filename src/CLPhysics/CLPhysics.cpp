@@ -1,31 +1,25 @@
-
 #include "CLPhysics.h"
-#include <iostream>
-#include <memory>
-#include "../Components/CExternalForce.h"
-#include "../Components/CBoundingChassis.h"
-#include "../Components/CBoundingCilindre.h"
-#include "../Components/CBoundingOBB.h"
-#include "../Entities/BoundingOBB.h"
-#include "../Managers/ManBoundingOBB.h"
 
-#include <Components/CAABoundingBox.h>
+#include <Components/CExternalForce.h>
+#include <Components/CBoundingChassis.h>
+#include <Components/CBoundingCilindre.h>
+#include <Components/CBoundingOBB.h>
 #include <Components/CBoundingPlane.h>
 #include <Components/CBoundingSphere.h>
 #include <Components/CCar.h>
-#include <Components/CId.h>
 #include <Components/CNitro.h>
 #include <Components/CTransformable.h>
 #include <Components/CTotem.h>
-#include "../Components/CRemovableObject.h"
-#include "../Components/CShield.h"
-#include "../Components/CGravity.h"
+#include <Components/CRemovableObject.h>
+#include <Components/CShield.h>
+#include <Components/CGravity.h>
+
+#include <Entities/BoundingOBB.h>
 #include <Entities/BoundingWall.h>
-#include <Entities/Car.h>
 #include <Entities/CarAI.h>
 #include <Entities/CarHuman.h>
-#include <EventManager/Event.h>
-#include <EventManager/EventManager.h>
+
+#include <Managers/ManBoundingOBB.h>
 #include <Managers/ManBoundingWall.h>
 #include <Managers/ManBoundingGround.h>
 #include <Managers/ManCar.h>
@@ -34,21 +28,21 @@
 #include <Managers/ManTotem.h>
 #include <Managers/ManBoxPowerUp.h>
 #include <Managers/Manager.h>
-#include <Systems/Utils.h>
-#include "../Facade/Render/RenderFacadeIrrlicht.h"
-#include "../Facade/Render/RenderFacadeManager.h"
 
-#include <cmath>
+#include <Systems/Utils.h>
+
+#include <EventManager/Event.h>
+#include <EventManager/EventManager.h>
+
+#include <iostream>
 
 using namespace std;
 
-CLPhysics::CLPhysics() {
-}
 
-void CLPhysics::AddManager(Manager &m) {
-    managers.push_back(&m);
-}
-/*
+//TODO: Se accede a posiciones del vector de managers sin preguntar si existe.
+//TODO: Esto es muy peligroso, puede petar, y si no peta, coge otro manager que no debe y en caso de no reventar: Bad thigs happen.
+
+/**
 * [0] manCars
 * [1] manWalls
 * [2] manOBB
@@ -57,6 +51,12 @@ void CLPhysics::AddManager(Manager &m) {
 * [5] manNavMesh
 * [6] manTotem
 */
+
+void CLPhysics::AddManager(Manager &m) {
+    managers.push_back(&m);
+}
+
+
 void CLPhysics::Update(float delta) {
     Simulate(delta);
     // Aplicamos las fisicas de gravedad
@@ -78,7 +78,7 @@ void CLPhysics::CentralSystemGravity(){
 }
 
 void CLPhysics::ConstGravity(){
-    ManCar *manCar = static_cast<ManCar *>(managers[0]);
+    auto *manCar = static_cast<ManCar *>(managers[0]);
     for(const auto& car : manCar->GetEntities()){
         CBoundingChassis *chaCar = static_cast<CBoundingChassis *>(car->GetComponent(CompType::CompBoundingChassis).get());
         CTransformable *trcar = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
@@ -86,14 +86,14 @@ void CLPhysics::ConstGravity(){
         chaCar->sphereFront->center.y += gravityCar;
         RePositionCarY(*trcar, *chaCar->sphereBehind, *chaCar->sphereFront);
     }
-    ManPowerUp *manPowerUp = static_cast<ManPowerUp *>(managers[4]);
+    auto *manPowerUp = static_cast<ManPowerUp *>(managers[4]);
     for(const auto& powerUp : manPowerUp->GetEntities()){
         CBoundingSphere *spEntity = static_cast<CBoundingSphere *>(powerUp->GetComponent(CompType::CompBoundingSphere).get());
         CTransformable *trEntity = static_cast<CTransformable *>(powerUp->GetComponent(CompType::TransformableComp).get());
         spEntity->center.y += gravityPU;
         RePositionEntityY(*trEntity, *spEntity);
     }
-    ManTotem *manTotem = static_cast<ManTotem *>(managers[7]);
+    auto *manTotem = static_cast<ManTotem *>(managers[7]);
     const auto& totem = manTotem->GetEntities()[0];
     CBoundingSphere *spTotem = static_cast<CBoundingSphere *>(totem->GetComponent(CompType::CompBoundingSphere).get());
     CTransformable *trTotem = static_cast<CTransformable *>(totem->GetComponent(CompType::TransformableComp).get());
@@ -102,7 +102,7 @@ void CLPhysics::ConstGravity(){
 }
 
 void CLPhysics::aplicateGravity(){
-    ManCar *manCar = static_cast<ManCar *>(managers[0]);
+    auto *manCar = static_cast<ManCar *>(managers[0]);
     const auto& cars = manCar->GetEntities();
     size_t numCar = cars.size();
     for (size_t currentCar = 0; currentCar < numCar; currentCar++) {
@@ -121,8 +121,8 @@ void CLPhysics::aplicateGravity(){
 
 
 void CLPhysics::HandleCollisionsWithGround() {
-    ManCar *manCar = static_cast<ManCar *>(managers[0]);
-    ManBoundingGround *manGrounds = static_cast<ManBoundingGround *>(managers[3]);
+    auto *manCar = static_cast<ManCar *>(managers[0]);
+    auto *manGrounds = static_cast<ManBoundingGround *>(managers[3]);
 
     const auto& cars = manCar->GetEntities();
     size_t numCar = cars.size();
@@ -147,7 +147,7 @@ void CLPhysics::HandleCollisionsWithGround() {
 
         bool interBeh = false;
         for (size_t currentGround = 0; currentGround < numGrounds && !interBeh; currentGround++) {
-            BoundingWall *ground = static_cast<BoundingWall *>(grounds[currentGround].get());
+            auto *ground = static_cast<BoundingWall *>(grounds[currentGround].get());
             CBoundingPlane *plane = static_cast<CBoundingPlane *>(ground->GetComponent(CompType::CompBoundingPlane).get());
             //sameGround = CollisionsChassisGround(*trcar, *chaCar, *ccarcar, false, *plane);
             interBeh = CollisionsSphereGround(*trcar, *spBehindCar, *plane);
@@ -158,7 +158,7 @@ void CLPhysics::HandleCollisionsWithGround() {
         }
         bool interFro = false;
         for (size_t currentGround = 0; currentGround < numGrounds && !interFro; currentGround++) {
-            BoundingWall *ground = static_cast<BoundingWall *>(grounds[currentGround].get());
+            auto *ground = static_cast<BoundingWall *>(grounds[currentGround].get());
             CBoundingPlane *plane = static_cast<CBoundingPlane *>(ground->GetComponent(CompType::CompBoundingPlane).get());
             interFro = CollisionsSphereGround(*trcar, *spFrontCar, *plane);
             if(interFro){ 
@@ -174,13 +174,13 @@ void CLPhysics::HandleCollisionsWithGround() {
     }
 
     // POWER-UPS
-    ManCar *manPowerUp = static_cast<ManCar *>(managers[4]);
-    for (auto currentPU : manPowerUp->GetEntities()) {
+    auto *manPowerUp = static_cast<ManCar *>(managers[4]);
+    for (const auto& currentPU : manPowerUp->GetEntities()) {
         CBoundingSphere *cSphere = static_cast<CBoundingSphere *>(currentPU->GetComponent(CompType::CompBoundingSphere).get());
         CTransformable *trEntity = static_cast<CTransformable *>(currentPU->GetComponent(CompType::TransformableComp).get());
  
         for (size_t currentGround = 0; currentGround < numGrounds; currentGround++) {
-            BoundingWall *ground = static_cast<BoundingWall *>(grounds[currentGround].get());
+            auto *ground = static_cast<BoundingWall *>(grounds[currentGround].get());
             CBoundingPlane *plane = static_cast<CBoundingPlane *>(ground->GetComponent(CompType::CompBoundingPlane).get());
             CollisionsSphereGround(*trEntity, *cSphere, *plane);
             RePositionEntityY(*trEntity, *cSphere);
@@ -188,12 +188,12 @@ void CLPhysics::HandleCollisionsWithGround() {
     }
 
     // TOTEM
-    ManTotem *manTotem = static_cast<ManTotem *>(managers[7]);
+    auto *manTotem = static_cast<ManTotem *>(managers[7]);
     const auto& totem = manTotem->GetEntities()[0];
     CBoundingSphere *spTotem = static_cast<CBoundingSphere *>(totem->GetComponent(CompType::CompBoundingSphere).get());
     CTransformable *trTotem = static_cast<CTransformable *>(totem->GetComponent(CompType::TransformableComp).get());
     for (size_t currentGround = 0; currentGround < numGrounds; currentGround++) {
-        BoundingWall *ground = static_cast<BoundingWall *>(grounds[currentGround].get());
+        auto *ground = static_cast<BoundingWall *>(grounds[currentGround].get());
         CBoundingPlane *plane = static_cast<CBoundingPlane *>(ground->GetComponent(CompType::CompBoundingPlane).get());
         CollisionsSphereGround(*trTotem, *spTotem, *plane);
         RePositionEntityY(*trTotem, *spTotem);
@@ -204,7 +204,7 @@ void CLPhysics::HandleCollisionsWithGround() {
 
 
 void CLPhysics::LimitRotationCarY() const{
-    ManCar *manCar = static_cast<ManCar *>(managers[0]);
+    auto *manCar = static_cast<ManCar *>(managers[0]);
     const auto& cars = manCar->GetEntities();
     size_t numCar = cars.size();
     for (size_t currentCar = 0; currentCar < numCar; currentCar++) {
@@ -241,20 +241,20 @@ void CLPhysics::RotateCarXZ(CTransformable &trcar, CBoundingChassis &chaCar, CBo
     }
     // rotacion en X
     auto angleRotate = Angle2Vectors(normalPlane, vec3(0,1,0));
-    auto dirRotateY = (trcar.rotation.y * M_PI) / 180.0;
+    auto dirRotateY = (trcar.rotation.y * glm::pi<float>()) / 180.0;
     //cout << "LA NORMAL DEL PLANO ES: (" << normalPlane.x << " , " << normalPlane.y << " , " << normalPlane.z << " )" << endl;
-    auto total = abs(normalPlane.x*100) + abs(normalPlane.z*100);
+    auto total = glm::abs(normalPlane.x*100) + glm::abs(normalPlane.z*100);
     if(total == 0.0) total = 1.0;
-    auto newR_X = sin(dirRotateY) * (normalPlane.x*100);
+    auto newR_X = glm::sin(dirRotateY) * (normalPlane.x*100);
     auto resultante_X = newR_X*100/(total);
     auto rotationX_exeX = angleRotate*(resultante_X/100);
 
-    auto newR_Z = cos(dirRotateY) * (normalPlane.z*100);
+    auto newR_Z = glm::cos(dirRotateY) * (normalPlane.z*100);
     auto resultante_Z = newR_Z*100/total;
     auto rotationX_exeZ = angleRotate*(resultante_Z/100);
 
     //auto rotationFinal = rotationX_exeX + rotationX_exeZ;
-    //if(abs(trcar.rotation.x - rotationFinal) > 3 ){  // deberia de multiplicarse por el delta
+    //if(glm::abs(trcar.rotation.x - rotationFinal) > 3 ){  // deberia de multiplicarse por el delta
     //    if( trcar.rotation.x < rotationFinal)
     //        trcar.rotation.x += 3.0;
     //    else
@@ -283,6 +283,7 @@ bool CLPhysics::CollisionsChassisGround(CTransformable &trCar, CBoundingChassis 
     return false;
 }
 */
+
 void CLPhysics::RePositionCarY(CTransformable &trCar, CBoundingSphere &sp1Car, CBoundingSphere &sp2Car) const{
     trCar.position.y = (sp1Car.center.y + sp2Car.center.y) / 2;
 }
@@ -317,7 +318,7 @@ void CLPhysics::CentralSystemCollisions(){
 }
 
 void CLPhysics::RepositionBounding(){
-    ManCar *manCar = static_cast<ManCar *>(managers[0]);
+    auto *manCar = static_cast<ManCar *>(managers[0]);
     const auto& entities = manCar->GetEntities();
     size_t numEntities = entities.size();
     for (size_t i = 0; i < numEntities; i++) {
@@ -331,15 +332,15 @@ void CLPhysics::RepositionBounding(){
         PositionCilindreIntoSpheres(*cBoundingChassis);
     }
     // POWER UPS
-    ManPowerUp *manPowerUp = static_cast<ManPowerUp *>(managers[4]);
-    for (auto currentPU : manPowerUp->GetEntities()) {
+    auto *manPowerUp = static_cast<ManPowerUp *>(managers[4]);
+    for (const auto& currentPU : manPowerUp->GetEntities()) {
         CTransformable *trPU = static_cast<CTransformable *>(currentPU->GetComponent(CompType::TransformableComp).get());
         CBoundingSphere *cBoundingSphere = static_cast<CBoundingSphere *>(currentPU->GetComponent(CompType::CompBoundingSphere).get());
         //PositionSphereIntoTransformable(*trPU, *cBoundingSphere);
         cBoundingSphere->center = trPU->position; 
     }
     // TOTEM
-    ManTotem *manTotem = static_cast<ManTotem *>(managers[7]);
+    auto *manTotem = static_cast<ManTotem *>(managers[7]);
     const auto& totem = manTotem->GetEntities()[0];
     CBoundingSphere *spTotem = static_cast<CBoundingSphere *>(totem->GetComponent(CompType::CompBoundingSphere).get());
     CTransformable *trTotem = static_cast<CTransformable *>(totem->GetComponent(CompType::TransformableComp).get());
@@ -349,10 +350,10 @@ void CLPhysics::RepositionBounding(){
 
 void CLPhysics::HandleCollisionsWithOBB(){
     
-    ManCar *manCar = static_cast<ManCar *>(managers[0]);
-    ManBoundingOBB *manOBBs = static_cast<ManBoundingOBB *>(managers[2]);
+    auto *manCar = static_cast<ManCar *>(managers[0]);
+    auto *manOBBs = static_cast<ManBoundingOBB *>(managers[2]);
 
-    vector<shared_ptr<Entity>> carAIs = manCar->GetEntities();
+    const vector<shared_ptr<Entity>>& carAIs = manCar->GetEntities();
     size_t numCar = carAIs.size();
 
     vector<shared_ptr<Entity>> obbs = manOBBs->GetEntities();
@@ -370,7 +371,7 @@ void CLPhysics::HandleCollisionsWithOBB(){
         //CExternalForce *cExternalForce = static_cast<CExternalForce *>(car->GetComponent(CompType::CompExternalForce).get());
         for (size_t currentOBB = 0; currentOBB < numOBBs; currentOBB++) {
             //BoundingWall *wall = static_cast<BoundingWall *>(obbs[currentOBB].get());
-            BoundingOBB *obbActual = static_cast<BoundingOBB *>(obbs[currentOBB].get());
+            auto *obbActual = static_cast<BoundingOBB *>(obbs[currentOBB].get());
             //CBoundingPlane *plane = static_cast<CBoundingPlane *>(wall->GetComponent(CompType::CompBoundingPlane).get());
             CBoundingOBB *cOBBactual = static_cast<CBoundingOBB *>(obbActual->GetComponent(CompType::CompBoundingOBB).get());
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -383,8 +384,8 @@ void CLPhysics::HandleCollisionsWithOBB(){
 }
 
 void CLPhysics::HandleCollisionsWithPlanes() {
-    ManCar *manCar = static_cast<ManCar *>(managers[0]);
-    ManBoundingWall *manWalls = static_cast<ManBoundingWall *>(managers[1]);
+    auto *manCar = static_cast<ManCar *>(managers[0]);
+    auto *manWalls = static_cast<ManBoundingWall *>(managers[1]);
 
     const auto& carAIs = manCar->GetEntities();
     size_t numCar = carAIs.size();
@@ -400,7 +401,7 @@ void CLPhysics::HandleCollisionsWithPlanes() {
         CTransformable *trcar = static_cast<CTransformable *>(car->GetComponent(CompType::TransformableComp).get());
         CCar *ccarcar = static_cast<CCar *>(car->GetComponent(CompType::CarComp).get());
         for (size_t currentWall = 0; currentWall < numWalls; currentWall++) {
-            BoundingWall *wall = static_cast<BoundingWall *>(walls[currentWall].get());
+            auto *wall = static_cast<BoundingWall *>(walls[currentWall].get());
             CBoundingPlane *plane = static_cast<CBoundingPlane *>(wall->GetComponent(CompType::CompBoundingPlane).get());
 
             //HandleCollisions(*trcar, *spcar, *ccarcar, false, *plane);
@@ -417,7 +418,7 @@ void CLPhysics::Simulate(float delta) {
 }
 
 void CLPhysics::HandleCollisions() {
-    ManCar *manCar = static_cast<ManCar *>(managers[0]);
+    auto *manCar = static_cast<ManCar *>(managers[0]);
 
     const auto& entities = manCar->GetEntities();
     size_t numEntities = entities.size();
@@ -485,8 +486,8 @@ void CLPhysics::checkCollisionNitro(Entity* car1, Entity* car2){
 
 void CLPhysics::PositionSphereIntoTransformable(CTransformable &tr, CBoundingSphere &sp) const{
     sp.center = tr.position;
-    float x = -cos(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
-    float z = sin(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
+    float x = -glm::cos(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
+    float z = glm::sin(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
     sp.center.x += x;
     sp.center.z += z;
 }
@@ -495,8 +496,8 @@ void CLPhysics::PositionSphereIntoTransformable(CTransformable &tr, CBoundingSph
 void CLPhysics::PositionSphBehindIntoTransf(CTransformable &tr, CBoundingSphere &sp) const{
     sp.center.x = tr.position.x;
     sp.center.z = tr.position.z;
-    float x = -cos(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
-    float z = sin(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
+    float x = -glm::cos(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
+    float z = glm::sin(Utils::DegToRad(tr.rotation.y)) * (sp.radius);
     sp.center.x += x;
     sp.center.z += z;
     // Necesitamos tambien actualizar el CILINDRO
@@ -505,8 +506,8 @@ void CLPhysics::PositionSphBehindIntoTransf(CTransformable &tr, CBoundingSphere 
 void CLPhysics::PositionSphFrontIntoTransf(CTransformable &tr, CBoundingSphere &sp) const{
     sp.center.x = tr.position.x;
     sp.center.z = tr.position.z;
-    float x = -cos(Utils::DegToRad(tr.rotation.y)) * (sp.radius+10);
-    float z = sin(Utils::DegToRad(tr.rotation.y)) * (sp.radius+10);
+    float x = -glm::cos(Utils::DegToRad(tr.rotation.y)) * (sp.radius+10);
+    float z = glm::sin(Utils::DegToRad(tr.rotation.y)) * (sp.radius+10);
     sp.center.x += x;
     sp.center.z += z;
     // Necesitamos tambien actualizar el cilindro
@@ -569,7 +570,7 @@ void CLPhysics::SeparateSpheres(CTransformable &trCar1, CBoundingSphere &spCar1,
                                 CTransformable &trCar2, CBoundingSphere &spCar2, CCar &ccarCar2) const{
     vec3 direction = spCar2.center - spCar1.center;  // te da la dirección al otro bounding en x, y, z, es decir, si tenemos 200, 10, 30, significa que estamos a 200 de distancia en x, a 10 en y y a 30 en z
     float centerDistance = glm::length(direction);
-    float distanceCollided = abs(spCar1.radius + spCar2.radius - centerDistance);
+    float distanceCollided = glm::abs(spCar1.radius + spCar2.radius - centerDistance);
 
     // vec3 nuevaDirectionCar1 = glm::reflect(-direction, direction);
     // vec3 nuevaDirectionCar2 = glm::reflect(direction, -direction);
@@ -586,7 +587,7 @@ void CLPhysics::SeparateSpheres(CTransformable &trCar1, CBoundingSphere &spCar1,
 void CLPhysics::SeparateCilindreSphere(CTransformable &trCar1, glm::vec3 &cenCar1, const float &radCar1, CCar &ccarCar1, CTransformable &trCar2, glm::vec3 &cenCar2, const float &radCar2, CCar &ccarCar2) const{
     vec3 direction = cenCar2 - cenCar1;  // te da la dirección al otro bounding en x, y, z, es decir, si tenemos 200, 10, 30, significa que estamos a 200 de distancia en x, a 10 en y y a 30 en z
     float centerDistance = glm::length(direction);
-    float distanceCollided = abs(radCar1 + radCar2 - centerDistance);
+    float distanceCollided = glm::abs(radCar1 + radCar2 - centerDistance);
 
     // vec3 nuevaDirectionCar1 = glm::reflect(-direction, direction);
     // vec3 nuevaDirectionCar2 = glm::reflect(direction, -direction);
@@ -680,9 +681,9 @@ void CLPhysics::CollisionsSphereOBB(CTransformable &trCar, CBoundingChassis &cha
 
 vec3 CLPhysics::CalculateVecDirCar(CTransformable &cTransformable) const{
 
-   float angleRotation = (cTransformable.rotation.y * M_PI) / 180.0;
-   float nextPosX    = cTransformable.position.x - cos(angleRotation) * 1;
-   float nexPosZ     = cTransformable.position.z + sin(angleRotation) * 1;
+   float angleRotation = (cTransformable.rotation.y * glm::pi<float>()) / 180.0;
+   float nextPosX    = cTransformable.position.x - glm::cos(angleRotation) * 1;
+   float nexPosZ     = cTransformable.position.z + glm::sin(angleRotation) * 1;
 
    return vec3(nextPosX-cTransformable.position.x, 0, nexPosZ-cTransformable.position.z);
 
@@ -716,6 +717,7 @@ bool CLPhysics::HandleCollisions(CTransformable &trCar1, CBoundingSphere &spCar1
     PositionSphereIntoTransformable(trCar2, spCar2);
     IntersectData intersData = spCar1.IntersectSphere(spCar2);
     if (intersData.intersects) {
+        //TODO: Mejorar cuando suena el evento de choque.
         //SonarChoque(mainCar);
 
         SeparateSpheres(trCar1, spCar1, ccarCar1, trCar2, spCar2, ccarCar2);
@@ -897,15 +899,15 @@ void CLPhysics::ReciveExternalForce(CTransformable &trCar1,  CCar &ccar1, CExter
 
 void VersionRayoVectores() {
     /*vec3 direccionCar1;
-            direccionCar1.x = cos(anguloCar1 * M_PI / 180.0);
+            direccionCar1.x = glm::cos(anguloCar1 * glm::pi<float>() / 180.0);
             direccionCar1.y = 0;
-            direccionCar1.z = sin(anguloCar1 * M_PI / 180.0);
+            direccionCar1.z = glm::sin(anguloCar1 * glm::pi<float>() / 180.0);
             CRay cray1(spCar1.center, normalize(direccionCar1));
 
             vec3 direccionCar2;
-            direccionCar2.x = cos(anguloCar2 * M_PI / 180.0);
+            direccionCar2.x = glm::cos(anguloCar2 * glm::pi<float>() / 180.0);
             direccionCar2.y = 0;
-            direccionCar2.z = sin(anguloCar2 * M_PI / 180.0);
+            direccionCar2.z = glm::sin(anguloCar2 * glm::pi<float>() / 180.0);
             CRay cray2(spCar2.center, normalize(direccionCar2));
 
             float cRay1IntersectsSP2 = cray1.IntersectSphere(spCar2);
@@ -982,22 +984,22 @@ void CLPhysics::ReflectCollision(CTransformable &trCar1, CCar &cCar1, CTransform
     float anguloCar1 = trCar1.rotation.y;
     float anguloCar2 = trCar2.rotation.y;
     vec3 direccionCar;
-    direccionCar.x = cos(anguloCar1 * M_PI / 180.0);
+    direccionCar.x = glm::cos(anguloCar1 * glm::pi<float>() / 180.0);
     direccionCar.y = 0;
-    direccionCar.z = sin(anguloCar1 * M_PI / 180.0);
+    direccionCar.z = glm::sin(anguloCar1 * glm::pi<float>() / 180.0);
 
     vec3 direccionCarAI;
-    direccionCarAI.x = cos(anguloCar2 * M_PI / 180.0);
+    direccionCarAI.x = glm::cos(anguloCar2 * glm::pi<float>() / 180.0);
     direccionCarAI.y = 0;
-    direccionCarAI.z = sin(anguloCar2 * M_PI / 180.0);
+    direccionCarAI.z = glm::sin(anguloCar2 * glm::pi<float>() / 180.0);
 
     vec3 nuevaDirectionCar1 = glm::reflect(direccionCar, direccionCarAI);
     vec3 nuevaDirectionCar2 = glm::reflect(direccionCarAI, direccionCar);
 
     float nuevoAnguloCar1Rad = atan2(nuevaDirectionCar1.x, nuevaDirectionCar1.z);
-    float nuevoAnguloCar1Deg = nuevoAnguloCar1Rad * (180.0 / M_PI);
+    float nuevoAnguloCar1Deg = nuevoAnguloCar1Rad * (180.0 / glm::pi<float>());
     float nuevoAnguloCar2Rad = atan2(nuevaDirectionCar2.x, nuevaDirectionCar2.z);
-    float nuevoAnguloCar2Deg = nuevoAnguloCar2Rad * (180.0 / M_PI);
+    float nuevoAnguloCar2Deg = nuevoAnguloCar2Rad * (180.0 / glm::pi<float>());
 
     trCar1.rotation.y = nuevoAnguloCar1Deg;
     trCar2.rotation.y = nuevoAnguloCar2Deg;
@@ -1017,15 +1019,15 @@ void CLPhysics::ReflectSpherePlane(CTransformable &trCar1, CCar &cCar1, CBoundin
     /*
     float anguloCar1 = trCar1.rotation.y;
     vec3 direccionCar;
-    direccionCar.x = cos(anguloCar1 * M_PI / 180.0);
+    direccionCar.x = glm::cos(anguloCar1 * glm::pi<float>() / 180.0);
     direccionCar.y = 0;
-    direccionCar.z = sin(anguloCar1 * M_PI / 180.0);
+    direccionCar.z = glm::sin(anguloCar1 * glm::pi<float>() / 180.0);
 
     // pondremos la normal del plano
     vec3 nuevaDirectionCar1 = glm::reflect(direccionCar, plane.normal);
 
     float nuevoAnguloCar1Rad = atan2(nuevaDirectionCar1.x, nuevaDirectionCar1.z);
-    float nuevoAnguloCar1Deg = nuevoAnguloCar1Rad * (180.0 / M_PI);
+    float nuevoAnguloCar1Deg = nuevoAnguloCar1Rad * (180.0 / glm::pi<float>());
 
     trCar1.rotation.y = nuevoAnguloCar1Deg;
 
@@ -1043,7 +1045,7 @@ void CLPhysics::ReflectSpherePlane(CTransformable &trCar1, CCar &cCar1, CBoundin
 
 
 void CLPhysics::RunTests() {
-    CBoundingSphere sp1(vec3(0.f, 0.f, 0.f), 1.f);
+    /*CBoundingSphere sp1(vec3(0.f, 0.f, 0.f), 1.f);
     CBoundingSphere sp2(vec3(0.f, 3.f, 0.f), 1.f);
     CBoundingSphere sp3(vec3(0.f, 0.f, 2.f), 1.f);
     CBoundingSphere sp4(vec3(1.f, 0.f, 0.f), 1.f);
@@ -1094,7 +1096,7 @@ void CLPhysics::RunTests() {
     cout << "AABB1 intersects AABB5: " << aabb1IDinters5.intersects << ", Distance: " << aabb1IDinters5.GetDistance() << endl
          << endl;
 
-    /*CBoundingPlane plane1(vec3(0.f, 1.f, 0.f), 0.f);
+    CBoundingPlane plane1(vec3(0.f, 1.f, 0.f), 0.f);
 
     IntersectData pl1sp1 = plane1.IntersectSphere(sp1);
     IntersectData pl1sp2 = plane1.IntersectSphere(sp2);
@@ -1151,9 +1153,9 @@ double CLPhysics::Angle2Vectors(const vec3 &a, const vec3 &b) const{
     // "domain error" math exceptions.
     dot = ( dot < -1.0 ? -1.0 : ( dot > 1.0 ? 1.0 : dot ) );
 
-    double angleRad = acos( dot );
+    double angleRad = glm::acos( dot );
     // grados = radianes*(180/PI_)
-    return angleRad*(180/M_PI);  
+    return angleRad*(180/glm::pi<float>());
 }
 
 
@@ -1164,7 +1166,7 @@ void CLPhysics::IntersectCarsTotem(ManCar &manCars, ManTotem &manTotem){
     bool collision = false;
     for(long unsigned int i=0; i<manCars.GetEntities().size() && !collision; i++){
         const auto& currentCar = manCars.GetEntities()[i];
-        auto cChassisCar = static_cast<CBoundingChassis *>(currentCar.get()->GetComponent(CompType::CompBoundingChassis).get());  
+        auto cChassisCar = static_cast<CBoundingChassis *>(currentCar->GetComponent(CompType::CompBoundingChassis).get());
         auto cTotem = static_cast<CTotem *>(manTotem.GetEntities()[0]->GetComponent(CompType::TotemComp).get()); 
 
         if(cTotem->active){  
@@ -1196,11 +1198,11 @@ void CLPhysics::IntersectCarsBoxPowerUp(ManCar &manCars, ManBoxPowerUp &manBoxPo
         bool collision = false;
         for(long unsigned int i=0; i<manCars.GetEntities().size() && !collision; i++){
             const auto& currentCar = manCars.GetEntities()[i];
-            auto cPowerUpCar = static_cast<CPowerUp*>(currentCar.get()->GetComponent(CompType::PowerUpComp).get()); 
-            auto cChassisCar = static_cast<CBoundingChassis *>(currentCar.get()->GetComponent(CompType::CompBoundingChassis).get());   
+            auto cPowerUpCar = static_cast<CPowerUp*>(currentCar->GetComponent(CompType::PowerUpComp).get());
+            auto cChassisCar = static_cast<CBoundingChassis *>(currentCar->GetComponent(CompType::CompBoundingChassis).get());
 
             // Vemos si efectivamente esta activo o no, para poder cogerlo
-            if(cBoxPowerUp->active == true){
+            if(cBoxPowerUp->active){
                 // primero vemos si colisionan
                 auto intersect = cChassisCar->cilindre->IntersectSphere(*cSpherePU);
                 if(!intersect.intersects)
@@ -1232,12 +1234,12 @@ void CLPhysics::IntersectCarsBoxPowerUp(ManCar &manCars, ManBoxPowerUp &manBoxPo
 void CLPhysics::IntersectsCarsPowerUps(ManCar &manCars, ManPowerUp &manPowerUps, ManNavMesh *manNavMesh){
       
     for(const auto& currentPU : manPowerUps.GetEntities()){      
-        CBoundingSphere *cSpherePU = static_cast<CBoundingSphere *>(currentPU.get()->GetComponent(CompType::CompBoundingSphere).get());  
+        CBoundingSphere *cSpherePU = static_cast<CBoundingSphere *>(currentPU->GetComponent(CompType::CompBoundingSphere).get());
 
         bool collision = false;
         for(long unsigned int i=0; i< manCars.GetEntities().size() && !collision; i++){
             const auto& currentCar = manCars.GetEntities()[i];
-            auto cChassisCar = static_cast<CBoundingChassis *>(currentCar.get()->GetComponent(CompType::CompBoundingChassis).get()); 
+            auto cChassisCar = static_cast<CBoundingChassis *>(currentCar->GetComponent(CompType::CompBoundingChassis).get());
 
             auto intersect = cChassisCar->cilindre->IntersectSphere(*cSpherePU);
             if(!intersect.intersects)
@@ -1253,13 +1255,13 @@ void CLPhysics::IntersectsCarsPowerUps(ManCar &manCars, ManPowerUp &manPowerUps,
                 (*dataCollisonCarPowerUp)[CAR_AI] = currentCar.get();              // nos guardamos el puntero al coche                              
                 EventManager::GetInstance().AddEventMulti(Event{EventType::COLLISION_ENTITY_AI_POWERUP, dataCollisonCarPowerUp}); 
                 // ponemos a true el componente DeleteEntity, para eliminarlo con seguridad beibeee
-                auto cRemovableObj = static_cast<CRemovableObject*>(currentPU.get()->GetComponent(CompType::RemovableObjectComp).get());
+                auto cRemovableObj = static_cast<CRemovableObject*>(currentPU->GetComponent(CompType::RemovableObjectComp).get());
                 cRemovableObj->destroy = true;
 
                 // comprobamos si el coche tenia escudo y el totem.. ya que debe de soltarlo
                 auto cShield = static_cast<CShield*>(currentCar.get()->GetComponent(CompType::ShieldComp).get());
-                if(cShield->activePowerUp==false && static_cast<CTotem*>(currentCar.get()->GetComponent(CompType::TotemComp).get())->active){  // TRUE
-                    auto dataTransformableCar = static_cast<CTransformable*>(currentCar.get()->GetComponent(CompType::TransformableComp).get());
+                if(!cShield->activePowerUp && static_cast<CTotem*>(currentCar->GetComponent(CompType::TotemComp).get())->active){  // TRUE
+                    auto dataTransformableCar = static_cast<CTransformable*>(currentCar->GetComponent(CompType::TransformableComp).get());
                     shared_ptr<DataMap> dataTransfCar = make_shared<DataMap>();                                                                    
                     (*dataTransfCar)[CAR_TRANSFORMABLE] = dataTransformableCar;  
                     (*dataTransfCar)[ACTUAL_CAR] = currentCar.get(); 
@@ -1291,7 +1293,7 @@ void CLPhysics::IntersectPowerUpWalls(ManPowerUp &manPowerUp, ManBoundingWall &m
                 //shared_ptr<DataMap> dataCollisonPowerUp = make_shared<DataMap>();                                                                       
                 //(*dataCollisonPowerUp)[POWER_UP] = currentPU.get();              // nos guardamos el puntero para eliminar el powerUp                            
                 //EventManager::GetInstance().AddEventMulti(Event{EventType::DELETE_POWERUP, dataCollisonPowerUp}); 
-                auto cRemovableObj = static_cast<CRemovableObject*>(currentPU.get()->GetComponent(CompType::RemovableObjectComp).get());
+                auto cRemovableObj = static_cast<CRemovableObject*>(currentPU->GetComponent(CompType::RemovableObjectComp).get());
                 cRemovableObj->destroy = true;
             }
 
@@ -1308,21 +1310,9 @@ void CLPhysics::IntersectPowerUpWalls(ManPowerUp &manPowerUp, ManBoundingWall &m
                 //shared_ptr<DataMap> dataCollisonPowerUp = make_shared<DataMap>();                                                                       
                 //(*dataCollisonPowerUp)[POWER_UP] = currentPU.get();              // nos guardamos el puntero para eliminar el powerUp                            
                 //EventManager::GetInstance().AddEventMulti(Event{EventType::DELETE_POWERUP, dataCollisonPowerUp}); 
-                auto cRemovableObj = static_cast<CRemovableObject*>(currentPU.get()->GetComponent(CompType::RemovableObjectComp).get());
+                auto cRemovableObj = static_cast<CRemovableObject*>(currentPU->GetComponent(CompType::RemovableObjectComp).get());
                 cRemovableObj->destroy = true;
             }
         } 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

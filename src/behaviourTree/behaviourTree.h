@@ -7,7 +7,7 @@ class behaviourTree{
 
     public:
         // run() hace referencia a la accion a realizar 
-		virtual bool run(Blackboard* blackboard) = 0;
+		virtual bool run(Blackboard*) = 0;
 
     private:
         stateNode   state;  

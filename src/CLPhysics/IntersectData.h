@@ -1,6 +1,5 @@
 #pragma once
-#include "../../include/glm/geometric.hpp"
-#include "../../include/glm/vec3.hpp"
+#include <glm/glm.hpp>
 
 using namespace glm;
 
@@ -24,12 +23,13 @@ class IntersectData {
     float GetDistance() {
         return glm::length(direction);
     }
-    //const bool intersects;
-    bool intersects;
-    glm::vec3 direction;
-    float distance = 9999999;
-    int posEntity; // cuando pasamos un OBB, por ejemplo, y colisionamos con uno de sus planos, para saber con que plano colisionamos
 
-    glm::vec3 virtualCenter;
-    float virtualRadius;
+    //const bool intersects;
+    bool intersects {false};
+    glm::vec3 direction { glm::vec3 (0.0f, 0.0f, 0.0f)};
+    float distance { 9999999 };
+    int posEntity { 0 }; // cuando pasamos un OBB, por ejemplo, y colisionamos con uno de sus planos, para saber con que plano colisionamos
+
+    glm::vec3 virtualCenter{ glm::vec3 (0.0f, 0.0f, 0.0f)};
+    float virtualRadius { 0.0 };
 };

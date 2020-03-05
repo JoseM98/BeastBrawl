@@ -1,15 +1,15 @@
 #pragma once
 
 #include "composite.h"
-#include <memory>
-
-using namespace std;
 
 struct Blackboard;
 
-class selector: public composite{
+using namespace std;
+
+class selector: public composite {
 
   public:
-	  virtual bool run(Blackboard* blackboard) override;
+        //Aun que pone que es redundante, Jose dice que no se quite el 'virtual'. ¿Por qué? No se, preguntale a él.
+	    virtual bool run(Blackboard* blackboard) override;
 
 };

@@ -1,8 +1,8 @@
 #include "decorator.h"
 
 
-void Decorator::addChild(shared_ptr<behaviourTree> child){
-	this->child=child;
+void Decorator::addChild(shared_ptr<behaviourTree> c){
+	child= std::move(c);
 }
 
 
