@@ -26,8 +26,8 @@ class CCar : public Component {
     float acceleration = 0.0;
     float reverseMaxSpeed = -60.0;
     float wheelRotation = 0.0;
-    const float incrementWheelRotation = 75;  // velocidad por iteracion que se gira la rueda
-    const float decrementWheelRotation = 75;  // velocidad por iteracion que se recupera la rueda
+    const float incrementWheelRotation = 30 * Constants::DELTA_TIME;  // velocidad por iteracion que se gira la rueda
+    const float decrementWheelRotation = 42 * Constants::DELTA_TIME;  // velocidad por iteracion que se recupera la rueda
     float maxWheelRotation = 10;
     float friction;
     float slowDown;

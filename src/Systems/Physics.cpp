@@ -162,7 +162,7 @@ void Physics::CalculatePosition(CCar *cCar, CTransformable *cTransformable, CExt
     // Rotacion del coche
     // if (cCar->wheelRotation != 0) {
     // cTransformable->rotation.y += cCar->wheelRotation * 0.20;
-    cTransformable->rotationNext.y = cTransformable->rotationPrev.y + cCar->wheelRotation * Constants::DELTA_TIME;
+    cTransformable->rotationNext.y = cTransformable->rotationNext.y + cCar->wheelRotation * 12 * Constants::DELTA_TIME;
 
     if (cTransformable->rotationNext.y >= 360.0)
         cTransformable->rotationNext.y -= 360.0;
@@ -193,11 +193,11 @@ void Physics::CalculatePositionReverse(CCar *cCar, CTransformable *cTransformabl
     cTransformable->positionNext.y = cTransformable->positionPrev.y + sin(angleRotation) * cCar->speed * Constants::DELTA_TIME;
     cTransformable->positionNext.x = cTransformable->positionPrev.x - cos(angleRotation) * cCar->speed * Constants::DELTA_TIME;
 
-    cTransformable->rotationNext.y = cTransformable->rotationPrev.y - cCar->wheelRotation * Constants::DELTA_TIME;
+    cTransformable->rotationNext.y = cTransformable->rotationPrev.y - cCar->wheelRotation * 0.2;
 
     //Si tiene rotacion, rotamos el coche
     if (cCar->wheelRotation != 0) {
-        cTransformable->rotation.y -= cCar->wheelRotation * 0.20;
+        cTransformable->rotation.y -= cCar->wheelRotation * 12 * Constants::DELTA_TIME;
         if (cTransformable->rotation.y >= 360.0)
             cTransformable->rotation.y -= 360.0;
         else if (cTransformable->rotation.y < 0.0)
@@ -270,7 +270,7 @@ void Physics::TurnLeft(Car *car, Camera *cam) {
         }
 
         if (cCamera->rotExtraYNext > -(cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
-            cCamera->rotExtraYNext -= cCar->incrementWheelRotation * Constants::DELTA_TIME;
+            cCamera->rotExtraYNext -= cCar->incrementWheelRotation;
         }
     } else if (cCar->speed <= -cCar->maxSpeed * 0.15) {
         if (cCar->wheelRotation > -cCar->maxWheelRotation) {
@@ -278,7 +278,7 @@ void Physics::TurnLeft(Car *car, Camera *cam) {
             cCar->wheelRotation -= cCar->incrementWheelRotation;
         }
         if (cCamera->rotExtraYNext > -(cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
-            cCamera->rotExtraYNext -= cCar->incrementWheelRotation * Constants::DELTA_TIME;
+            cCamera->rotExtraYNext -= cCar->incrementWheelRotation;
         }
     } else {
         // la rueda vuelve a su sitio original al no dejarte rotar
@@ -306,7 +306,7 @@ void Physics::TurnRight(Car *car, Camera *cam) {
         }
 
         if (cCamera->rotExtraYNext < (cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
-            cCamera->rotExtraYNext += cCar->incrementWheelRotation * Constants::DELTA_TIME;
+            cCamera->rotExtraYNext += cCar->incrementWheelRotation;
         }
     } else if (cCar->speed <= -cCar->maxSpeed * 0.15) {
         if (cCar->wheelRotation < cCar->maxWheelRotation) {
@@ -314,7 +314,7 @@ void Physics::TurnRight(Car *car, Camera *cam) {
             cCar->wheelRotation += cCar->incrementWheelRotation;
         }
         if (cCamera->rotExtraYNext < (cCar->maxWheelRotation + cCamera->rotExtraCamera)) {
-            cCamera->rotExtraYNext += cCar->incrementWheelRotation * Constants::DELTA_TIME;
+            cCamera->rotExtraYNext += cCar->incrementWheelRotation;
         }
     } else {
         // la rueda vuelve a su sitio original al no dejarte rotar

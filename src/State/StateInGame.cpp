@@ -173,6 +173,8 @@ void StateInGame::AdjustPrevInterpolations() {
         ctrans->rotationPrev = ctrans->rotationNext;
         ctrans->rotation = ctrans->rotationNext;
     }
+
+    // TODO, ajustar interpolaciones de la cámara también
 }
 
 void StateInGame::Update() {
