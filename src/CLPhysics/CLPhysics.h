@@ -30,7 +30,7 @@ using namespace std;
 
 class CLPhysics {
    public:
-        CLPhysics() = default;
+        CLPhysics();
         ~CLPhysics() = default;
 
     void AddManager(Manager &e);
