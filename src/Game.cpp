@@ -6,6 +6,7 @@
 #include "State/StateLobbyMulti.h"
 #include "State/StateMenu.h"
 #include "State/StatePause.h"
+#include "State/StateControls.h"
 #include <Constants.h>
 
 
@@ -36,7 +37,12 @@ void Game::SetState(State::States stateType) {
             gameStarted = false;
             break;
         case State::CONTROLS:
-            //currentState = new StateControls();
+            EventManager::GetInstance().ClearEvents();
+            EventManager::GetInstance().ClearListeners();
+            currentState = make_shared<StateControls>();
+            gameState.reset();
+            SuscribeEvents();
+            gameStarted = false;
             break;
         case State::CREDITS:
             //currentState = new StateCredits();
@@ -55,6 +61,7 @@ void Game::SetState(State::States stateType) {
                 gameStarted = true;
             } else {
                 currentState = gameState;
+                currentState->InitState();
             }
             break;
         case State::INGAME_MULTI:
@@ -95,7 +102,8 @@ void Game::SetState(State::States stateType) {
     }
 
     // Inicializa los bancos cada vez que se cambia de estado.
-    currentState->InitState();
+    // Se cambia de sitio porque se tiene que hacer antes de iniciar los managers
+    //currentState->InitState();
 }
 
 void Game::InitGame() {
@@ -112,7 +120,7 @@ void Game::InitGame() {
 
     //Inicializa la fachada de FMOD.
     SoundFacadeManager::GetInstance()->InitializeFacadeFmod();
-    SoundFacadeManager::GetInstance()->GetSoundFacade()->InitSoundEngine();
+    SoundFacadeManager::GetInstance()->GetSoundFacade()->Initialize();
 
     SuscribeEvents();
 
@@ -151,6 +159,11 @@ void Game::SuscribeEvents() {
         EventType::STATE_LOBBYMULTI,
         bind(&Game::SetStateLobbyMulti, this, placeholders::_1),
         "SetStateLobbyMulti"));
+
+    EventManager::GetInstance().SubscribeMulti(Listener(
+        EventType::STATE_CONTROLS,
+        bind(&Game::SetStateControls, this, placeholders::_1),
+        "SetStateControls"));
 }
 
 void Game::MainLoop() {
@@ -182,7 +195,7 @@ void Game::MainLoop() {
 
 void Game::TerminateGame() {
     //Libera los sonidos y bancos.
-    SoundFacadeManager::GetInstance()->GetSoundFacade()->TerminateSoundEngine();
+    SoundFacadeManager::GetInstance()->GetSoundFacade()->Terminate();
     cout << "**********************************************" << endl;
     cout << "Game Terminate" << endl;
 }
@@ -230,4 +243,8 @@ void Game::SetStateEndRace(DataMap* d) {
 
 void Game::SetStateLobbyMulti(DataMap* d) {
     SetState(State::LOBBY_MULTI);
+}
+
+void Game::SetStateControls(DataMap* d){
+    SetState(State::CONTROLS);
 }
