@@ -36,11 +36,11 @@ Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture
     glEnableVertexAttribArray(2);	
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
     // vertex tangent
-    // glEnableVertexAttribArray(2);
-    // glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
-    // // vertex bitangent
-    // glEnableVertexAttribArray(3);
-    // glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+    // vertex bitangent
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
 
     glBindVertexArray(0);
 }
@@ -130,7 +130,7 @@ Mesh CLResourceMesh::processMesh(aiMesh *mesh, const aiScene *scene)
         else
             vertex.texCoords = glm::vec2(0.0f, 0.0f);
 
-        //tangent
+        //tangent 
         if(mesh->HasTangentsAndBitangents()){
             vecAux.x = mesh->mTangents[i].x;
             vecAux.y = mesh->mTangents[i].y;
@@ -201,30 +201,6 @@ Mesh CLResourceMesh::processMesh(aiMesh *mesh, const aiScene *scene)
 }  
 
 
-// Material CLResourceMesh::loadMaterial(aiMaterial* mat) {
-//     //Ruben del futuro:
-//     //Una vez tienes estos valores se los mandas al fragment por el struct material y ya estaria yo creo
-//     Material material;
-//     aiColor3D color(0.f, 0.f, 0.f);
-//     float shininess;
-
-
-//     mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-//     material.diffuse = glm::vec3(color.r, color.b, color.g);
-
-//     mat->Get(AI_MATKEY_COLOR_AMBIENT, color);
-//     material.ambient = glm::vec3(color.r, color.b, color.g);
-
-//     mat->Get(AI_MATKEY_COLOR_SPECULAR, color);
-//     material.specular = glm::vec3(color.r, color.b, color.g);
-
-//     mat->Get(AI_MATKEY_SHININESS, shininess);
-//     material.shininess = shininess;
-
-//     return material;
-// }
-
-
 vector<Texture> CLResourceMesh::loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName)
 {
     vector<Texture> textures;
@@ -268,7 +244,6 @@ unsigned int CLResourceMesh::TextureFromFile(const char *path, const string &dir
     std::string token;
     while ((pos = filename.find(delimiter)) != std::string::npos) {
         token = filename.substr(0, pos);
-        std::cout << token << std::endl;
         filename.erase(0, pos + delimiter.length());
     }
 
@@ -283,7 +258,7 @@ unsigned int CLResourceMesh::TextureFromFile(const char *path, const string &dir
     unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     if (data)
     {
-        GLenum format;
+        GLenum format = 3;
         if (nrComponents == 1)
             format = GL_RED;
         else if (nrComponents == 3)

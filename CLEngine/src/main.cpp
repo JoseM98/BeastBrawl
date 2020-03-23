@@ -144,13 +144,13 @@ int main() {
     static_cast<CLMesh*>(mesh3->GetEntity())->SetMesh(resourceMeshOBJ);
     static_cast<CLMesh*>(mesh3->GetEntity())->SetMaterial(resourceMaterial); 
 
-    camera->SetTranslation(glm::vec3(70.0f, 0.0f, 60.0f));
-    mesh1->SetScalation(glm::vec3(2.0f, 2.0f, 2.0f));
+    camera->SetTranslation(glm::vec3(115.0f, 0.0f, 127.0f));
+    mesh1->SetScalation(glm::vec3(10.0f, 10.0f, 10.0f));
     mesh1->SetRotation(glm::vec3(0.0f,0.0f,0.0f));
-    mesh1->SetTranslation(glm::vec3(50.0f,50.0f,50.0f));
+    mesh1->SetTranslation(glm::vec3(100.0f,0.0f,100.0f));
     mesh2->SetScalation(glm::vec3(2.0f, 2.0f, 2.0f));
     mesh2->SetRotation(glm::vec3(0.0f, 180.0f, 0.0f));
-    mesh2->SetTranslation(glm::vec3(10.0f,0.0f,0.0f));
+    mesh2->SetTranslation(glm::vec3(100.0f,50.0f,0.0f));
     mesh3->SetTranslation(glm::vec3(-40.0f,0.0f,0.0f));
     mesh3->SetScalation(glm::vec3(0.2f,0.2f,0.2f));
 
@@ -203,7 +203,7 @@ int main() {
         //meshes->SetRotation(glm::vec3(0.0f,0.0f,index));
         // auto trans1 = mesh1->GetTranslation();
         // mesh1->SetTranslation(glm::vec3(trans1.x+index,trans1.y,trans1.z));
-        static_cast<CLCamera*>(camera->GetEntity())->SetCameraTarget(mesh2->GetGlobalTranslation());
+        static_cast<CLCamera*>(camera->GetEntity())->SetCameraTarget(mesh1->GetGlobalTranslation());
 
 
         // Measure speed

@@ -5,14 +5,15 @@ out vec4 FragColor;
 in vec2 TexCoords; //Coordenadas de textura
 in vec3 Normal;    //La normal ya reajustada con escalado
 in vec3 FragPos;   //Posicion
+in mat3 TBN;       //Matriz Tangent-Bitangent-Normal
 uniform vec3 viewPos;     //Posición de la camara
 
 struct Material {
     vec3 ambient;
     sampler2D diffuse;
     sampler2D specular;
-    sampler2D heigth;
     sampler2D normal;
+    sampler2D heigth;
     float shininess;
 }; 
 uniform Material material;
@@ -39,12 +40,15 @@ uniform int cartoonParts = 8;
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir){
 
-    vec3 ambient = light.ambient * texture(material.diffuse,TexCoords).rgb;
+    // get diffuse color
+    vec3 color = texture(material.diffuse, TexCoords).rgb;
+
+    vec3 ambient = light.ambient * color/*texture(material.diffuse,TexCoords).rgb*/;
     // diffuse
     vec3 lightDir = normalize(light.position - fragPos);
     float diff = max(dot(normal,lightDir), 0.0);
-    vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoords).rgb; 
-    diffuse  = light.diffuse * texture(material.diffuse, TexCoords).rgb * floor(diff * cartoonParts) /  cartoonParts;
+    vec3 diffuse = light.diffuse * diff * color/*texture(material.diffuse, TexCoords).rgb*/; 
+    diffuse  = light.diffuse * color /*texture(material.diffuse, TexCoords).rgb*/ * floor(diff * cartoonParts) /  cartoonParts;
     vec3 H = normalize(lightDir + viewDir);
     // specular
     vec3 reflectDir = reflect(-lightDir, normal);  //Angulo reflectado
@@ -57,7 +61,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir){
         spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess); //Formula de la luz especular
         specular = light.specular * spec * texture(material.specular,TexCoords).rgb;  //Multiplicamos todo 
     }
-  // attenuation
+    // attenuation
     float distance    = length(light.position - fragPos); //Distancia de la luz al objeto
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance)); //Formula de la atenuacion
 
@@ -65,10 +69,11 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir){
     float specMask = (pow(dot(H, normal), material.shininess) > 0.4) ? 1 : 0;
     float edgeDetection = (dot(viewDir, normal) > 0.2) ? 1 : 0;
 
+    
     ambient *= attenuation;
     diffuse *= attenuation;
     specular*= attenuation;
-    return edgeDetection * (ambient + diffuse /*+ specular*specMask*/);
+    return edgeDetection * (ambient + diffuse /*+ specular*specMask*/ );
 } 
 
 void main(){
@@ -77,6 +82,10 @@ void main(){
 
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos); //Vector entre nosotros y el punto del objeto
+
+    // vec3 norm = texture(material.normal, TexCoords).rgb;
+    // norm = normalize(norm * 2.0 - 1.0);   
+    // norm = normalize(TBN * norm); 
     // phase 2: Point lights
     
     int i = 0;
@@ -89,5 +98,8 @@ void main(){
     //FragColor = floor(FragColor * cartoonParts) / cartoonParts;  // estaba mal aplicado, era en la luz difusa solo
 
     //Si comentas esta linea se ve con luces
-    FragColor = texture(material.diffuse,TexCoords);
+    //FragColor = texture(material.diffuse,TexCoords);
+
+    //Para visualizar el mapa de normales si le llega bien
+    //FragColor = texture(material.normal,TexCoords);
 }
