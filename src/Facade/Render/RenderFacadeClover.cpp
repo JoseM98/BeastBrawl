@@ -591,15 +591,20 @@ void RenderFacadeClover::FacadeInitResources(){
 }
 
 void RenderFacadeClover::FacadeInitIntro() {
-    resourceManager->GetResourceTexture("media/pauseMenu.png", true);
-    resourceManager->GetResourceTexture("media/menu/main_menu.png", true);
-    resourceManager->GetResourceTexture("media/menu/elements_menu.png", true);
+    // resourceManager->GetResourceTexture("media/pauseMenu.png", true);
+    // resourceManager->GetResourceTexture("media/menu/main_menu.png", true);
+    // resourceManager->GetResourceTexture("media/menu/elements_menu.png", true);
 
-    resourceManager->DeleteResourceTexture("media/menu/main_menu.png");
+    // resourceManager->DeleteResourceTexture("media/menu/main_menu.png");
 
-    resourceManager->GetResourceTexture("media/menu/creditos_hover.png", true);
+    // resourceManager->GetResourceTexture("media/menu/creditos_hover.png", true);
 
-    resourceManager->GetResourceTexture("media/menu/main_menu.png", true);
+    // resourceManager->GetResourceTexture("media/menu/main_menu.png", true);
+
+    introAnimation = make_shared<Animation2D>("media/introAnimation/Beast Brawl.jpg",356,24);
+    introAnimation->PreLoad(resourceManager);
+    introAnimation->Start();
+
 
 
 
@@ -828,10 +833,6 @@ void RenderFacadeClover::FacadeDrawHUD(Entity* car, ManCar* manCars, Entity* glo
 }
 
 void RenderFacadeClover::FacadeDrawIntro() {
-    if(!introAnimation){
-        introAnimation = make_unique<Animation2D>("media/introAnimation/Beast Brawl.jpg",356,24);
-        introAnimation->Start();
-    }
     
 
     resourceManager->DeleteResourceTexture(introAnimation->GetCurrentPath());
@@ -1442,6 +1443,23 @@ RenderFacadeClover::Animation2D::Animation2D(std::string _path, uint16_t _numFra
     }
 
     path = auxPath;
+}
+
+void RenderFacadeClover::Animation2D::PreLoad(CLResourceManager* resourceManager){
+    string newPath = path;
+    for(unsigned int i = 0; i < numFrames ; ++i){
+        int numFramesDigits = to_string((int)numFrames).length();
+        int actualFrameDigits = to_string(i).length();
+
+        int numOfZeros = numFramesDigits - actualFrameDigits;
+        for(int j = 0; j<numOfZeros; ++j){
+            newPath.append("0");
+        }
+        newPath.append(to_string(i));
+
+        resourceManager->GetResourceTexture(newPath + extension,true);
+        newPath = path;
+    }
 }
 
 void RenderFacadeClover::Animation2D::Update(){

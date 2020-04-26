@@ -169,13 +169,14 @@ class RenderFacadeClover : public RenderFacade {
       CLNode* camera1 {nullptr};
 
       //Animaciones
-      unique_ptr<Animation2D> introAnimation {nullptr};
+      shared_ptr<Animation2D> introAnimation {nullptr};
 
       class Animation2D{
          public:
             Animation2D(std::string _path, uint16_t _numFrames, uint16_t _fps);
             ~Animation2D(){};
 
+            void PreLoad(CLResourceManager* resourceManager);
             void Update();
             void Start();
             void Restart();

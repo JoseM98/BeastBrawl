@@ -410,6 +410,7 @@ class CLEngine {
         int height{};
         GLFWwindow *window { nullptr };
         unsigned int hudShader { 0 };
+        unsigned int VBOHud, VAOHud, EBOHud;
         unsigned int textShader { 0 };
 
         vector<unsigned int> shaders;

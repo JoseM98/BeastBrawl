@@ -43,6 +43,10 @@ CLEngine::~CLEngine() {
     TerminateImGui();
     glfwDestroyWindow(window);
     glfwTerminate();
+    glDeleteVertexArrays(1, &VAOHud);
+    glDeleteBuffers(1, &VBOHud);
+    glDeleteBuffers(1, &EBOHud);
+    glDeleteVertexArrays(1,&VAOText);
     cout << ">>>>> GLFW OFF" << endl;
 }
 
@@ -236,6 +240,10 @@ void CLEngine::DrawImage2D(float _x, float _y, float _width, float _height, floa
         auto resourceShader = CLResourceManager::GetResourceManager()->GetResourceShader("CLEngine/src/Shaders/spriteShader.vert", "CLEngine/src/Shaders/spriteShader.frag");
         hudShader = resourceShader->GetProgramID();
         shaders.push_back(hudShader);
+
+        glGenVertexArrays(1, &VAOHud);
+        glGenBuffers(1, &VBOHud);
+        glGenBuffers(1, &EBOHud);
     }
 
     float nXLeft    =     (2.0f * _x)/width - 1.0f;
@@ -255,17 +263,14 @@ void CLEngine::DrawImage2D(float _x, float _y, float _width, float _height, floa
             3, 2, 1
     };
 
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    
 
-    glBindVertexArray(VAO);
+    glBindVertexArray(VAOHud);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBOHud);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOHud);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -276,22 +281,15 @@ void CLEngine::DrawImage2D(float _x, float _y, float _width, float _height, floa
 
     unsigned int texture;
     auto resourceTexture = CLResourceManager::GetResourceManager()->GetResourceTexture(file, vertically);
-    if(!resourceTexture){
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-        return;
-    }
     texture = static_cast<CLResourceTexture*>(resourceTexture)->GetTextureID();
 
     glBindTexture(GL_TEXTURE_2D, texture);
 
     glUseProgram(hudShader);
-    glBindVertexArray(VAO);
+    glBindVertexArray(VAOHud);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    
 }
 
 /**
