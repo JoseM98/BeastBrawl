@@ -1,6 +1,10 @@
 #include "CLResourceTexture.h"
 using namespace CLE;
 
+
+#include <stdio.h>
+#include <string.h>
+
 bool CLResourceTexture::LoadFile(string file, bool vertically){
 
     glGenTextures(1, &textureID);
@@ -14,6 +18,8 @@ bool CLResourceTexture::LoadFile(string file, bool vertically){
     unsigned char *data = stbi_load(file.c_str(), &width, &height, &nrComponents, 0);
     widthText = width;
     heightText = height;
+
+    cout << strlen((char*)data) << endl;
     
     if (data)
     {
