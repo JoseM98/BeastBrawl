@@ -75,8 +75,8 @@ class CLEngine {
         void DisableCursor();
         void CloseWindow();
         void PollEvents();
-        void DrawDepthMap();
-        void RenderDepthMap(CLShadowMapping& shadowMap, CLResourceShader* depthShader, glm::vec3 posLight);
+        void DrawDepthMap(const glm::mat4& lightSpaceMatrix);
+        void RenderDepthMap(CLShadowMapping& shadowMap, CLResourceShader* depthShader, const glm::mat4& lightSpaceMatrix);
         void Clear();
 
         //! Carga una fuente

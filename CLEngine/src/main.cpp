@@ -61,7 +61,7 @@ int main() {
         auto resourceShaderSkybox = resourceManager->GetResourceShader("CLEngine/src/Shaders/skybox.vert", "CLEngine/src/Shaders/skybox.frag");
         auto resourceMeshGround = resourceManager->GetResourceMesh("media/training_ground.obj", true);
         auto resourceMeshTotem = resourceManager->GetResourceMesh("media/totem.obj", true);
-        auto resourceMesh = resourceManager->GetResourceMesh("media/sphera.obj", true);
+        auto resourceMesh = resourceManager->GetResourceMesh("media/kart_penguin.obj", true);
         auto resourceMeshBox = resourceManager->GetResourceMesh("media/TEST_BOX.obj", true);
         // auto animationKong = resourceManager->GetResourceAnimation("media/animations/kong/001kong.obj", 75, true);
         // auto animationCube = resourceManager->GetResourceAnimation("media/animations/cube/001cube.obj", 4, true);
@@ -87,13 +87,13 @@ int main() {
 
 
         auto mesh1 = device->AddMesh(device->GetRootNode(),3);
-        mesh1->SetShaderProgramID(resourceShaderBasic->GetProgramID());
+        mesh1->SetShaderProgramID(resourceShaderCartoon->GetProgramID());
 
         auto camera = device->AddCamera(device->GetRootNode(),4);
         camera->SetShaderProgramID(resourceShaderBasic->GetProgramID());
 
         auto mesh2 = device->AddMesh(device->GetRootNode(),5);
-        mesh2->SetShaderProgramID(resourceShaderBasic->GetProgramID());
+        mesh2->SetShaderProgramID(resourceShaderCartoon->GetProgramID());
 
         auto nodeKongAnim = device->AddMesh(device->GetRootNode(),6);
         nodeKongAnim->SetShaderProgramID(resourceShaderBasic->GetProgramID());
@@ -133,7 +133,7 @@ int main() {
                         "media/skybox/front.jpg",
                         "media/skybox/back.jpg");
 
-        device->AddShadowMapping(light2->GetEntity()->GetID());
+        device->AddShadowMapping(light1->GetEntity()->GetID());
 
         static_cast<CLMesh*>(mesh1->GetEntity())->SetMesh(resourceMeshGround);
         static_cast<CLMesh*>(mesh2->GetEntity())->SetMesh(resourceMesh);
@@ -154,9 +154,9 @@ int main() {
         mesh1->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
         mesh1->SetTranslation(glm::vec3(50.0f, 50.0f, 50.0f));
 
-        mesh2->SetScalation(glm::vec3(10.5f, 10.5f, 10.5f));
-        mesh2->SetRotation(glm::vec3(-90.0f, 0.0f, 0.0f));
-        mesh2->SetTranslation(glm::vec3(50.0f, 80.0f, -50.0f));
+        mesh2->SetScalation(glm::vec3(15.5f, 15.5f, 15.5f));
+        mesh2->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+        mesh2->SetTranslation(glm::vec3(50.0f, 54.0f, -50.0f));
 
         nodeKongAnim->SetScalation(glm::vec3(1.0f, 1.0f, 1.0f));
         nodeKongAnim->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));

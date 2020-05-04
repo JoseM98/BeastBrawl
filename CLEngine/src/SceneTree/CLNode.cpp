@@ -151,7 +151,7 @@ glm::mat4 CLNode::CalculateTransformationMatrix() {
 
 
 
-void CLNode::DFSTree(glm::mat4 mA, CLCamera* cam) {
+void CLNode::DFSTree(glm::mat4 mA, CLCamera* cam, const glm::mat4& lightSpaceMatrix) {
     // > Flag
     // > > Calcular matriz
     // > Dibujar
@@ -179,6 +179,8 @@ void CLNode::DFSTree(glm::mat4 mA, CLCamera* cam) {
         glm::vec3 pos    = GetGlobalTranslation();
         glUniform3fv(glGetUniformLocation(shaderProgramID, "position"), 1, glm::value_ptr(pos));
 
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+
         auto particleEntity = dynamic_cast<CLParticleSystem*>(entity.get());
 
         if((particleEntity && particlesActivated) || !particleEntity){
@@ -189,7 +191,7 @@ void CLNode::DFSTree(glm::mat4 mA, CLCamera* cam) {
     }
 
     for (auto node : childs) {
-        node->DFSTree(transformationMat, cam);
+        node->DFSTree(transformationMat, cam, lightSpaceMatrix);
     }
 }
 
@@ -210,7 +212,7 @@ void CLNode::DFSTree(glm::mat4 mA, GLuint shaderID) {
     //CLE::CLFrustum::Visibility frusVisibility = frustum_m.IsInside(translation, dimensionsBoundingBox);
 
     if(entity && visible /*&& frusVisibility == CLE::CLFrustum::Visibility::Completly*/) { 
-        
+        glUseProgram(shaderID); 
         glUniformMatrix4fv(glGetUniformLocation(shaderID, "model"), 1, GL_FALSE, glm::value_ptr(transformationMat));
 
         

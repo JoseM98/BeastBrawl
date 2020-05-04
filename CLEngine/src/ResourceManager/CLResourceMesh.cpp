@@ -299,8 +299,8 @@ void CLResourceMesh::Draw(GLuint shaderID) {
             glBindTexture(GL_TEXTURE_2D, mesh.textures[i].id);
         }
         glActiveTexture(GL_TEXTURE1);
-        glUniform1i(glGetUniformLocation(shaderID, "depthMap"), 1);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, CLShadowMapping::depthCubemap);
+        glUniform1i(glGetUniformLocation(shaderID, "shadowMap"), 1);
+        glBindTexture(GL_TEXTURE_2D, CLShadowMapping::depthMap);
 
         glBindVertexArray(mesh.VAO);
         glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
@@ -313,6 +313,26 @@ void CLResourceMesh::Draw(GLuint shaderID) {
 
 void CLResourceMesh::DrawDepthMap(GLuint shaderID) {
     for (auto &mesh : vecMesh) {
+        for (unsigned int i = 0; i < mesh.textures.size(); i++) {
+            glActiveTexture(GL_TEXTURE0 + i);  // active proper texture unit before binding
+            // retrieve texture number (the N in diffuse_textureN)
+            string name = mesh.textures[i].type;
+            if (name == "texture_diffuse")
+                glUniform1i(glGetUniformLocation(shaderID, "material.diffuse"), i);
+            else if (name == "texture_specular")
+                glUniform1i(glGetUniformLocation(shaderID, "material.specular"), i);
+
+            else if (name == "texture_normal")
+                glUniform1i(glGetUniformLocation(shaderID, "material.normal"), i);
+
+            else if (name == "texture_height")
+                glUniform1i(glGetUniformLocation(shaderID, "material.height"), i);
+
+            // now set the sampler to the correct texture unit
+            // and finally bind the texture
+            glBindTexture(GL_TEXTURE_2D, mesh.textures[i].id);
+        }
+
         glBindVertexArray(mesh.VAO);
         glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);

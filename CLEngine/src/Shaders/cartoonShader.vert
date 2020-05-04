@@ -9,6 +9,7 @@ layout (location = 4) in vec3 animationOffsetNormal;
 out vec2 TexCoords;
 out vec3 Normal;
 out vec3 FragPos;
+out vec4 FragPosLightSpace;
 
 uniform mat4 transform;
 
@@ -16,6 +17,7 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 MVP;
+uniform mat4 lightSpaceMatrix;
 
 
 // A = (0,0) kf1
@@ -40,4 +42,6 @@ void main()
     //TODO: Cambiar este calculo a la CPU ya que inversas por cada vertice es muy costoso
     Normal = mat3(transpose(inverse(model))) * newNormal; 
     TexCoords = aTexCoord;
+
+    FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
 }
