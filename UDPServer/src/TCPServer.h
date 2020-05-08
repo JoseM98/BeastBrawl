@@ -4,6 +4,7 @@
 #include "../../include/boost/asio.hpp"
 #include <chrono>
 #include <iostream>
+#include <memory>
 #include "TCPConnection.h"
 #include "Player.h"
 
@@ -24,14 +25,14 @@ class TCPServer{
 
    private:
     
-    void HandleAccept(TCPConnection::pointer new_connection, const boost::system::error_code& error);
-    bool PlayerExists(TCPConnection::pointer new_connection);
+    void HandleAccept(std::shared_ptr<TCPConnection> new_connection, const boost::system::error_code& error);
+    bool PlayerExists(std::shared_ptr<TCPConnection> new_connection);
 
     boost::asio::io_context& context;
     tcp::acceptor acceptor_;
     UDPServer &udpServer;
 
-    vector<TCPConnection::pointer> connections;
+    vector<std::shared_ptr<TCPConnection>> connections;
     std::vector<Player> players;
     std::vector<uint8_t> characters;
 };

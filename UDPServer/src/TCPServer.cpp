@@ -30,7 +30,7 @@ void TCPServer::Close() {
 }
 
 void TCPServer::StartReceiving() {
-    TCPConnection::pointer new_connection = TCPConnection::Create(this, context, players, characters, connections);
+    std::shared_ptr<TCPConnection> new_connection = std::make_shared<TCPConnection>(this, context, players, characters, connections);
     acceptor_.async_accept(
         new_connection->socket(),
         boost::bind(&TCPServer::HandleAccept,
@@ -39,7 +39,7 @@ void TCPServer::StartReceiving() {
                     boost::asio::placeholders::error));
 }
 
-void TCPServer::HandleAccept(TCPConnection::pointer new_connection, const boost::system::error_code& error) {
+void TCPServer::HandleAccept(std::shared_ptr<TCPConnection> new_connection, const boost::system::error_code& error) {
     if (!error) {
         //std::cout << "Recibi un mensaje" << std::endl;
         if(Server::GAME_STARTED == false){
@@ -47,6 +47,7 @@ void TCPServer::HandleAccept(TCPConnection::pointer new_connection, const boost:
             
             // Comprobaciones para ver si existe el player
             if (PlayerExists(new_connection) == false) {
+                cout << "Guardamos la TCPConnection" << endl;
                 connections.push_back(new_connection);
                 Player p;
                 p.endpointTCP = new_connection->socket().remote_endpoint();
@@ -62,7 +63,7 @@ void TCPServer::HandleAccept(TCPConnection::pointer new_connection, const boost:
     StartReceiving();
 }
 
-bool TCPServer::PlayerExists(TCPConnection::pointer new_connection) {
+bool TCPServer::PlayerExists(std::shared_ptr<TCPConnection> new_connection) {
     string newAddress = new_connection->socket().remote_endpoint().address().to_string();
     uint16_t newPort = new_connection->socket().remote_endpoint().port();
     for (const auto& currentPlayer : connections) {

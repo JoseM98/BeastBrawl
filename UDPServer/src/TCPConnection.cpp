@@ -6,16 +6,18 @@
 #include "../../src/Systems/Serialization.h"
 #include "../src/Constants.h"
 #include "../src/Systems/Utils.h"
-#include "TCPServer.h"
 #include "Server.h"
+#include "TCPServer.h"
+#include <thread>
 
 using boost::asio::ip::tcp;
 using namespace std::chrono;
 
-TCPConnection::TCPConnection(TCPServer *tcpServer_, asio::io_context& io_context, std::vector<Player>& p, std::vector<uint8_t> &c, std::vector<TCPConnection::pointer>& connect) : tcpServer{tcpServer_}, socket_(io_context), players(p), characters(c), connections(connect) {
+TCPConnection::TCPConnection(TCPServer* tcpServer_, asio::io_context& io_context, std::vector<Player>& p, std::vector<uint8_t>& c, std::vector<std::shared_ptr<TCPConnection>>& connections_) : tcpServer{tcpServer_}, socket_(io_context), players(p), characters(c), connections(connections_) {
 }
 
 TCPConnection::~TCPConnection() {
+    socket_.close();
     cout << "Se ha llamado al destructor de TCPConnection" << endl;
 }
 
@@ -28,7 +30,7 @@ void TCPConnection::Start() {
     socket_.async_receive(
         asio::buffer(recevBuff.get(), Constants::ONLINE_BUFFER_SIZE),
         boost::bind(&TCPConnection::HandleRead,
-                    shared_from_this(),
+                    this,
                     recevBuff,
                     boost::asio::placeholders::error,
                     boost::asio::placeholders::bytes_transferred));
@@ -37,11 +39,13 @@ void TCPConnection::Start() {
 void TCPConnection::HandleRead(std::shared_ptr<unsigned char[]> recevBuff, const boost::system::error_code& error, size_t bytes_transferred) {
     if (!error && bytes_transferred != 0) {
         size_t currentIndex = 0;
-        uint8_t petitionType = Serialization::Deserialize<uint8_t>(recevBuff.get(), currentIndex);    // numero
+        uint8_t petitionType = Serialization::Deserialize<uint8_t>(recevBuff.get(), currentIndex);  // numero
+        cout << "El petition type es " << unsigned(petitionType) << " y hemos leido " << bytes_transferred << " bytes\n";
 
         Constants::PetitionTypes callType = static_cast<Constants::PetitionTypes>(petitionType);
         switch (callType) {
             case Constants::PetitionTypes::CONNECTION_REQUEST: {
+                cout << "Hola, ojete" << endl;
                 uint8_t characterRecvd = Serialization::Deserialize<uint8_t>(recevBuff.get(), currentIndex);  // personaje
                 characters.push_back(characterRecvd);
 
@@ -61,6 +65,7 @@ void TCPConnection::HandleRead(std::shared_ptr<unsigned char[]> recevBuff, const
         DeleteMe();
     } else if (error) {
         std::cout << "Error al leer: " << error.message() << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
     Start();
 }
@@ -87,9 +92,9 @@ void TCPConnection::DeleteMe() {
         std::remove_if(
             connections.begin(),
             connections.end(),
-            [&](TCPConnection::pointer& c) { return (c->socket().remote_endpoint() == socket_.remote_endpoint()); }),
+            [&](std::shared_ptr<TCPConnection>& c) { return (c->socket().remote_endpoint() == socket_.remote_endpoint()); }),
         connections.end());
-}
+};
 
 // void TCPConnection::SendStartMessage(string datos){
 //     socket_.async_send(

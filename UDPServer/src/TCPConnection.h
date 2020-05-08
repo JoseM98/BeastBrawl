@@ -14,11 +14,10 @@ using namespace std::chrono;
 
 class TCPServer;
 
-class TCPConnection : public std::enable_shared_from_this<TCPConnection> {
+class TCPConnection {
     public:
+    TCPConnection(TCPServer *tcpServer_, asio::io_context& io_context, std::vector<Player> &p, std::vector<uint8_t> &c, std::vector<std::shared_ptr<TCPConnection>>& connect);
     ~TCPConnection();
-    typedef std::shared_ptr<TCPConnection> pointer;
-    static pointer Create(TCPServer *tcpServer_, boost::asio::io_context& io_context, std::vector<Player> &p, std::vector<uint8_t> &c, std::vector<TCPConnection::pointer>& connect){ return pointer(new TCPConnection(tcpServer_, io_context, p, c, connect)); }
     tcp::socket& socket(){ return socket_;}
     void Start();
     void Close();
@@ -29,7 +28,6 @@ class TCPConnection : public std::enable_shared_from_this<TCPConnection> {
 
 
    private:
-    TCPConnection(TCPServer *tcpServer_, asio::io_context& io_context, std::vector<Player> &p, std::vector<uint8_t> &c, std::vector<TCPConnection::pointer>& connect);
     void HandleRead(std::shared_ptr<unsigned char[]> recevBuff, const boost::system::error_code& error, size_t bytes_transferred);
     void HandleWrite(const boost::system::error_code& error, size_t bytes_transferred);
     void DeleteMe();
@@ -47,7 +45,7 @@ class TCPConnection : public std::enable_shared_from_this<TCPConnection> {
 
     std::vector<Player> &players;
     std::vector<uint8_t> &characters;
-    std::vector<TCPConnection::pointer>& connections;
+    std::vector<std::shared_ptr<TCPConnection>>& connections;
 
     //uint16_t sendBuff;
 
