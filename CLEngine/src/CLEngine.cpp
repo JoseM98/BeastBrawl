@@ -989,7 +989,7 @@ void CLEngine::DrawGrass(){
         auto& frustrum_m = GetActiveCamera()->GetFrustum();
         frusVisibility = frustrum_m.IsInside(sysGrass->GetPosition(), sysGrass->GetSize());
         
-        if(frusVisibility == CLE::CLFrustum::Visibility::Completly && glm::distance(sysGrass->GetPosition(), GetActiveCameraNode()->GetGlobalTranslation()) < 1200.0)
+        if(frusVisibility == CLE::CLFrustum::Visibility::Completly /*&& glm::distance(sysGrass->GetPosition(), GetActiveCameraNode()->GetGlobalTranslation()) < 1200.0*/)
             sysGrass->Draw(grassShader, projection, view);
     }
 }
