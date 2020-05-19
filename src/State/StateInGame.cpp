@@ -323,18 +323,18 @@ void StateInGame::UpdateGame() {
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
 
     }else if(camPoint == CameraPoints::BOTTOM_FOLLOW){
-        cTransfor->position = glm::vec3(-943.0, 50.0, -321.0);
+        cTransfor->position = glm::vec3(-943.0, 100.0, -321.0);
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
 
     }else if(camPoint == CameraPoints::BOTTOM_STATIC){
-        cTransfor->position = glm::vec3(-943.0, 50.0, -321.0);
+        cTransfor->position = glm::vec3(-943.0, 70.0, -321.0);
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
-        renderEngine->SetCamTarget(glm::vec3(-801.0, 60.0, -464.0));
+        renderEngine->SetCamTarget(glm::vec3(-801.0, 70.0, -464.0));
 
     }else if(camPoint == CameraPoints::BOTTOM_GROUND){
-        cTransfor->position = glm::vec3(-739.0, 3.0, -397.0);
+        cTransfor->position = glm::vec3(-817.0, 3.0, -397.0);
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
-        renderEngine->SetCamTarget(glm::vec3(-739.0, 7.0, -297.0));
+        renderEngine->SetCamTarget(glm::vec3(-817.0, 7.0, -297.0));
 
     }
     /*else if(camPoint == CameraPoints::TOP_FOLLOW){
