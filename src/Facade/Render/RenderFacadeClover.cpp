@@ -634,15 +634,14 @@ void RenderFacadeClover::UpdateCamera(Entity* cam, ManCar* manCars) {
         auto cTranCar = static_cast<CTransformable*>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
         if(cTranCar->position.z > -590){
             // CAMARA1
-            camera1->SetTranslation(glm::vec3(-920, 50, -(-480)));
+            //if(cTranCar->position.z < -410){
+                camera1->SetTranslation(glm::vec3(-805, 5, 400));
+            //}else{
+            //    camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y, -cTransformable->position.z));       
+            //}
+
         }else{
-            //CAMARAS 2 Y 3
-            auto cTotemCar = static_cast<CTotem*>(manCars->GetEntities()[1]->GetComponent(CompType::TotemComp).get())->active;
-            if(!cTotemCar){
-                camera1->SetTranslation(glm::vec3(-900, 150, -(-860)));
-            }else{
-                camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y, -cTransformable->position.z));
-            }
+            camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y, -cTransformable->position.z));
 
 
         }

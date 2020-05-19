@@ -3,9 +3,9 @@
 
 
 enum MAX_VELOCITY {
-    V_LOW     = 180,
-    V_MEDIUM  = 210,
-    V_HIGH    = 240
+    V_LOW     = 150,
+    V_MEDIUM  = 150,
+    V_HIGH    = 150
 };
 enum ACCELERATION { // acceleration/100
     A_LOW     = 125,
