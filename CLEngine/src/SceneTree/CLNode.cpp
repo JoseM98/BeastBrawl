@@ -174,7 +174,8 @@ void CLNode::DFSTree(glm::mat4 mA, CLCamera* cam, const glm::mat4& VPmatrix) {
     }
 
     //Voy a comentar de momento el frustrum ya que para el particle system puede dar problemas
-    if( (entity && visible && frusVisibility == CLE::CLFrustum::Visibility::Completly) || (entity && visible && ignoreFrustrum) ){ 
+    // if( (entity && visible && frusVisibility == CLE::CLFrustum::Visibility::Completly) || (entity && visible && ignoreFrustrum) ){ 
+    if( (entity && visible ) || (entity && visible && ignoreFrustrum) ){ 
         glUseProgram(shaderProgramID); 
         glm::mat4 MVP = VPmatrix * transformationMat;
         glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "model"), 1, GL_FALSE, glm::value_ptr(transformationMat));

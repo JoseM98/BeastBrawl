@@ -66,8 +66,8 @@ class CCamera : public Component
 
         bool wheelCamera{true};
         const float heightWheelCam{6.0};
-        const float posXWheelCam{9.0};
-        const float posZWheelCam{9.0};
+        const float posXWheelCam{14.0};
+        const float posZWheelCam{14.0};
     private:
 
 };

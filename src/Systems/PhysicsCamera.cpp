@@ -82,12 +82,12 @@ void PhysicsCamera::CalculatePositionCamera(CCar *cCar, CTransformable *cTransfo
     
     if(cCamera->wheelCamera) {
         cTransCam->position.y = cTransformableCar->position.y + cCamera->heightWheelCam;
-        cTransCam->position.z = cTransformableCar->position.z - (cCamera->posZWheelCam) * sin(glm::radians(rotationFinal + 90));
-        cTransCam->position.x = cTransformableCar->position.x + (cCamera->posXWheelCam) * cos(glm::radians(rotationFinal + 90));
+        cTransCam->position.z = cTransformableCar->position.z - (cCamera->posZWheelCam) * sin(glm::radians(cTransformableCar->rotation.y + 70));
+        cTransCam->position.x = cTransformableCar->position.x + (cCamera->posXWheelCam) * cos(glm::radians(cTransformableCar->rotation.y + 70));
         vec3 newTarget;
         newTarget.y = cCamera->heightWheelCam;
-        newTarget.z = cTransCam->position.z + 1000  * sin(glm::radians(rotationFinal));
-        newTarget.x = cTransCam->position.x - 1000  * cos(glm::radians(rotationFinal));
+        newTarget.z = cTransCam->position.z + 1000  * sin(glm::radians(cTransformableCar->rotation.y));
+        newTarget.x = cTransCam->position.x - 1000  * cos(glm::radians(cTransformableCar->rotation.y));
         cCamera->target = newTarget;
     } else {
         cTransCam->position.y = cTransformableCar->position.y + cCamera->perfectUpDistance;
