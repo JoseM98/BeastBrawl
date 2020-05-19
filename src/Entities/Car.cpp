@@ -252,7 +252,7 @@ Car::Car(int pj){
 
             radiusSPhere =          6.5;
             distanceSphere =        2.0;
-            distanceFloor =         9.0;
+            distanceFloor =         7.0;
     
             scale = glm::vec3(5.2f, 5.2f, 5.2f);
             break;

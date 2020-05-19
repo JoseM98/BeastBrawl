@@ -315,7 +315,11 @@ void StateInGame::UpdateGame() {
 
 
     // ACTUALIZACION DE LAS FISICAS DE LOS COCHES
-    manCamera->Update();
+    auto cTotemCar = static_cast<CTotem*>(manCars->GetEntities()[1]->GetComponent(CompType::TotemComp).get())->active;
+    if(cTotemCar){
+        cout << "hacemos el update  "<< endl;
+        manCamera->Update();
+    }
 
 
     // Actualizaciones en la fachada
@@ -396,8 +400,8 @@ void StateInGame::UpdateGame() {
 //                              (end-timeStartSeccion).count();
 //     cout << "TIEMO ACTUAL ULDATE  (CLIPPING_OCTREE):  " << elapsed_millisecons/1000000 << endl;
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    auto cTransCar = static_cast<CTransformable*>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
-    cout << "Pos X: " << cTransCar->position.x << "   Pos Y: " << cTransCar->position.y << "     Pos Z: " << cTransCar->position.z << "  \n";
+    //auto cTransCar = static_cast<CTransformable*>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
+    //cout << "Pos X: " << cTransCar->position.x << "   Pos Y: " << cTransCar->position.y << "     Pos Z: " << cTransCar->position.z << "  \n";
 
 
 }

@@ -620,22 +620,6 @@ void RenderFacadeClover::UpdateCamera(Entity* cam, ManCar* manCars) {
     targetPosition.y += cCamera->upTargetDistance;
 
     if(cCamera->camType == CamType::INVERTED_CAM){
-        targetPosition.y += 0;
-
-        float distX = abs(cTransformable->position.x - targetPosition.x);
-        float distZ = abs(-cTransformable->position.z - targetPosition.z);
-
-        if(cTransformable->position.x - targetPosition.x < 0)   targetPosition.x = targetPosition.x - (2*distX);
-        else                                                    targetPosition.x = targetPosition.x + (2*distX);
-
-        if(-cTransformable->position.z - targetPosition.z < 0)  targetPosition.z = targetPosition.z - (2*distZ);
-        else                                                    targetPosition.z = targetPosition.z + (2*distZ);
-
-        //float angleRotation = (60 * M_PI) / 180.0;
-        cameraEntity->SetFOV(60);
-        cameraEntity->SetCameraTarget(glm::vec3(targetPosition.x,targetPosition.y,targetPosition.z));
-        camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y-5, -cTransformable->position.z));
-        //camera1->SetRotation(glm::vec3(cTransformable->rotation.x,cTransformable->rotation.y,cTransformable->rotation.z));
         
     }else if(cCamera->camType == CamType::NORMAL_CAM){
         //float angleRotation = (70 * M_PI) / 180.0;
@@ -643,7 +627,30 @@ void RenderFacadeClover::UpdateCamera(Entity* cam, ManCar* manCars) {
         cameraEntity->SetCameraTarget(glm::vec3(targetPosition.x,targetPosition.y,targetPosition.z));
         
         cameraEntity->SetFOV(70);
-        camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y, -cTransformable->position.z));
+
+
+
+
+        auto cTranCar = static_cast<CTransformable*>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
+        if(cTranCar->position.z > -590){
+            // CAMARA1
+            camera1->SetTranslation(glm::vec3(-920, 50, -(-480)));
+        }else{
+            //CAMARAS 2 Y 3
+            auto cTotemCar = static_cast<CTotem*>(manCars->GetEntities()[1]->GetComponent(CompType::TotemComp).get())->active;
+            if(!cTotemCar){
+                camera1->SetTranslation(glm::vec3(-900, 150, -(-860)));
+            }else{
+                camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y, -cTransformable->position.z));
+            }
+
+
+        }
+
+
+
+
+
         //camera1->SetRotation(glm::vec3(cTransformable->rotation.x,Utils::IrrlichtAngleToOpenGL(cTransformable->rotation.y),cTransformable->rotation.z));
 
     }else if (cCamera->camType == CamType::TOTEM_CAM){

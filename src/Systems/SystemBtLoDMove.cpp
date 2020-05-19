@@ -277,7 +277,7 @@ struct SBArrive_LoDMove : public behaviourTree {
         //std::cout << "Aplico SB Arrive" << std::endl;
         auto cBrainAI = static_cast<CBrainAI*>(blackboard->actualCar->GetComponent(CompType::BrainAIComp).get());
         cBrainAI->movementType = "Steering Behaviour moverse";
-        return true;
+        return false;
     }
 };
 
