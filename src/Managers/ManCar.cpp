@@ -141,30 +141,31 @@ void ManCar::CreateMainCar(int pj) {
     car = make_shared<CarHuman>(pj); 
     entities.push_back(car);
     //despues de crearlo, lo vamos a rotar para que mire al totem
-    
+    car->SetRotation(glm::vec3(0,270,0));
 
 }
 
 void ManCar::CreateMainCar(int pj, glm::vec3 _position) {
     car = make_shared<CarHuman>(pj, _position); 
     entities.push_back(car);
-    car->SetRotation(glm::vec3(0, GetAngleToTotem(_position),0));
-    //car->SetRotation(glm::vec3(0,90,0));
+    //car->SetRotation(glm::vec3(0, 180,0));
+    car->SetRotation(glm::vec3(0,270,0));
 }
 
 //Cambiar PJ
 void ManCar::CreateHumanCar(int pj, glm::vec3 _position) {
     shared_ptr<CarHuman> p = make_shared<CarHuman>(pj, _position);
     entities.push_back(p);
-    p->SetRotation(glm::vec3(0, GetAngleToTotem(_position),0));
-    //car->SetRotation(glm::vec3(0,90,0));
+    //p->SetRotation(glm::vec3(0, 180,0));
+    p->SetRotation(glm::vec3(0,270,0));
 }
 
 //Cambiar PJ
 void ManCar::CreateCarAI(int pj, int difficult, glm::vec3 _position) {
     shared_ptr<CarAI> p = make_shared<CarAI>(pj, difficult, _position);
     entities.push_back(p);
-    p->SetRotation(glm::vec3(0, GetAngleToTotem(_position),0));
+    //p->SetRotation(glm::vec3(0, 180,0));
+    p->SetRotation(glm::vec3(0,270,0));
 }
 
 //Cambiar PJ
