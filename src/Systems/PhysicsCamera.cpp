@@ -37,6 +37,43 @@ void PhysicsCamera::update(Car *car, Camera *cam) {
 }
 
 
+void PhysicsCamera::update22222(Entity *holiibanana, Camera *cam, CarHuman* hilicar) {
+    // actualizar posiciones
+    auto cTransformable = static_cast<CTransformable *>(holiibanana->GetComponent(CompType::TransformableComp).get());
+    auto cTransCaaar = static_cast<CTransformable *>(static_cast<Car *>(hilicar)->GetComponent(CompType::TransformableComp).get());
+    auto cCamera = static_cast<CCamera *>(cam->GetComponent(CompType::CameraComp).get());
+    auto cTransformableCam = static_cast<CTransformable *>(cam->GetComponent(CompType::TransformableComp).get());
+
+    CalculatePositionCamera22222(cTransformable, cTransformableCam, cCamera, cTransCaaar);
+}
+
+//Calcula la posicion de la camara (duda con las formulas preguntar a Jose)
+void PhysicsCamera::CalculatePositionCamera22222(CTransformable *cTransformableCar, CTransformable *cTransCam, CCamera *cCamera, CTransformable* cTransCaaar) {
+    float rotationFinal = cTransCaaar->rotation.y - cCamera->rotExtraY;
+    rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
+    
+    cTransCam->position.y = cTransformableCar->position.y + 20;
+    cTransCam->position.z = cTransformableCar->position.z - 80 * sin(glm::radians(rotationFinal));
+    cTransCam->position.x = cTransformableCar->position.x + 80 * cos(glm::radians(rotationFinal));
+
+}
+
+
+
+
+//Calcula la posicion de la camara (duda con las formulas preguntar a Jose)
+void PhysicsCamera::CalculatePositionCamera(CCar *cCar, CTransformable *cTransformableCar, CTransformable *cTransCam, CCamera *cCamera, CSpeed *cSpeedCam, CHurt *cHurt) {
+    float rotationFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY - cHurt->currentRotation;
+    rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
+    
+    cTransCam->position.y = cTransformableCar->position.y + cCamera->perfectUpDistance;
+    cTransCam->position.z = cTransformableCar->position.z - (cCamera->actualDistance-cCamera->collisionDistance) * sin(glm::radians(rotationFinal));
+    cTransCam->position.x = cTransformableCar->position.x + (cCamera->actualDistance-cCamera->collisionDistance) * cos(glm::radians(rotationFinal));
+
+}
+
+
+
 void PhysicsCamera::CalculateOffsetCamera(const CCar &cCar, const CNitro &cNitro, CCamera *cCamera) const{
     if(!cNitro.activePowerUp){
         if(cCamera->actualDistance > cCamera->perfectDistance){         // recuperacion en caso de haber acabado la aceleracion con el nitro -> acercar
@@ -74,70 +111,6 @@ float PhysicsCamera::CalculateCameraDistance(const CCar &cCar, const CCamera &cC
 
 
 
-//Calcula la posicion de la camara (duda con las formulas preguntar a Jose)
-void PhysicsCamera::CalculatePositionCamera(CCar *cCar, CTransformable *cTransformableCar, CTransformable *cTransCam, CCamera *cCamera, CSpeed *cSpeedCam, CHurt *cHurt) {
-    float rotationFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY - cHurt->currentRotation;
-    rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
-    
-
-    cTransCam->position.y = cTransformableCar->position.y + cCamera->perfectUpDistance;
-    cTransCam->position.z = cTransformableCar->position.z - (cCamera->actualDistance-cCamera->collisionDistance) * sin(glm::radians(rotationFinal));
-    cTransCam->position.x = cTransformableCar->position.x + (cCamera->actualDistance-cCamera->collisionDistance) * cos(glm::radians(rotationFinal));
-
-    //float rotFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY;
-    //auto carPos =  cTransformableCar->position;
-    //auto destPosition = glm::vec3((carPos.x + 40 * cos(((rotFinal)*PI)/180.0)), carPos.y + 20, (carPos.z - 40 * sin(((rotFinal)*PI)/180.0)));
-    //auto maxPosition = glm::vec3((carPos.x + 50 * cos(((rotFinal)*PI)/180.0)), carPos.y + 20, (carPos.z - 50 * sin(((rotFinal)*PI)/180.0)));
-    //auto disDest_X = abs(destPosition.x - cTransCam->position.x); 
-    //if( disDest_X < abs( cTransformableCar->position.x - cTransCam->position.x))     Accelerate_X(cCar, cCamera, cSpeedCam);
-    //else                                                                                        Decelerate_X(cCar, cCamera, cSpeedCam);
-    //
-    //auto disDest_Z = abs(destPosition.z - cTransCam->position.z); 
-    //if( disDest_Z < abs( cTransformableCar->position.z - cTransCam->position.z))     Accelerate_Z(cCar, cCamera, cSpeedCam);
-    //else                                                                                        Decelerate_Z(cCar, cCamera, cSpeedCam);
-    //
-//
-//
-    //double angleRotCamera = atan2(destPosition.z-cTransCam->position.z, destPosition.x-cTransCam->position.x)*180/M_PI;
-    //angleRotCamera = 180.0 - angleRotCamera; // se le restan ya que el eje empieza en el lado contrario 
-    //if(angleRotCamera<0)
-    //    angleRotCamera += 360;
-//
-    //auto speedX = -cos(radians(angleRotCamera))*cSpeedCam->speed.x;  
-    //auto speedZ = sin(radians(angleRotCamera))*cSpeedCam->speed.z;  
-//
-    ////cout << "el cCamara speed X es: " << cSpeedCam->speed.x <<" el speedX es: " << speedX << " y por el delta es: " << speedX * deltaTime << endl;
-    //if( abs(speedX * deltaTime) < disDest_X)  cTransCam->position.x += speedX * deltaTime;
-    //else{
-    //    cTransCam->position.x = destPosition.x;
-    //    cSpeedCam->speed.x = cCar->speed;
-    //}          
-//
-    //if( abs(speedZ * deltaTime) < disDest_Z)  cTransCam->position.z += speedZ * deltaTime;
-    //else{
-    //    cTransCam->position.z = destPosition.z;
-    //    cSpeedCam->speed.z = cCar->speed;
-    //}   
-    //cTransCam->position.y  = destPosition.y;
-//
-//
-    //if( disDest_X > abs(destPosition.x - maxPosition.x)){     
-    //    cTransCam->position.x = maxPosition.x; 
-    //}
-    //if( disDest_Z > abs(destPosition.z - maxPosition.z)){     
-    //    cTransCam->position.z = maxPosition.z; 
-    //}
-//
-//
-    //if( abs(cTransCam->position.x - maxPosition.x) > abs(destPosition.x - maxPosition.x)){     
-    //    cTransCam->position.x = destPosition.x; 
-    //}
-    //if( abs(cTransCam->position.z - maxPosition.z) > abs(destPosition.z - maxPosition.z)){     
-    //    cTransCam->position.z = destPosition.z; 
-    //}
-
-
-}
 
 
 

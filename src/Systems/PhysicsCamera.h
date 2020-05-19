@@ -14,6 +14,7 @@ using namespace glm;
 #define PI 3.141592
 
 class Car;
+class CarHuman;
 class Camera;
 class CCar;
 class CTransformable;
@@ -29,6 +30,7 @@ class PhysicsCamera {
     PhysicsCamera(float);
     ~PhysicsCamera(){};
     void update(Car*, Camera*);
+    void update22222(Entity*, Camera*, CarHuman *);
     void TurnLeft(Car *, Camera *);
     void TurnRight(Car *, Camera *);
     void NotTurning(Car *, Camera *);
@@ -37,6 +39,7 @@ class PhysicsCamera {
    private:
     float deltaTime;
     void CalculatePositionCamera(CCar *cCar, CTransformable *cTransformableCar, CTransformable *cTransformableCamera, CCamera *cCamera, CSpeed *cSpeed, CHurt *cHurt);
+    void CalculatePositionCamera22222(CTransformable *cTransformableCar, CTransformable *cTransformableCamera, CCamera *cCamera, CTransformable* hilicar);
     void CalculateOffsetCamera(const CCar &cCar, const CNitro &cNitro, CCamera *cCamera) const;
     float CalculateCameraDistance(const CCar &cCar, const CCamera &cCamera) const;
 

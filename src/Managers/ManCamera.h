@@ -12,6 +12,7 @@ using namespace std;
 using namespace glm;
 
 class Car;
+class CarHuman;
 
 class ManCamera{
    public:
@@ -20,6 +21,7 @@ class ManCamera{
     ~ManCamera();
 
     void Update();
+    void Update22222(Entity* holiiibanabab, CarHuman* holicar);
     void CreateCamera();
     void CreateCamera(Car*);
     void FollowPlayer(Car*);

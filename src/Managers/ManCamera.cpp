@@ -2,6 +2,7 @@
 #include "Manager.h"
 
 #include <Entities/Car.h>
+#include <Entities/CarHuman.h>
 #include <Entities/Camera.h>
 #include <Components/CCar.h>
 
@@ -41,6 +42,12 @@ void ManCamera::FollowPlayer(Car* car){
 void ManCamera::Update(){
     physicsCamera->update( playerFollow, camera.get());
 }
+
+
+void ManCamera::Update22222(Entity * holiiibana, CarHuman * holicar){
+    physicsCamera->update22222( holiiibana, camera.get(), holicar);
+}
+
 
 void ManCamera::SubscribeToEvents() {
 
