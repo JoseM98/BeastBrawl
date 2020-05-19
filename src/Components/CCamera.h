@@ -64,10 +64,10 @@ class CCamera : public Component
         const float camAceleration {12.0 * Constants::DELTA_TIME};
         const float camDeceleration {6.0 * Constants::DELTA_TIME};
 
-        bool wheelCamera{false};
-        const float heightWheelCam{2.0};
-        const float posXWheelCam{50.0};
-        const float posZWheelCam{0.0};
+        bool wheelCamera{true};
+        const float heightWheelCam{6.0};
+        const float posXWheelCam{9.0};
+        const float posZWheelCam{9.0};
     private:
 
 };

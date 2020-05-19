@@ -639,8 +639,12 @@ void RenderFacadeClover::UpdateCamera(Entity* cam, ManCar* manCars) {
         
     }else if(cCamera->camType == CamType::NORMAL_CAM){
         //float angleRotation = (70 * M_PI) / 180.0;
-        cameraEntity->SetCameraTarget(cCamera->target);
-        //cameraEntity->SetCameraTarget(glm::vec3(targetPosition.x,targetPosition.y,targetPosition.z));
+        if(cCamera->wheelCamera) {
+            vec3 newTarget = cCamera->target;
+            newTarget.z = -newTarget.z;
+            cameraEntity->SetCameraTarget(newTarget);
+        } else
+            cameraEntity->SetCameraTarget(glm::vec3(targetPosition.x,targetPosition.y,targetPosition.z));
         
         cameraEntity->SetFOV(70);
         camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y, -cTransformable->position.z));
