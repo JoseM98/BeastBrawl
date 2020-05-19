@@ -13,8 +13,8 @@ CNitro::~CNitro(){
 void CNitro::activatePowerUp(){
     activePowerUp = true;
     timeStart = system_clock::now();
-    nitroAcceleration = 5.0; 
-    nitroMaxSpeed = 500.0; 
+    nitroAcceleration = 50.0; 
+    nitroMaxSpeed = 400.0; 
 }
 
 

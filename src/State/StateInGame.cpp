@@ -103,7 +103,7 @@ void StateInGame::AddElementsToRender() {
 
 
     // Añadimos cosas a la fachada de render
-    renderEngine->FacadeAddPlates(manNamePlates.get());
+    //renderEngine->FacadeAddPlates(manNamePlates.get());
 
 
     // LOS ESCUDOS SIEMPRE AL FINAL POR SER TRANSPARENTES
