@@ -32,6 +32,7 @@ StateInGame::StateInGame() {
     ground = make_shared<GameObject>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "", "mayan_map.obj");
 
     // Ordena las posiciones del ranking 1 vez antes de empezar la partida
+    SubscriveToEvents();
 }
 
 StateInGame::~StateInGame() {
@@ -314,12 +315,41 @@ void StateInGame::UpdateGame() {
     IntersectsCLPhysics();
 
 
-    // ACTUALIZACION DE LAS FISICAS DE LOS COCHES
-    manCamera->Update();
+    /////////////////////////////////////////////////////////////////////////////////
+    // ACTUALIZACION DE LAS Camaras
+    auto cTransfor = static_cast<CTransformable *>(manCamera.get()->getCamera()->GetComponent(CompType::TransformableComp).get());
+    if(camPoint == CameraPoints::NORMAL){
+        manCamera->Update();
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+
+    }else if(camPoint == CameraPoints::BOTTOM_FOLLOW){
+        cTransfor->position = glm::vec3(-943.0, 50.0, -321.0);
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+
+    }else if(camPoint == CameraPoints::BOTTOM_STATIC){
+        cTransfor->position = glm::vec3(-943.0, 50.0, -321.0);
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+        renderEngine->SetCamTarget(glm::vec3(-801.0, 60.0, -464.0));
+
+    }else if(camPoint == CameraPoints::BOTTOM_GROUND){
+        cTransfor->position = glm::vec3(-739.0, 3.0, -397.0);
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+        renderEngine->SetCamTarget(glm::vec3(-739.0, 7.0, -297.0));
+
+    }
+    /*else if(camPoint == CameraPoints::TOP_FOLLOW){
+        cTransfor->position = glm::vec3(-920.0, 120.0, -661.0);
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+
+    }else if(camPoint == CameraPoints::TOP_STATIC){
+        cTransfor->position = glm::vec3(-920.0, 120.0, -661.0);
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+        renderEngine->SetCamTarget(glm::vec3(-813.0, 110.0, -579.0));
+    }*/
+    /////////////////////////////////////////////////////////////////////////////////
 
 
     // Actualizaciones en la fachada
-    renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
     physicsEngine->UpdateCar(manCars.get()->GetCar().get(), manCamera.get()->getCamera());
 
     for (auto actualPowerUp : manPowerUps->GetEntities())  // actualizamos los powerUp en la fachada
@@ -561,4 +591,22 @@ void StateInGame::CreateVegetation(){
     // Arriba 4
     renderEngine->FacadeAddGrass(50.0, 45.0, glm::vec3(410.0f, 100.0f, -775.0f), glm::vec3(10.0, 10.0, 10.0), true);
     renderEngine->FacadeAddGrass(50.0, 45.0, glm::vec3(410.0f, 100.0f, -1015.0f), glm::vec3(10.0, 10.0, 10.0), true);
+}
+
+
+void StateInGame::SubscriveToEvents(){
+    EventManager::GetInstance().SubscribeMulti(Listener(
+        EventType::PRESS_C,
+        bind(&StateInGame::ChangeCameraPos, this, placeholders::_1),
+        "ChangeCamera"));
+}
+
+
+void StateInGame::ChangeCameraPos(DataMap* d) {
+    uint8_t pos = int(camPoint);
+    pos++;
+    camPoint = CameraPoints(pos);
+    if(camPoint == CameraPoints::FINAL){
+        camPoint = CameraPoints::NORMAL;
+    }
 }

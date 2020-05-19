@@ -125,7 +125,8 @@ enum EventType {
     TCP_CHAR_REQUEST,
     TCP_WAIT_OTHERS,
     TCP_SEL_CHAR,
-    RETURN_TO_SELCHAR
+    RETURN_TO_SELCHAR,
+    PRESS_C
 };
 
 // enum DataType{

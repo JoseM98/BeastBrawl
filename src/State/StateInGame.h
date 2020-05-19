@@ -170,6 +170,8 @@ class StateInGame : public State {
     void IntersectsCLPhysics();
 
     void CreateVegetation();
+    void SubscriveToEvents();
+    void ChangeCameraPos(DataMap* d);
     
     //void CAMBIARCosasDeTotem(ManTotem &);
     //void CAMBIARCosasNavMesh(ManCar &, ManNavMesh &);
@@ -186,5 +188,7 @@ class StateInGame : public State {
     double accumulatedTimeUPDATE {0.0};
 
 
+    enum CameraPoints{ NORMAL, BOTTOM_FOLLOW, BOTTOM_GROUND, BOTTOM_STATIC,/*TOP_FOLLOW, TOP_STATIC,*/ FINAL };
 
+    CameraPoints camPoint {CameraPoints::NORMAL};
 };

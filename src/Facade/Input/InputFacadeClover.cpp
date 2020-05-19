@@ -648,6 +648,13 @@ bool InputFacadeClover::CheckInputSingle(){
     auto renderFacade = RenderFacadeManager::GetInstance()->GetRenderFacade();
 
 
+    if (glfwGetKey(device->GetWindow(),GLFW_KEY_C) && !IsInputPressed(BUTTON_C)) {
+        SetValueInput(InputXBox::BUTTON_C, true);
+        eventManager.AddEventMulti(Event{EventType::PRESS_C});
+    }else if(!glfwGetKey(device->GetWindow(),GLFW_KEY_C)){
+        SetValueInput(InputXBox::BUTTON_C, false);
+    }
+
     //CLAXON
     if ( glfwGetKey(device->GetWindow(),GLFW_KEY_P) || state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_THUMB] ) {
         eventManager.AddEventMulti(Event{EventType::PRESS_P});
