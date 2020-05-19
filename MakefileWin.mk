@@ -13,7 +13,7 @@ JUMP_LINE		   := @echo
 SOURCES  	:= $(wildcard *.cpp)
 
 NAME_EXE	:= Beast_Brawl.exe
-CXXFLAGS 	+= -Wall -Wno-unknown-pragmas -std=gnu++1z -static-libgcc -static-libstdc++ # el no-unknown-pragmas es para que no salga el warning de los pragma region
+CXXFLAGS 	+= -Wall -Wno-unknown-pragmas -std=gnu++1z -static-libgcc -static-libstdc++ -fuse-ld=gold # el no-unknown-pragmas es para que no salga el warning de los pragma region
 																										 # el -fuse-ld=gold es para el ccache
 																										 # si pongo -std=c++17 falla M_PI, poniendo -std=gnu++17 funciona bien en windows
 
@@ -67,6 +67,12 @@ CREATE_SYMLINKS :=
 CC			:= x86_64-w64-mingw32-g++-posix # sin posix no podemos utilizar thread ni mutex
 #CC			:= x86_64-w64-mingw32-g++
 
+
+
+ifdef CACHE
+	CC := ccache $(CC)
+	CXXFLAGS += -fuse-ld=gold
+endif
 
 
 #Esto crea el ejecutable

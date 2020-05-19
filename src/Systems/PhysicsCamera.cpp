@@ -32,7 +32,8 @@ void PhysicsCamera::update(Car *car, Camera *cam) {
     auto cTransformableCam = static_cast<CTransformable *>(cam->GetComponent(CompType::TransformableComp).get());
     auto cHurt = static_cast<CHurt *>(car->GetComponent(CompType::HurtComp).get());
 
-    CalculateOffsetCamera(*cCar, *cNitro, cCamera);
+    if(!cCamera->wheelCamera)
+        CalculateOffsetCamera(*cCar, *cNitro, cCamera);
     CalculatePositionCamera(cCar, cTransformable, cTransformableCam, cCamera, cSpeedCam, cHurt);
 }
 
@@ -79,10 +80,21 @@ void PhysicsCamera::CalculatePositionCamera(CCar *cCar, CTransformable *cTransfo
     float rotationFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY - cHurt->currentRotation;
     rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
     
-
-    cTransCam->position.y = cTransformableCar->position.y + cCamera->perfectUpDistance;
-    cTransCam->position.z = cTransformableCar->position.z - (cCamera->actualDistance-cCamera->collisionDistance) * sin(glm::radians(rotationFinal));
-    cTransCam->position.x = cTransformableCar->position.x + (cCamera->actualDistance-cCamera->collisionDistance) * cos(glm::radians(rotationFinal));
+    if(cCamera->wheelCamera) {
+        cTransCam->position.y = cTransformableCar->position.y + cCamera->heightWheelCam;
+        cTransCam->position.z = cTransformableCar->position.z + (cCamera->posZWheelCam) * sin(glm::radians(rotationFinal + 90));
+        cTransCam->position.x = cTransformableCar->position.x + (cCamera->posXWheelCam) * cos(glm::radians(rotationFinal + 90));
+        vec3 newTarget;
+        newTarget.y = cCamera->heightWheelCam;
+        newTarget.z = cTransformableCar->position.z - 1000  * sin(glm::radians(rotationFinal));
+        newTarget.x = cTransformableCar->position.x - 1000  * cos(glm::radians(rotationFinal));
+        //cCamera->target = newTarget;
+    } else {
+        cTransCam->position.y = cTransformableCar->position.y + cCamera->perfectUpDistance;
+        cTransCam->position.z = cTransformableCar->position.z - (cCamera->actualDistance-cCamera->collisionDistance) * sin(glm::radians(rotationFinal));
+        cTransCam->position.x = cTransformableCar->position.x + (cCamera->actualDistance-cCamera->collisionDistance) * cos(glm::radians(rotationFinal));
+        cCamera->target = cTransformableCar->position;
+    }
 
     //float rotFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY;
     //auto carPos =  cTransformableCar->position;
