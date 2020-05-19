@@ -188,7 +188,8 @@ class StateInGame : public State {
     double accumulatedTimeUPDATE {0.0};
 
 
-    enum CameraPoints{ NORMAL, BOTTOM_FOLLOW, BOTTOM_GROUND, BOTTOM_STATIC,/*TOP_FOLLOW, TOP_STATIC,*/ FINAL };
+    enum CameraPoints{ NORMAL, BOTTOM_FOLLOW, BOTTOM_GROUND, /*BOTTOM_STATIC, TOP_FOLLOW, TOP_STATIC,*/ FINAL };
+    float extraRotationCam {0.0};
 
     CameraPoints camPoint {CameraPoints::NORMAL};
 };
