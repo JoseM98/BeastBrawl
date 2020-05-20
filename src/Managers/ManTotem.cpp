@@ -24,7 +24,7 @@ ManTotem::ManTotem(ManNavMesh *manNavMesh_) : manNavMesh{manNavMesh_} {
     double totemPosX = j["TOTEM"]["x"].get<double>();
     double totemPosY = j["TOTEM"]["y"].get<double>();
     double totemPosZ = j["TOTEM"]["z"].get<double>();
-    vec3 posNewTotem = glm::vec3(-350, 120, -900);
+    vec3 posNewTotem = glm::vec3(0, 15, 530);
     //std::cout << " LA POS X DEL TOTEM ES LA: " << totemPosX << std::endl;
     //CreateTotem(glm::vec3(-100.0, 20.0, -100.0));
     //CreateTotem(vec3(totemPosX, totemPosY-15, totemPosZ));

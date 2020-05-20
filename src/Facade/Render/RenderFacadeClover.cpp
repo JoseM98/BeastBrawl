@@ -631,23 +631,46 @@ void RenderFacadeClover::UpdateCamera(Entity* cam, ManCar* manCars) {
 
 
 
+//        auto cTranCar = static_cast<CTransformable*>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
+//        if(cTranCar->position.z > -590){
+//            // CAMARA1
+//            camera1->SetTranslation(glm::vec3(-920, 50, 480));
+//        }else{
+//            //CAMARAS 2 Y 3
+//            auto cTotemCar = static_cast<CTotem*>(manCars->GetEntities()[1]->GetComponent(CompType::TotemComp).get())->active;
+//            if(!cTotemCar){
+//                camera1->SetTranslation(glm::vec3(-900, 150, 860));
+//            }else{
+//                camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y, -cTransformable->position.z));
+//            }
+//        }
+
+
+
+
         auto cTranCar = static_cast<CTransformable*>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
-        if(cTranCar->position.z > -590){
+        if(cTranCar->position.z < -607){
             // CAMARA1
-            camera1->SetTranslation(glm::vec3(-920, 50, -(-480)));
+            if(cTranCar->position.x < 450){
+                camera1->SetTranslation(glm::vec3(400, 170, 820));
+            }else{
+                camera1->SetTranslation(glm::vec3(900, 140, 700));     
+            }
         }else{
             //CAMARAS 2 Y 3
             auto cTotemCar = static_cast<CTotem*>(manCars->GetEntities()[1]->GetComponent(CompType::TotemComp).get())->active;
-            if(!cTotemCar){
-                camera1->SetTranslation(glm::vec3(-900, 150, -(-860)));
+            if(cTranCar->position.z < -350){
+                camera1->SetTranslation(glm::vec3(700, 40, 460));
             }else{
                 camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y, -cTransformable->position.z));
             }
-
-
         }
 
 
+
+
+
+                //camera1->SetTranslation(glm::vec3(cTransformable->position.x, cTransformable->position.y, -cTransformable->position.z));
 
 
 

@@ -208,7 +208,7 @@ void SystemPathPlanning::UpdateDijkstra(CarAI* carAI, ManWayPoint* graph, ManNav
     //Vamos a comprobar si esta en el rango del waypoint
     if((cPosDestination->position.z - radious) < cTransformable->position.z && (cPosDestination->position.z + radious) >= cTransformable->position.z 
         && (cPosDestination->position.x - radious) < cTransformable->position.x && (cPosDestination->position.x + radious) >= cTransformable->position.x
-        && (cPosDestination->position.y - radious - 10.0) < cTransformable->position.y && (cPosDestination->position.y + radious + 10.0) >= cTransformable->position.y){
+        && (cPosDestination->position.y - radious - 20.0) < cTransformable->position.y && (cPosDestination->position.y + radious + 20.0) >= cTransformable->position.y){
         //Tenemos que comprobar si le quedan mas nodos que visitar en el path
         auto cBrainAI = static_cast<CBrainAI*>(carAI->GetComponent(CompType::BrainAIComp).get());
 

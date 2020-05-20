@@ -11,9 +11,9 @@ StateInGameSingle::StateInGameSingle() : StateInGame() {
     
     // posicionamos el mainCar. Antes estaba en StateInGame pero esto rompía el online por el random
     vec3 newPos = manCars->GetPosSpawn();
-    manCars->GetCar()->SetPosition(glm::vec3(-820.0, 10.0, 373.0));
+    manCars->GetCar()->SetPosition(glm::vec3(-200.0, 116.0, -895.0));
     // y lo ponemos mirando al totem, que antes no estaba
-    //manCars->GetCar()->SetRotation(glm::vec3(0, manCars->GetAngleToTotem(newPos),0));
+    manCars->GetCar()->SetRotation(glm::vec3(0, 180,0));
     
 
     InitializeSystems(*manCars.get(), *manBoundingWall.get(), *manBoundingOBB.get(), *manBoundingGround.get(), *manPowerUps.get(), *manNavMesh.get(), *manBoxPowerUps.get(), *manTotems.get());
@@ -335,7 +335,7 @@ void StateInGameSingle::InitCarAIS(ManCar &manCars, ManWayPoint &manWayPoint) {
         //for (uint8_t i = 0; i < (numPlayers - 1); ++i) {
         //    manCars.CreateCarAI(iaPjs[i], iaDifficult, manCars.GetPosSpawn());
         //}
-        manCars.CreateCarAI(5, iaDifficult, glm::vec3(-804.0, 10.0, -27.0));
+        manCars.CreateCarAI(4, iaDifficult, glm::vec3(53.0, 116.0, -895.0));
         //manCars.CreateCarAI(iaPjs[1], iaDifficult, manCars.GetPosSpawn());
 
     } else {

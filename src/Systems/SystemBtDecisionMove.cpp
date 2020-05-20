@@ -290,6 +290,7 @@ struct MovNavMeshTotem_dm : public behaviourTree {
         //auto cCurrendNavMeshCar = static_cast<CCurrentNavMesh*>(blackboard->actualCar->GetComponent(CompType::CurrentNavMeshComp).get());
         auto cCurrentNavMeshTotem = static_cast<CCurrentNavMesh*>(blackboard->manTotems->GetEntities()[0].get()->GetComponent(CompType::CurrentNavMeshComp).get());
         auto cBrainAI = static_cast<CBrainAI*>(blackboard->actualCar->GetComponent(CompType::BrainAIComp).get());
+        cout << "EL TARGET: " << cBrainAI->targetNavMesh << " y el CURRENT: " << cCurrentNavMeshTotem->currentNavMesh << endl;
         if(cBrainAI->targetNavMesh != cCurrentNavMeshTotem->currentNavMesh){
             cBrainAI->targetNavMesh = cCurrentNavMeshTotem->currentNavMesh;
             shared_ptr<DataMap> dataPowerUp = make_shared<DataMap>();      
@@ -298,9 +299,9 @@ struct MovNavMeshTotem_dm : public behaviourTree {
             (*dataPowerUp)[MAN_NAVMESH] = blackboard->manNavMesh;  
             (*dataPowerUp)[ID_DESTINATION] = cCurrentNavMeshTotem->currentNavMesh;                                                                                                   
             EventManager::GetInstance().AddEventMulti(Event{EventType::CALCULATE_PATH_TO_NAVMESH, dataPowerUp}); 
-        }else{
-            cBrainAI->targetNavMesh =-1;
-        }  
+        }//else{
+        //    cBrainAI->targetNavMesh =-1;
+        //}  
         //cout << "NOS MOVEREMOS AL NAVMESH QUE DONDE ESTA EL TOTEEEEEEM " << endl;
         return true;
     }
@@ -443,9 +444,9 @@ struct MoveToNavMeshCarTotem_dm : public behaviourTree {
                         (*dataNavCar)[MAN_NAVMESH] = blackboard->manNavMesh;  
                         (*dataNavCar)[ID_DESTINATION] = cCurrendNavMeshCarAI->currentNavMesh;                                                                                                   
                         EventManager::GetInstance().AddEventMulti(Event{EventType::CALCULATE_PATH_TO_NAVMESH, dataNavCar}); 
-                    }else{
-                        cBrainAI->targetNavMesh = -1;
-                    }
+                    }//else{
+                    //    cBrainAI->targetNavMesh = -1;
+                    //}
                     //cout << "NOS MOVEMOS AL NAVMHES DONDE ESTA EL COCHE CON EL TOTEM LOCOOOOO "<< endl;
                 }
             }
