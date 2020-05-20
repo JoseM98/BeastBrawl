@@ -316,19 +316,32 @@ void StateInGame::UpdateGame() {
 
 
 //    // Actualizaciones en la fachada
-    renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
-    // ACTUALIZACION DE LAS FISICAS DE LOS COCHES
-    if(manPowerUps->GetEntities().size() == 0){
-        //auto cTotemCar = static_cast<CTotem*>(manCars->GetEntities()[1]->GetComponent(CompType::TotemComp).get())->active;
-        //if(cTotemCar){
-            cout << "hacemos el update  "<< endl;
-            manCamera->Update();
-        //}
-    }else{
-        auto cTransfBanana = static_cast<CTransformable*>(manPowerUps->GetEntities()[0]->GetComponent(CompType::TransformableComp).get())->position;
-        renderEngine->SetCamTarget(vec3(cTransfBanana.x, cTransfBanana.y +20, cTransfBanana.z));
-        manCamera->Update22222(manPowerUps->GetEntities()[0].get(), manCars.get()->GetCar().get());
+
+
+
+    if(LABOLEANA_LOCAAA == false){
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+        // ACTUALIZACION DE LAS FISICAS DE LOS COCHES
+        if(manPowerUps->GetEntities().size() == 0){
+            //auto cTotemCar = static_cast<CTotem*>(manCars->GetEntities()[1]->GetComponent(CompType::TotemComp).get())->active;
+            //if(cTotemCar){
+                cout << "hacemos el update  "<< endl;
+                manCamera->Update();
+            //}
+        }else{
+            auto cTransfBanana = static_cast<CTransformable*>(manPowerUps->GetEntities()[0]->GetComponent(CompType::TransformableComp).get())->position;
+            renderEngine->SetCamTarget(vec3(cTransfBanana.x, cTransfBanana.y +20, cTransfBanana.z));
+            manCamera->Update22222(manPowerUps->GetEntities()[0].get(), manCars.get()->GetCar().get());
+
+
+            auto cTransfCarAI = static_cast<CTransformable*>(manCars->GetEntities()[1]->GetComponent(CompType::TransformableComp).get())->position;
+            if(glm::distance(cTransfBanana, cTransfCarAI) < 30){
+                LABOLEANA_LOCAAA = true;
+            }
+        }
     }
+
+
 
 
 

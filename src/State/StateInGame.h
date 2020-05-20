@@ -9,6 +9,7 @@
 #include <stack>
 #include <string>
 
+#include <glm/geometric.hpp>
 #include <glm/vec3.hpp>
 #include <Entities/BoxPowerUp.h>
 #include <Entities/Camera.h>
@@ -186,5 +187,7 @@ class StateInGame : public State {
     double accumulatedTimeUPDATE {0.0};
 
 
+
+    bool LABOLEANA_LOCAAA {false};
 
 };
