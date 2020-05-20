@@ -330,7 +330,7 @@ void StateInGame::UpdateGame() {
     cTransCam->position.y = 40.0;
     cTransCam->position.z = cTransformableCar->position.z - 60.0 * sin(glm::radians(rotationFinal));
     cTransCam->position.x = cTransformableCar->position.x + 60.0 * cos(glm::radians(rotationFinal));*/
-
+ 
     if(camPoint == CameraPoints::NORMAL){
         manCamera->Update();
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
