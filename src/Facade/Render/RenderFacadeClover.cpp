@@ -1446,6 +1446,8 @@ void RenderFacadeClover::FacadeDrawHUD(Entity* car, ManCar* manCars, Entity* glo
 
     if (!inputShowHUD) { return; }
 
+    auto margen = 240.0f + 50.0f;
+
     device->SetEnableDepthTest(false);
     
     std::string cadena;
@@ -1468,7 +1470,7 @@ void RenderFacadeClover::FacadeDrawHUD(Entity* car, ManCar* manCars, Entity* glo
         if(minimapTexture) {
             widthMM = minimapTexture->GetWidth();
             heightMM = minimapTexture->GetHeight();
-            posXMiniMap = w - (widthMM+50);    
+            posXMiniMap = w - (widthMM + margen);    
             posYMiniMap = h - (heightMM+50);
         }
         device->DrawImage2D(posXMiniMap, posYMiniMap, widthMM, heightMM, 0.9f, cadena, true);
@@ -1494,16 +1496,16 @@ void RenderFacadeClover::FacadeDrawHUD(Entity* car, ManCar* manCars, Entity* glo
     
         if(backTotem){
             if(leftTotem && !rightTotem)
-                device->DrawImage2D(50, posRefY, 1.f, 0.1f, "media/hudTotemLeft.png", true);
+                device->DrawImage2D(margen, posRefY, 1.f, 0.1f, "media/hudTotemLeft.png", true);
             else if(rightTotem && !leftTotem)
-                device->DrawImage2D( (w-50.0f) - anchoSpriteTotem, posRefY , 1.f, 0.1f, "media/hudTotemRight.png", true);
+                device->DrawImage2D( (w-margen) - anchoSpriteTotem, posRefY , 1.f, 0.1f, "media/hudTotemRight.png", true);
             else
                 device->DrawImage2D(w/2 - (anchoSpriteTotem/2) , h - 50 - altoSpriteTotem, 1.f, 0.1f, "media/hudTotemBack.png", true);
         }else{
             if(leftTotem)
-                device->DrawImage2D(50, posRefY, 1.f, 0.1f, "media/hudTotemLeft.png", true);
+                device->DrawImage2D(margen, posRefY, 1.f, 0.1f, "media/hudTotemLeft.png", true);
             else if(rightTotem)
-                device->DrawImage2D( (w-50.0f) - anchoSpriteTotem, posRefY , 1.f, 0.1f, "media/hudTotemRight.png", true);
+                device->DrawImage2D( (w-margen) - anchoSpriteTotem, posRefY , 1.f, 0.1f, "media/hudTotemRight.png", true);
         }
     }
 
@@ -1513,9 +1515,9 @@ void RenderFacadeClover::FacadeDrawHUD(Entity* car, ManCar* manCars, Entity* glo
     if(!powerUpAnimation->GetFinished() && currentPowerUp != 0){
         //resourceManager->DeleteResourceTexture(powerUpAnimation->GetCurrentPath());
         powerUpAnimation->Update();
-        device->DrawImage2D(50.0f, 25.0f, 150.0f, 150.0f, 0.1f, powerUpAnimation->GetCurrentPath(), true);
+        device->DrawImage2D(margen, 25.0f, 150.0f, 150.0f, 0.1f, powerUpAnimation->GetCurrentPath(), true);
     }else{
-        device->DrawImage2D(50.0f, 25.0f, 150.0f, 150.0f, 0.1f ,powerUps[currentPowerUp], true);
+        device->DrawImage2D(margen, 25.0f, 150.0f, 150.0f, 0.1f ,powerUps[currentPowerUp], true);
     }
 
     // TABLA TIEMPOS
@@ -1543,10 +1545,10 @@ void RenderFacadeClover::FacadeDrawHUD(Entity* car, ManCar* manCars, Entity* glo
 
             cadena = "media/ranking.png";
             //device->DrawImage2D(w - 200.0f, 150.0f + j*45.0f, 1.0, 0.9f, cadena, true);
-            device->DrawImage2D(50.0f, h - 85.0f - rankingSize + j*45.0f, widthRanking*0.4f, 43.0f, 0.9f, cadena, true);
+            device->DrawImage2D(margen, h - 85.0f - rankingSize + j*45.0f, widthRanking*0.4f, 43.0f, 0.9f, cadena, true);
             
             //device->DrawImage2D(w - 160.0f, 155.0f + j*45.0f, 0.4f, 0.1f*j+0.1f, sprite, true);  //CARITA
-            device->DrawImage2D(100.0f, h - 80.0f - rankingSize + j*45.0f, 0.4f, 0.7f, sprite, true);  //CARITA
+            device->DrawImage2D(margen + 50.0f, h - 80.0f - rankingSize + j*45.0f, 0.4f, 0.7f, sprite, true);  //CARITA
 
             auto it2 = seconds.find(it->first);
             if (it2 != seconds.end()) {
@@ -1556,12 +1558,12 @@ void RenderFacadeClover::FacadeDrawHUD(Entity* car, ManCar* manCars, Entity* glo
                 }
                 cadena = std::to_string(positionR) + ".";
                 //device->RenderText2D(cadena, w - 190.0f, h - 180.0f - 45.0f*j, 0.1f*j+0.1f, 0.6f, glm::vec3(255.0f,255.0f,255.0f));
-                device->RenderText2D(cadena, 65.0f, 55.0f + rankingSize - j*45.0f, 0.5f, 0.6f, glm::vec3(255.0f,255.0f,255.0f));
+                device->RenderText2D(cadena,margen + 15.0f, 55.0f + rankingSize - j*45.0f, 0.5f, 0.6f, glm::vec3(255.0f,255.0f,255.0f));
 
                 antTime = it2->second;
                 cadena = std::to_string(antTime);
                 //device->RenderText2D(cadena, w - 110.0f, h - 180.0f - 45.0f*j, 0.1f*j+0.1f, 0.6f, color);
-                device->RenderText2D(cadena, 148.0f, 55.0f + rankingSize - j*45.0f, 0.5f, 0.6f, color);
+                device->RenderText2D(cadena, margen + 98.0f, 55.0f + rankingSize - j*45.0f, 0.5f, 0.6f, color);
             }
             ++j;
         }
@@ -1650,7 +1652,7 @@ void RenderFacadeClover::FacadeDrawHUD(Entity* car, ManCar* manCars, Entity* glo
     // MARCADOR GLOBAL
     if (globalClock) {
         cadena = "media/indicator_tiempo.png";
-        device->DrawImage2D(w-(widthMTime*0.5f)-50.0f, 50.0f ,0.5f , 0.2f, cadena, true);
+        device->DrawImage2D(w-(widthMTime*0.5f)- margen, 50.0f ,0.5f , 0.2f, cadena, true);
         
         auto cGClock = static_cast<CClock*>(globalClock->GetComponent(CompType::ClockComp).get());
         int time = cGClock->DURATION_TIME/1000 - cGClock->accumulatedTime/1000;
@@ -1665,7 +1667,7 @@ void RenderFacadeClover::FacadeDrawHUD(Entity* car, ManCar* manCars, Entity* glo
         if(min == 0 && seg <= 30) {
             color = glm::vec3(255.0f, 0.0f, 0.0f);
         }
-        device->RenderText2D(cadena, (w - 165.0f), (h - 100.0f), 0.05f, 0.6f, color);
+        device->RenderText2D(cadena, (w - margen - 115.0f), (h - 100.0f), 0.05f, 0.6f, color);
     }
    
     
