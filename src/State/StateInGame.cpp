@@ -13,6 +13,8 @@
 #include "../Components/CShader.h"
 #include "../Components/CAnimation.h"
 #include "../Components/CTotem.h"
+#include "../Components/CNitro.h"
+#include "../Components/CHurt.h"
 #include "../Entities/Camera.h"
 #include "../Constants.h"
 #include "../GameValues.h"
@@ -317,32 +319,106 @@ void StateInGame::UpdateGame() {
 
     /////////////////////////////////////////////////////////////////////////////////
     // ACTUALIZACION DE LAS Camaras
-    auto cTransfor = static_cast<CTransformable *>(manCamera.get()->getCamera()->GetComponent(CompType::TransformableComp).get());
+    auto cTransCam = static_cast<CTransformable *>(manCamera.get()->getCamera()->GetComponent(CompType::TransformableComp).get());
+    auto cTransformableCar = static_cast<CTransformable *>(manCars->GetCar()->GetComponent(CompType::TransformableComp).get());
+    auto cCar = static_cast<CCar *>(manCars->GetCar()->GetComponent(CompType::CarComp).get());
+    auto cNitro = static_cast<CNitro *>(manCars->GetCar()->GetComponent(CompType::NitroComp).get());
+    auto cCamera = static_cast<CCamera *>(manCamera.get()->getCamera()->GetComponent(CompType::CameraComp).get());
+    auto cSpeedCam = static_cast<CSpeed *>(manCamera.get()->getCamera()->GetComponent(CompType::SpeedComp).get());
+    auto cHurt = static_cast<CHurt *>(manCars->GetCar()->GetComponent(CompType::HurtComp).get());
+    /*float rotationFinal = Utils::GetAdjustedDegrees(cTransformableCar->rotation.y - extraRotationCam);
+    cTransCam->position.y = 40.0;
+    cTransCam->position.z = cTransformableCar->position.z - 60.0 * sin(glm::radians(rotationFinal));
+    cTransCam->position.x = cTransformableCar->position.x + 60.0 * cos(glm::radians(rotationFinal));*/
+
     if(camPoint == CameraPoints::NORMAL){
         manCamera->Update();
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
 
-    }else if(camPoint == CameraPoints::BOTTOM_FOLLOW){
-        cTransfor->position = glm::vec3(-943.0, 100.0, -321.0);
+    }else if(camPoint == CameraPoints::TOP1){
+        float rotationFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY - cHurt->currentRotation + 50;
+        rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
+        cTransCam->position.y = cTransformableCar->position.y + 60.0;
+        cTransCam->position.z = cTransformableCar->position.z - (cCamera->actualDistance) * sin(glm::radians(rotationFinal));
+        cTransCam->position.x = cTransformableCar->position.x + (cCamera->actualDistance) * cos(glm::radians(rotationFinal));
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
 
-    }else if(camPoint == CameraPoints::BOTTOM_STATIC){
-        cTransfor->position = glm::vec3(-943.0, 70.0, -321.0);
-        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
-        renderEngine->SetCamTarget(glm::vec3(-801.0, 70.0, -464.0));
+        cCamera->target.y = cTransformableCar->position.y;
+        cCamera->target.x = cTransformableCar->position.x + (-cCamera->actualDistance) * cos(glm::radians(rotationFinal));
+        cCamera->target.z = cTransformableCar->position.z - (-cCamera->actualDistance) * sin(glm::radians(rotationFinal));
+        renderEngine->SetCamTarget(cCamera->target);
 
-    }else if(camPoint == CameraPoints::BOTTOM_GROUND){
-        cTransfor->position = glm::vec3(-817.0, 3.0, -397.0);
+    }else if(camPoint == CameraPoints::TOP2){
+        float rotationFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY - cHurt->currentRotation;
+        rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
+        cTransCam->position.y = cTransformableCar->position.y + 60.0;
+        cTransCam->position.z = cTransformableCar->position.z - (cCamera->actualDistance) * sin(glm::radians(rotationFinal));
+        cTransCam->position.x = cTransformableCar->position.x + (cCamera->actualDistance) * cos(glm::radians(rotationFinal));
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
-        renderEngine->SetCamTarget(glm::vec3(-817.0, 7.0, -297.0));
+
+        cCamera->target.y = cTransformableCar->position.y;
+        cCamera->target.x = cTransformableCar->position.x + (-cCamera->actualDistance-10) * cos(glm::radians(rotationFinal));
+        cCamera->target.z = cTransformableCar->position.z - (-cCamera->actualDistance-10) * sin(glm::radians(rotationFinal));
+        renderEngine->SetCamTarget(cCamera->target);
+
+    }else if(camPoint == CameraPoints::LATERAL_BOTTOM){
+        float rotationFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY - cHurt->currentRotation + 60;
+        rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
+        cTransCam->position.y = cTransformableCar->position.y + cCamera->perfectUpDistance;
+        cTransCam->position.z = cTransformableCar->position.z - (cCamera->actualDistance) * sin(glm::radians(rotationFinal));
+        cTransCam->position.x = cTransformableCar->position.x + (cCamera->actualDistance) * cos(glm::radians(rotationFinal));
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+
+        cCamera->target.y = cTransformableCar->position.y;
+        cCamera->target.x = cTransformableCar->position.x + (-cCamera->actualDistance) * cos(glm::radians(rotationFinal));
+        cCamera->target.z = cTransformableCar->position.z - (-cCamera->actualDistance) * sin(glm::radians(rotationFinal));
+        renderEngine->SetCamTarget(cCamera->target);
+    }else if(camPoint == CameraPoints::FRONTAL1){
+        float rotationFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY - cHurt->currentRotation;
+        rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
+        cTransCam->position.y = cTransformableCar->position.y + 11;
+        cTransCam->position.z = cTransformableCar->position.z - (-10) * sin(glm::radians(rotationFinal));
+        cTransCam->position.x = cTransformableCar->position.x + (-10) * cos(glm::radians(rotationFinal));
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+
+        cCamera->target.y = cTransformableCar->position.y + 12;
+        cCamera->target.x = cTransformableCar->position.x + (-15) * cos(glm::radians(rotationFinal));
+        cCamera->target.z = cTransformableCar->position.z - (-15) * sin(glm::radians(rotationFinal));
+        renderEngine->SetCamTarget(cCamera->target);
+
+    }else if(camPoint == CameraPoints::FRONTAL2){
+        float rotationFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY - cHurt->currentRotation;
+        rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
+        cTransCam->position.y = cTransformableCar->position.y + cCamera->perfectUpDistance;
+        cTransCam->position.z = cTransformableCar->position.z - (-cCamera->actualDistance) * sin(glm::radians(rotationFinal));
+        cTransCam->position.x = cTransformableCar->position.x + (-cCamera->actualDistance) * cos(glm::radians(rotationFinal));
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+
+        cCamera->target.y = cTransformableCar->position.y;
+        cCamera->target.x = cTransformableCar->position.x + (cCamera->actualDistance) * cos(glm::radians(rotationFinal));
+        cCamera->target.z = cTransformableCar->position.z - (cCamera->actualDistance) * sin(glm::radians(rotationFinal));
+        renderEngine->SetCamTarget(cCamera->target);
+
+    }else if(camPoint == CameraPoints::FRONTAL3){
+        float rotationFinal = cTransformableCar->rotation.y - cCar->skidRotation - cCamera->rotExtraY - cHurt->currentRotation + 40;
+        rotationFinal = Utils::GetAdjustedDegrees(rotationFinal);
+        cTransCam->position.y = cTransformableCar->position.y + 6;
+        cTransCam->position.z = cTransformableCar->position.z - (-cCamera->actualDistance+5) * sin(glm::radians(rotationFinal));
+        cTransCam->position.x = cTransformableCar->position.x + (-cCamera->actualDistance+5) * cos(glm::radians(rotationFinal));
+        renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
+
+        cCamera->target.y = cTransformableCar->position.y;
+        cCamera->target.x = cTransformableCar->position.x + (cCamera->actualDistance) * cos(glm::radians(rotationFinal));
+        cCamera->target.z = cTransformableCar->position.z - (cCamera->actualDistance) * sin(glm::radians(rotationFinal));
+        renderEngine->SetCamTarget(cCamera->target);
 
     }
     /*else if(camPoint == CameraPoints::TOP_FOLLOW){
-        cTransfor->position = glm::vec3(-920.0, 120.0, -661.0);
+        cTransCam->position = glm::vec3(-920.0, 120.0, -661.0);
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
 
     }else if(camPoint == CameraPoints::TOP_STATIC){
-        cTransfor->position = glm::vec3(-920.0, 120.0, -661.0);
+        cTransCam->position = glm::vec3(-920.0, 120.0, -661.0);
         renderEngine->UpdateCamera(manCamera.get()->getCamera(), manCars.get());
         renderEngine->SetCamTarget(glm::vec3(-813.0, 110.0, -579.0));
     }*/
