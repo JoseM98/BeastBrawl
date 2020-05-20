@@ -18,10 +18,6 @@ struct Vertex {
     glm::vec3 normal {0.f,0.f,0.f};
     // texCoords
     glm::vec2 texCoords {0.f,0.f};
-    // tangent
-    glm::vec3 tangent {0.f,0.f,0.f};
-    // bitangent
-    glm::vec3 bitangent {0.f,0.f,0.f};
     // offset
     glm::vec3 animationOffsetPos {0.f,0.f,0.f};
     // offset
@@ -59,7 +55,14 @@ namespace CLE {
     class CLResourceMesh : public CLResource {
         public:
             CLResourceMesh(){};
-            ~CLResourceMesh(){};
+            ~CLResourceMesh(){
+                for(auto mesh : vecMesh){
+                    glDeleteTextures(1,&mesh.textures.at(0).id);
+                    glDeleteBuffers(1,&mesh.VBO);
+                    glDeleteBuffers(1,&mesh.EBO);
+                    glDeleteVertexArrays(1,&mesh.VAO);
+                }
+            };
 
             void Draw(GLuint shaderID) override;
             bool LoadFile(std::string, bool) override;
@@ -81,7 +84,7 @@ namespace CLE {
             vector<Texture> textures_loaded;
             string directory;
             bool gammaCorrection;
-            const aiScene *scene;
+            //const aiScene *scene;
 
             
     };
