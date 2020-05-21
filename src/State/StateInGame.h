@@ -188,7 +188,10 @@ class StateInGame : public State {
     double accumulatedTimeUPDATE {0.0};
 
 
-    enum CameraPoints{ NORMAL, LATERAL_BOTTOM, FRONTAL2, FRONTAL3,/*TOP_FOLLOW, TOP_STATIC,*/ FINAL, TOP1, TOP2, FRONTAL1};
+    enum CameraPoints{ NORMAL, BRIDGE, GRASS, /*TOP_FOLLOW, TOP_STATIC,*/ FINAL};
+    bool InitBridgeCam {false};
+    bool InitGrassCam {false};
+
 
     CameraPoints camPoint {CameraPoints::NORMAL};
 };
