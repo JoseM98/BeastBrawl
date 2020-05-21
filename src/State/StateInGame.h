@@ -190,6 +190,8 @@ class StateInGame : public State {
 
     enum CameraPoints{ NORMAL, BRIDGE, GRASS, /*TOP_FOLLOW, TOP_STATIC,*/ FINAL};
     bool InitBridgeCam {false};
+    glm::vec3 targetBridge;
+    bool alturaBridge{false};
     bool InitGrassCam {false};
 
 
