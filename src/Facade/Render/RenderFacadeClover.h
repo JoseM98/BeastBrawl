@@ -29,6 +29,7 @@ class RenderFacadeClover : public RenderFacade {
       RenderFacadeClover();
       ~RenderFacadeClover() override;
       const uint16_t FacadeAddObject(Entity*) override;
+      const uint16_t FacadeAddObject(Entity*, bool isMainCar_) override;
       const uint16_t FacadeAddStaticObject(Entity*) override;
       void FacadeAddSphereOnObject(Entity* entity) override;
       const uint16_t FacadeAddObjectCar(Entity*) override;
@@ -182,6 +183,9 @@ class RenderFacadeClover : public RenderFacade {
 
 
    private:
+      void FacadeReleaseMeshesInGame();
+
+
       class Animation2D;
 
       std::string powerUps[7];
