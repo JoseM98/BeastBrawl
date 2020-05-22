@@ -107,7 +107,7 @@ void TCPClient::HandleConnect(const boost::system::error_code& error, tcp::resol
         socket.close();  // cerramos el socket
         StartConnect(++endpoint_iter);
     } else {
-        //std::cout << "Connectado a " << endpoint_iter->endpoint() << "\n";
+        std::cout << "Connectado a " << endpoint_iter->endpoint() << "\n";
         StartReceiving();
     }
 }
