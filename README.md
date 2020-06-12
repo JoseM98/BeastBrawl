@@ -1,7 +1,7 @@
 # Beast Brawl
 Beast Brawl es el nombre del juego que está siendo desarrollado por Clover Games Studio, un grupo formado por 6 personas de 4º curso del ininerario de Creación y Entretenimiento Digital del Grado en Ingeniería Multimedia:
 * José Francisco Valdés
-* Antonio José Martínez
+* Antonio José Martínez García
 * Judith Mula
 * Carlos de la Fuente
 * Rubén Rubio
